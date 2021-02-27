@@ -1,6 +1,9 @@
 package com.tudu.task;
 
-public class TaskStatus {
+public enum TaskStatus {
     //Enum class perhaps
     // TaskStatus can be ongoing, done, unstarted
+    ONGOING, DONE, UNSTARTED;
+
+
 }
