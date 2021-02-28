@@ -11,20 +11,20 @@ public class Task{
     private String title;
     private LocalDateTime dueDate;
     private TaskStatus status;
-    private String project;
+    private TaskProject project;
 
     public Task(){
         this.title = "DEFAULT";
         this.dueDate = LocalDateTime.of(2021, Month.FEBRUARY, 23, 22, 0);
         this.status = TaskStatus.UNSTARTED;
-        this.project = "DEFAULT";
+        this.project = new TaskProject("DEFAULT");
     }
 
     public Task(String title, LocalDateTime dueDate, TaskStatus status, String project) {
         this.title = title;
         this.dueDate = dueDate;
         this.status = status;
-        this.project = project;
+        this.project = new TaskProject(project);
     }
 
     // Getters and setters for all fields
@@ -53,11 +53,11 @@ public class Task{
     }
 
     public String getProject() {
-        return project;
+        return project.getName();
     }
 
     public void setProject(String project) {
-        this.project = project;
+        this.project = new TaskProject(project);
     }
 
     // toString Method to display
