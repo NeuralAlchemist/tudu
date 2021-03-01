@@ -66,9 +66,10 @@ public class Task{
     public String toString() {
         LocalDate dueDate = this.dueDate.toLocalDate();
         LocalTime dueTime = this.dueDate.toLocalTime();
-        return  "Task: "+title+", due at: " +dueDate+" "+dueTime +", current status: " +status +", project type: " +project ;
+        return  "Task: "+title+", due at: " +dueDate+" "+dueTime +", current status: " +status +", project type: " +project.getName() ;
     }
 
     // IF: add colored display based on project color
     // IF: add a font style : Italics for finished, Bold for those that need to be done, normal for ongoing
 }
+
