@@ -1,11 +1,13 @@
 package com.tudu;
 
+
 import com.tudu.task.Task;
 import com.tudu.task.TaskStatus;
 import com.tudu.tasklist.TaskList;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,8 +18,14 @@ public class Main {
         tl.displayTaskList();
         Task example = new Task();
         tl.addTask(example);
-        tl.addTask(example);
+        tl.addTask(new Task("Hope it works", LocalDateTime.now(), TaskStatus.UNSTARTED, "Work"));
+        tl.addTask(new Task("Zumba", LocalDateTime.now(), TaskStatus.UNSTARTED, "Cardio"));
+        tl.addTask(new Task("Running", LocalDateTime.now(), TaskStatus.UNSTARTED, "Cardio"));
+        tl.addTask(new Task("Strength", LocalDateTime.now(), TaskStatus.UNSTARTED, "Workout"));
+        System.out.println("Sorting by project");
         tl.displayTaskList();
+
+
 
     }
 }
