@@ -1,13 +1,36 @@
+
+/*
+    1.Java plugin adds java compilation along with testing and bundling capabilities
+        Read more at https://docs.gradle.org/current/userguide/java_plugin.html
+    2.The Application plugin facilitates creating an executable JVM application.
+        Read more at https://docs.gradle.org/current/userguide/application_plugin.html
+ */
 plugins {
     id 'java'
+    id 'application'
+}
+
+/*
+    This specifies a mandatory configuration for the plugin application.
+    The configuration shows the entry point of the application/project.
+ */
+application{
+    mainClass = "com.tudu.Main"
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
 
+/*
+    This shows from where the dependencies are going to be pulled from
+ */
 repositories {
     mavenCentral()
 }
+
+/*
+    QA : What is this? Also test is part of src, should they be separate?
+ */
 sourceSets {
     main {
         java {
@@ -15,10 +38,18 @@ sourceSets {
         }
     }
 }
+
+/*
+    Dependencies are requirements for building your application/library itself
+    Here the dependency is JUnit
+ */
 dependencies {
-    compile 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+    implementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
 }
 
+/*
+    For the build to understand that JUnit be used for testing
+ */
 test {
     useJUnitPlatform()
 }
