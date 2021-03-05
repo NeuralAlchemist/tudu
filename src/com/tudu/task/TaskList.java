@@ -47,6 +47,8 @@ public class TaskList {
         return dueDateSortedList;
     }
 
+    public SortedMap<String, ArrayList<Task>> getSortedByProject(){ return projectSortedMap;}
+
 
     public void displayTaskList(){
         System.out.println("Size of tree map: "+projectSortedMap.size());
