@@ -19,7 +19,7 @@ application{
 }
 
 group 'org.example'
-version '1.0-SNAPSHOT'
+//version '1.0-SNAPSHOT'
 
 /*
     This shows from where the dependencies are going to be pulled from
