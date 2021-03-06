@@ -7,7 +7,7 @@ public class TaskProject {
         this.name = name;
     }
 
-    public TaskProject(String name, Boolean pickColor){
+    public TaskProject(String name, boolean pickColor){
         this.name = name;
         // IF: keep track of colors used (this should be read and written to a file)
         // Display available colors and read the chosen color
