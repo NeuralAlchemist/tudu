@@ -28,8 +28,8 @@ public class TaskList {
         if(dueDateSortedList.isEmpty()){
             dueDateSortedList.add(task);
         } else {
-            if(dueDateSortedList.getFirst().getDueDate().isAfter(task.getDueDate())){
-                dueDateSortedList.add(0, task);
+            if(dueDateSortedList.getLast().getDueDate().isBefore(task.getDueDate())){
+                dueDateSortedList.offerLast(task);
             } else{
                 ListIterator<Task> listItr = dueDateSortedList.listIterator();
                 while(listItr.hasNext()){
