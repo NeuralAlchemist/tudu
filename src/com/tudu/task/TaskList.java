@@ -7,55 +7,56 @@ public class TaskList {
     // Private fields
     private SortedMap<String, ArrayList<Task>> projectSortedMap;
     private LinkedList<Task> dueDateSortedList;
+
     public TaskList() {
         projectSortedMap = new TreeMap<>();
         dueDateSortedList = new LinkedList<>();
     }
+
     // Methods : addTask, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
-    public void addTask(Task task){
+    public void addTask(Task task) {
         String projectName = task.getProject();
         Boolean projectExistsAlready = projectSortedMap.containsKey(projectName);
         ArrayList<Task> tasksOfProject = projectExistsAlready ? projectSortedMap.get(projectName) : new ArrayList<>(100);
-        if(projectExistsAlready && tasksOfProject.contains(task)){
+        if (projectExistsAlready && tasksOfProject.contains(task)) {
             System.out.println("Task is already present!");
-        } else if(!tasksOfProject.contains(task)) {
+        } else if (!tasksOfProject.contains(task)) {
             // Improve adding to sort it out by dueDate
             tasksOfProject.add(task);
             projectSortedMap.put(projectName, tasksOfProject);
             System.out.println("Added Task!");
         }
 
-        if(dueDateSortedList.isEmpty()){
+        if (dueDateSortedList.isEmpty()) {
             dueDateSortedList.add(task);
         } else {
-            if(dueDateSortedList.getLast().getDueDate().isBefore(task.getDueDate())){
-                dueDateSortedList.offerLast(task);
-            } else{
-                ListIterator<Task> listItr = dueDateSortedList.listIterator();
-                while(listItr.hasNext()){
-                    if((listItr.next().getDueDate().isBefore(task.getDueDate()))){
-                        continue;
-                    } else if(!listItr.next().getDueDate().isAfter(task.getDueDate())){
-                        break;
-                    }
+            for (int i = dueDateSortedList.size() - 1; i >= 0; i--) {
+                Task current = dueDateSortedList.get(i);
+                if (task.getDueDate().isAfter(current.getDueDate())) {
+                    dueDateSortedList.add(i + 1, task);
+                    break;
+                } else if (i == 0) {
+                    dueDateSortedList.offerFirst(task);
                 }
-                dueDateSortedList.add(listItr.nextIndex(), task);
             }
         }
     }
-    public LinkedList<Task> getSortedByDueDate(){
+
+    public LinkedList<Task> getSortedByDueDate() {
         return dueDateSortedList;
     }
 
-    public SortedMap<String, ArrayList<Task>> getSortedByProject(){ return projectSortedMap;}
+    public SortedMap<String, ArrayList<Task>> getSortedByProject() {
+        return projectSortedMap;
+    }
 
 
-    public void displayTaskList(){
-        System.out.println("Size of tree map: "+projectSortedMap.size());
-        for( Map.Entry<String, ArrayList<Task>> entry : projectSortedMap.entrySet()){
+    public void displayTaskList() {
+        System.out.println("Size of tree map: " + projectSortedMap.size());
+        for (Map.Entry<String, ArrayList<Task>> entry : projectSortedMap.entrySet()) {
             ArrayList<Task> tasksOfProject = entry.getValue();
-            System.out.println("tasks of project: "+entry.getKey()+" total: "+tasksOfProject.size());
-            for(Task task : tasksOfProject){
+            System.out.println("tasks of project: " + entry.getKey() + " total: " + tasksOfProject.size());
+            for (Task task : tasksOfProject) {
                 System.out.println(task.toString());
             }
         }
