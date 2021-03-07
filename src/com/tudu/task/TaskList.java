@@ -83,7 +83,7 @@ public class TaskList {
             }
         }
     }
-    // Methods : sortByDate(ascending/descending), sortByProjectFlag(ascending/descending), displayTaskList,
+    // Methods : sortByDate(ascending/descending), sortByProjectFlag(ascending/descending)
 
     // Methods : saveToFile (as CSV/TSV), loadFromFile(from CSV/TSV)
 }
