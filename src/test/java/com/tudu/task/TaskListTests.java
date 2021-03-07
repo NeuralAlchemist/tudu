@@ -73,4 +73,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
                  () -> assertEquals(dates.get(2), sortedDueDate.get(2).getDueDate()),
                  () -> assertEquals(dates.get(3), sortedDueDate.get(3).getDueDate()));
      }
+
+     @Test
+     @DisplayName("tasks added sequentially with duplicate due dates in random order are sorted by ascending due date")
+     void tasksAddedSequentiallyWithDuplicateDueDatesInRandomOrderAreSortedByAscendingDueDate() {
+         testDates();
+         TaskList example = new TaskList();
+         example.addTask(new Task("Workout", dates.get(2), TaskStatus.UNSTARTED, "Exercise"));
+         example.addTask(new Task("Read LOTR", dates.get(0), TaskStatus.UNSTARTED, "Personal"));
+         example.addTask(new Task("Collect package", dates.get(1), TaskStatus.UNSTARTED, "Personal"));
+         example.addTask(new Task("Write a good test", dates.get(1), TaskStatus.UNSTARTED, "Work"));
+         LinkedList<Task> sortedDueDate = example.getSortedByDueDate();
+         Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
+                 () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
+                 () -> assertEquals(dates.get(1), sortedDueDate.get(2).getDueDate()),
+                 () -> assertEquals(dates.get(2), sortedDueDate.get(3).getDueDate()));
+     }
+
 }
