@@ -30,14 +30,17 @@ public class TaskList {
         if (dueDateSortedList.isEmpty()) {
             dueDateSortedList.add(task);
         } else {
-            for (int i = dueDateSortedList.size() - 1; i >= 0; i--) {
-                Task current = dueDateSortedList.get(i);
-                if (task.getDueDate().isAfter(current.getDueDate())) {
-                    dueDateSortedList.add(i + 1, task);
+            Iterator<Task> listItr = dueDateSortedList.descendingIterator();
+            int currentIndex = dueDateSortedList.size()-1;
+            while(listItr.hasNext()){
+                Task current = listItr.next();
+                if(task.getDueDate().isAfter(current.getDueDate())){
+                    dueDateSortedList.add(currentIndex+1, task);
                     break;
-                } else if (i == 0) {
+                } else if(currentIndex == 0){
                     dueDateSortedList.offerFirst(task);
                 }
+                currentIndex--;
             }
         }
     }
