@@ -20,6 +20,10 @@ application{
     mainClass = "com.tudu.Main"
 }
 
+run{
+    standardInput = System.in
+}
+
 group 'org.example'
 //version '1.0-SNAPSHOT'
 
