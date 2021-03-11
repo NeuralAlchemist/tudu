@@ -1,6 +1,5 @@
 package com.tudu;
 
-
 import com.tudu.task.TaskListUI;
 
 public class Main {
