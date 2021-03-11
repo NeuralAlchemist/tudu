@@ -13,13 +13,13 @@ import java.util.Scanner;
 
 public class TaskListUI {
     private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
-    public TaskList taskList = new TaskList();
+    protected TaskList taskList = new TaskList();
 
     // Class to display TaskList and read user input from terminal
     // Must be an infinite loop until "Save and Quit" option is chosen
     // Private or local fields
     // Methods : readInput, printMenu
-    public void displayMenu() {
+    private void displayMenu() {
         System.out.println("What would you like to do?");
         System.out.println("1 -> View all tasks (sort by project/due date)");
         System.out.println("2 -> Add a new task");
