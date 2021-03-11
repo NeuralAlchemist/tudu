@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class TaskListUI {
     private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
-    private TaskList taskList = new TaskList();
+    public TaskList taskList = new TaskList();
 
     // Class to display TaskList and read user input from terminal
     // Must be an infinite loop until "Save and Quit" option is chosen
@@ -34,8 +34,6 @@ public class TaskListUI {
         boolean cont = true;
         while (cont) {
             displayMenu();
-            /*Scanner scan = new Scanner(System.in);
-            int input = scan.nextInt();*/
             int input = 0;
             try {
                 input = Integer.parseInt(r.readLine());
@@ -47,10 +45,9 @@ public class TaskListUI {
                 case 1:
                     System.out.println("Viewing all tasks");
                     break;
-                //Call method to go through adding task
                 case 2:
                     System.out.println("Add a new task");
-                    addTaskMenu();
+                    addTaskMenu(r);
                     break;
                 case 3:
                     System.out.println("Modifying a task");
@@ -64,25 +61,24 @@ public class TaskListUI {
 
     }
 
-    //Check that the inputted task is indeed present in the tasklist
-    private void addTaskMenu() {
+    private void addTaskMenu(BufferedReader r) {
         boolean addTask = true;
         while (addTask) {
-            String taskName = questionPrompt("Enter name of task: ");
+            String taskName = questionPrompt("Enter name of task: ", r);
             boolean successful;
             LocalDateTime dueDate;
             do {
-                dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")"));
+                dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")", r));
                 successful = (dueDate != null);
                 if (!successful) {
                     System.out.println("The chosen date does not exist, please input a valid date in the form" + DATE_FORMAT);
                 }
             } while (!successful);
-            TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED);
-            String project = questionPrompt("What type of project is this task?");
+            TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED, r);
+            String project = questionPrompt("What type of project is this task?", r);
             taskList.addTask(new Task(taskName, dueDate, status, project));
             System.out.println("Task has been added to Tudu!");
-            addTask = yesOrNoPrompt("Add more tasks?(y/n)", true, false);
+            addTask = yesOrNoPrompt("Add more tasks?(y/n)", true, false, r);
         }
     }
 
@@ -100,19 +96,29 @@ public class TaskListUI {
         return result;
     }
 
-    private static String questionPrompt(String prompt) {
-        Scanner scan = new Scanner(System.in);
+    private static String questionPrompt(String prompt, BufferedReader r) {
+        String result = null;
         System.out.println(prompt);
-        return scan.nextLine();
+        try{
+            result = r.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = null;
+        }
+        return result;
     }
 
-    private static <T> T yesOrNoPrompt(String prompt, T yesOption, T noOption) {
-        Scanner scan = new Scanner(System.in);
+    private static <T> T yesOrNoPrompt(String prompt, T yesOption, T noOption, BufferedReader r) {
         T result = null;
+        String input = null;
         boolean successful = false;
         do {
             System.out.println(prompt);
-            String input = scan.nextLine();
+            try {
+                input = r.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if (input.substring(0, 1).equalsIgnoreCase("y")) {
                 result = yesOption;
                 successful = true;
