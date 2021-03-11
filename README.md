@@ -22,14 +22,15 @@ To run this application
 
 - Run 
 
-  -  ```./gradlew run``` for  Linux/maOS
-  - ```./gradlew.bat run``` for Windows 
+  -  ```./gradlew run --console=plain``` for  Linux/maOS
+  - ```./gradlew.bat run -consol=plain``` for Windows 
 
 To see other functions available with Gradle, execute ```./gradlew``` on Linux/macOS and ```./gradlew.bat``` in the cloned local repository.
 
 #### Current status
-Currently, the functionality of adding a task and displaying by project works. 
-But this is not accessible to the user yet. UI will be updated soon. 
+User can view the startup menu and choose an option. Currently option 2, adding tasks is the only option that has functionality added to it.
+
+
 
    
 
