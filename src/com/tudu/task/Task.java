@@ -13,14 +13,14 @@ public class Task{
     private TaskStatus status;
     private TaskProject project;
 
-    public Task(){
+    protected Task(LocalDateTime dueDate){
         this.title = "DEFAULT";
-        this.dueDate = LocalDateTime.of(2021, Month.FEBRUARY, 23, 22, 0);
+        this.dueDate = dueDate;
         this.status = TaskStatus.UNSTARTED;
         this.project = new TaskProject("DEFAULT");
     }
 
-    public Task(String title, LocalDateTime dueDate, TaskStatus status, String project) {
+    protected Task(String title, LocalDateTime dueDate, TaskStatus status, String project) {
         this.title = title;
         this.dueDate = dueDate;
         this.status = status;
@@ -36,7 +36,7 @@ public class Task{
         this.title = title;
     }
 
-    public LocalDateTime getDueDate() {
+    protected LocalDateTime getDueDate() {
         return dueDate;
     }
 
@@ -52,7 +52,7 @@ public class Task{
         this.status = status;
     }
 
-    public String getProject() {
+    protected String getProject() {
         return project.getName();
     }
 
