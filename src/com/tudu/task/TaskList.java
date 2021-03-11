@@ -8,23 +8,21 @@ public class TaskList {
     private TreeMap<String, ArrayList<Task>> projectSortedMap;
     private LinkedList<Task> dueDateSortedList;
 
-    public TaskList() {
+    protected TaskList() {
         projectSortedMap = new TreeMap<>();
         dueDateSortedList = new LinkedList<>();
     }
 
-    // Methods : addTask, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
-    public void addTask(Task task) {
+    // Methods : ~~addTask~~, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
+    protected void addTask(Task task) {
         String projectName = task.getProject();
         Boolean projectExistsAlready = projectSortedMap.containsKey(projectName);
         ArrayList<Task> tasksOfProject = projectExistsAlready ? projectSortedMap.get(projectName) : new ArrayList<>(100);
         if (projectExistsAlready && tasksOfProject.contains(task)) {
-            System.out.println("Task is already present!");
         } else if (!tasksOfProject.contains(task)) {
             // Improve adding to sort it out by dueDate
             tasksOfProject.add(task);
             projectSortedMap.put(projectName, tasksOfProject);
-            System.out.println("Added Task!");
         }
 
         if (dueDateSortedList.isEmpty()) {
@@ -45,22 +43,24 @@ public class TaskList {
         }
     }
 
-    public LinkedList<Task> getSortedByDueDate() {
+    protected LinkedList<Task> getSortedByDueDate() {
         return dueDateSortedList;
     }
 
-    public SortedMap<String, ArrayList<Task>> getSortedByProject() {
+    protected SortedMap<String, ArrayList<Task>> getSortedByProject() {
         return projectSortedMap;
     }
 
-    public void displayByDueDate(boolean ascending){
+
+    // Methods : sortByDate(ascending/descending), sortByProjectFlag(ascending/descending)
+    protected void displayByDueDate(boolean ascending){
         Iterator<Task> itr = ascending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
         while(itr.hasNext()){
             System.out.println(itr.next().toString());
         }
     }
 
-    public void displayByProject(boolean ascending){
+    protected void displayByProject(boolean ascending){
         NavigableSet<String> entries = ascending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
         for(String entry : entries){
             ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
@@ -71,19 +71,19 @@ public class TaskList {
         }
     }
 
-
-
-    public void displayTaskList() {
-        System.out.println("Size of tree map: " + projectSortedMap.size());
-        for (Map.Entry<String, ArrayList<Task>> entry : projectSortedMap.entrySet()) {
-            ArrayList<Task> tasksOfProject = entry.getValue();
-            System.out.println("tasks of project: " + entry.getKey() + " total: " + tasksOfProject.size());
-            for (Task task : tasksOfProject) {
-                System.out.println(task.toString());
-            }
-        }
+    protected boolean findTask(Task task){
+        return dueDateSortedList.contains(task);
     }
-    // Methods : sortByDate(ascending/descending), sortByProjectFlag(ascending/descending)
+
+    /*public void editByProject(){
+        NavigableSet<String> entries = projectSortedMap.navigableKeySet();
+        int numberOfProject = 1;
+        for(String entry : entries){
+            System.out.println(numberOfProject+" -> "+entry);
+            numberOfProject++;
+        }
+    }*/
+
 
     // Methods : saveToFile (as CSV/TSV), loadFromFile(from CSV/TSV)
 }
