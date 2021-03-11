@@ -1,9 +1,6 @@
 package com.tudu.task;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -28,22 +25,33 @@ public class TaskListUITests {
     private final String YES = "yah\n";
     private final String NO = "nah\n";
 
+    @BeforeEach
+    public void init(){
+        tudu = new TaskListUI();
+    }
 
     @Test
     @DisplayName("sample test to check InputStream works for readInput")
     void sampleTestToSeeInputStreamWorksForReadInput() {
-        TaskListUI tudu = new TaskListUI();
         String task = "1\n4\n";
         tudu.readInput(new ByteArrayInputStream(task.getBytes()));
     }
 
     @Test
-    @DisplayName("task with correct inputs is added and should be in the tasklist")
-    void taskWithCorrectInputsIsAddedAndShouldBeInTheTasklist() {
-        TaskListUI tudu = new TaskListUI();
+    @DisplayName("task is added with correct inputs and should be in the tasklist")
+    void taskIsAddedWithCorrectInputsAndShouldBeInTheTasklist() {
         String input = VIEW+ADD+taskNames[0]+dueDates[3]+NO+projectNames[0]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         boolean actual = tudu.taskList.findTask(new Task(taskNames[0], localDueDates[3], TaskStatus.UNSTARTED, projectNames[0]));
+        Assertions.assertEquals(true, true);
+    }
+
+    @Test
+    @DisplayName("task with wrong year is forced to correct by validate Date")
+    void taskWithWrongYearIsForcedToCorrectByValidateDate() {
+        String input = ADD+taskNames[3]+"-00-1-1 1:1\n"+dueDates[1]+projectNames[2]+NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        boolean actual = tudu.taskList.findTask(new Task(taskNames[3], localDueDates[1], TaskStatus.ONGOING, projectNames[2]));
         Assertions.assertEquals(true, true);
     }
 
