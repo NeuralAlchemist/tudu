@@ -7,7 +7,7 @@ public class TaskList {
     // Private fields
     private TreeMap<String, ArrayList<Task>> projectSortedMap;
     private LinkedList<Task> dueDateSortedList;
-    private int size = 0;
+    private int numberOfTasks = 0;
 
     protected TaskList() {
         projectSortedMap = new TreeMap<>();
@@ -33,6 +33,7 @@ public class TaskList {
 
         if (dueDateSortedList.isEmpty()) {
             dueDateSortedList.add(task);
+            addedToDueDateSortedList = true;
         } else if(!dueDateSortedList.contains(task)) {
             Iterator<Task> listItr = dueDateSortedList.descendingIterator();
             int currentIndex = dueDateSortedList.size()-1;
@@ -40,19 +41,19 @@ public class TaskList {
                 Task current = listItr.next();
                 if(task.getDueDate().isAfter(current.getDueDate())){
                     dueDateSortedList.add(currentIndex+1, task);
+                    addedToDueDateSortedList = true;
                     break;
                 } else if(currentIndex == 0){
                     dueDateSortedList.offerFirst(task);
+                    addedToDueDateSortedList = true;
                 }
                 currentIndex--;
             }
-            addedToDueDateSortedList = true;
         } else {
             addedToDueDateSortedList = false;
         }
-
         if(addedToDueDateSortedList && addedToProjectSortedMap){
-            size++;
+            numberOfTasks++;
             //Implement boolean return
         } else {
             // Implement boolean return
@@ -87,9 +88,21 @@ public class TaskList {
         }
     }
 
-    protected boolean findTask(Task task){
-        //return the task otherwise null;
-        return dueDateSortedList.contains(task);
+    protected ArrayList<Task> findTaskByName(String taskName){
+        ArrayList<Task> listOfTasksFound = new ArrayList<>(10);
+        Iterator<Task> itr = dueDateSortedList.iterator();
+        Task current;
+        while(itr.hasNext()){
+            current = itr.next();
+            if(current.getName().contains(taskName)){
+                listOfTasksFound.add(current);
+            }
+        }
+        return listOfTasksFound;
+    }
+
+    protected int getNumberOfTasks(){
+        return numberOfTasks;
     }
 
     /*public void editByProject(){
