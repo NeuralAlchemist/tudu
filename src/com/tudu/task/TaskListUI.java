@@ -1,19 +1,19 @@
 package com.tudu.task;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import org.fusesource.jansi.Ansi;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Scanner;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class TaskListUI {
     private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
     protected TaskList taskList = new TaskList();
+    private final static int DEFAULT_NUMBER_OPTION = 5;
+    private final static String DEFAULT_STRING_OPTION = "n";
 
     // Class to display TaskList and read user input from terminal
     // Must be an infinite loop until "Save and Quit" option is chosen
@@ -28,16 +28,17 @@ public class TaskListUI {
     }
 
     public void readInput(InputStream in) {
-        System.out.println("inside method");
         BufferedReader r = new BufferedReader(new InputStreamReader(in));
-        System.out.println("TuDu! So many tasks so little time!");
+        System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1,1));
+        System.out.println("Get organizing with TuDu! \n");
+        //Display "welcome back if loading from a file
         boolean cont = true;
         while (cont) {
             displayMenu();
             int input = 0;
             try {
-                input = Integer.parseInt(r.readLine());
-                System.out.println(input);
+                String temp = r.readLine();
+                input = temp.isEmpty()? DEFAULT_NUMBER_OPTION : Integer.parseInt(temp); //DEFAULT
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -56,6 +57,8 @@ public class TaskListUI {
                     System.out.println("Saving and quitting");
                     cont = false;
                     break;
+                default:
+                    System.out.println("Invalid input! Please type a number in the range [1-4]");
             }
         }
 
@@ -97,10 +100,11 @@ public class TaskListUI {
     }
 
     private static String questionPrompt(String prompt, BufferedReader r) {
-        String result = null;
+        String result;
         System.out.println(prompt);
         try{
             result = r.readLine();
+            System.out.println(result);
         } catch (IOException e) {
             e.printStackTrace();
             result = null;
@@ -119,6 +123,7 @@ public class TaskListUI {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            input = input.isEmpty() ? DEFAULT_STRING_OPTION : input; //DEFAULT
             if (input.substring(0, 1).equalsIgnoreCase("y")) {
                 result = yesOption;
                 successful = true;
