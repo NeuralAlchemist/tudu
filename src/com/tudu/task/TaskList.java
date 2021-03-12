@@ -1,5 +1,6 @@
 package com.tudu.task;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class TaskList {
@@ -16,7 +17,8 @@ public class TaskList {
 
     // Methods : ~~addTask~~, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
     // update to check for already present tasks and return false if not added
-    protected void addTask(Task task) {
+    protected void addTask(String taskName, LocalDateTime dueDate, TaskStatus status, String project) {
+        Task task = new Task(taskName, dueDate, status, project);
         String projectName = task.getProject();
         boolean addedToProjectSortedMap = false;
         boolean addedToDueDateSortedList = false;
@@ -64,7 +66,7 @@ public class TaskList {
         return dueDateSortedList;
     }
 
-    protected SortedMap<String, ArrayList<Task>> getSortedByProject() {
+    protected TreeMap<String, ArrayList<Task>> getSortedByProject() {
         return projectSortedMap;
     }
 
