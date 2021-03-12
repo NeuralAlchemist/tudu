@@ -12,8 +12,9 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class TaskListUI {
     private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
     protected TaskList taskList = new TaskList();
-    private final static int DEFAULT_NUMBER_OPTION = 5;
+    private final static int DEFAULT_NUMBER_OPTION = 26;
     private final static String DEFAULT_STRING_OPTION = "n";
+    private BufferedReader bufferedReader;
 
     // Class to display TaskList and read user input from terminal
     // Must be an infinite loop until "Save and Quit" option is chosen
@@ -28,7 +29,7 @@ public class TaskListUI {
     }
 
     public void readInput(InputStream in) {
-        BufferedReader r = new BufferedReader(new InputStreamReader(in));
+        bufferedReader = new BufferedReader(new InputStreamReader(in));
         System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1,1));
         System.out.println("Get organizing with TuDu! \n");
         //Display "welcome back if loading from a file
@@ -37,7 +38,7 @@ public class TaskListUI {
             displayMenu();
             int input = 0;
             try {
-                String temp = r.readLine();
+                String temp = bufferedReader.readLine();
                 input = temp.isEmpty()? DEFAULT_NUMBER_OPTION : Integer.parseInt(temp); //DEFAULT
             } catch (IOException e) {
                 e.printStackTrace();
@@ -48,7 +49,7 @@ public class TaskListUI {
                     break;
                 case 2:
                     System.out.println("Add a new task");
-                    addTaskMenu(r);
+                    addTaskMenu();
                     break;
                 case 3:
                     System.out.println("Modifying a task");
@@ -64,28 +65,28 @@ public class TaskListUI {
 
     }
 
-    private void addTaskMenu(BufferedReader r) {
+    private void addTaskMenu() {
         boolean addTask = true;
         while (addTask) {
-            String taskName = questionPrompt("Enter name of task: ", r);
+            String taskName = questionPrompt("Enter name of task: ");
             boolean successful;
             LocalDateTime dueDate;
             do {
-                dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")", r));
+                dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")"));
                 successful = (dueDate != null);
                 if (!successful) {
                     System.out.println("The chosen date does not exist, please input a valid date in the form" + DATE_FORMAT);
                 }
             } while (!successful);
-            TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED, r);
-            String project = questionPrompt("What type of project is this task?", r);
+            TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED);
+            String project = questionPrompt("What type of project is this task?");
             taskList.addTask(new Task(taskName, dueDate, status, project));
             System.out.println("Task has been added to Tudu!");
-            addTask = yesOrNoPrompt("Add more tasks?(y/n)", true, false, r);
+            addTask = yesOrNoPrompt("Add more tasks?(y/n)", true, false);
         }
     }
 
-    private static LocalDateTime validateDate(String in) {
+    private LocalDateTime validateDate(String in) {
         LocalDateTime result;
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         format.setLenient(false);
@@ -99,12 +100,11 @@ public class TaskListUI {
         return result;
     }
 
-    private static String questionPrompt(String prompt, BufferedReader r) {
+    private String questionPrompt(String prompt) {
         String result;
         System.out.println(prompt);
         try{
-            result = r.readLine();
-            System.out.println(result);
+            result = bufferedReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
             result = null;
@@ -112,14 +112,14 @@ public class TaskListUI {
         return result;
     }
 
-    private static <T> T yesOrNoPrompt(String prompt, T yesOption, T noOption, BufferedReader r) {
+    private <T> T yesOrNoPrompt(String prompt, T yesOption, T noOption) {
         T result = null;
         String input = null;
         boolean successful = false;
         do {
             System.out.println(prompt);
             try {
-                input = r.readLine();
+                input = bufferedReader.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,4 +136,5 @@ public class TaskListUI {
         } while (!successful);
         return result;
     }
+
 }
