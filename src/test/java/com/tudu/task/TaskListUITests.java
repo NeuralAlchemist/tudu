@@ -108,14 +108,14 @@ public class TaskListUITests {
 
     @Test
     @Disabled
-    @DisplayName("task can have all fields blank except due date")
-    void taskCanHaveAllFieldsBlankExceptDueDate() {
+    @DisplayName("Input to add task can be empty except for due date")
+    void inputToAddTaskCanBeEmptyExceptForDueDate() {
         String input = ADD+EMPTY+dueDates[1]+EMPTY+EMPTY+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         TreeMap<String, ArrayList<Task>> tasks = tudu.getSortedByProject();
         ArrayList<Task> current = tasks.get("");
         Assertions.assertAll( () -> assertEquals("", current.get(0).getProject()),
-                () -> assertEquals("", current.get(0).getStatus()));
+                () -> assertEquals(TaskStatus.UNSTARTED, current.get(0).getStatus()));
     }
 
 }
