@@ -77,12 +77,11 @@ public class TaskListUI extends TaskList {
                     System.out.println("The chosen date does not exist, please input a valid date in the form" + DATE_FORMAT);
                 }
             } while (!successful);
-            //TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED);
-            boolean status = yesOrNoPrompt("Have you already begun the task?(y/n)", true, false);
+            boolean status = yesOrNoPrompt("Have you already begun the task?(y/n)");
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
             System.out.println("Task has been added to Tudu!");
-            addTask = yesOrNoPrompt("Add more tasks?(y/n)", true, false);
+            addTask = yesOrNoPrompt("Add more tasks?(y/n)");
         }
     }
 
@@ -112,8 +111,8 @@ public class TaskListUI extends TaskList {
         return result;
     }
 
-    private <T> T yesOrNoPrompt(String prompt, T yesOption, T noOption) {
-        T result = null;
+    private boolean yesOrNoPrompt(String prompt) {
+        boolean result;
         String input = null;
         boolean successful = false;
         do {
@@ -125,13 +124,14 @@ public class TaskListUI extends TaskList {
             }
             input = input.isEmpty() ? DEFAULT_STRING_OPTION : input; //DEFAULT
             if (input.substring(0, 1).equalsIgnoreCase("y")) {
-                result = yesOption;
+                result = true;
                 successful = true;
             } else if (input.substring(0, 1).equalsIgnoreCase("n")) {
-                result = noOption;
+                result = false;
                 successful = true;
             } else {
                 System.out.println("Invalid input! Please input yes/no.");
+                result = false;
             }
         } while (!successful);
         return result;
