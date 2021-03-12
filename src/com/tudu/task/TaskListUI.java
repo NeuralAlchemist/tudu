@@ -80,7 +80,6 @@ public class TaskListUI extends TaskList {
             boolean status = yesOrNoPrompt("Have you already begun the task?(y/n)");
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
-            System.out.println("Task has been added to Tudu!");
             addTask = yesOrNoPrompt("Add more tasks?(y/n)");
         }
     }
