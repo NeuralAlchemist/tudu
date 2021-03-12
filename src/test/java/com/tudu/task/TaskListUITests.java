@@ -8,7 +8,8 @@ import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
+import java.util.TreeMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TaskListUITests {
 
     private TaskListUI tudu;
@@ -27,6 +28,7 @@ public class TaskListUITests {
     private final String QUIT = "4\n";
     private final String YES = "yah\n";
     private final String NO = "nah\n";
+    private final String EMPTY = "\n";
 
     @BeforeEach
     public void init(){
@@ -102,6 +104,18 @@ public class TaskListUITests {
         LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
                 () -> Assertions.assertNotEquals(0, 1));
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("task can have all fields blank except due date")
+    void taskCanHaveAllFieldsBlankExceptDueDate() {
+        String input = ADD+EMPTY+dueDates[1]+EMPTY+EMPTY+NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        TreeMap<String, ArrayList<Task>> tasks = tudu.getSortedByProject();
+        ArrayList<Task> current = tasks.get("");
+        Assertions.assertAll( () -> assertEquals("", current.get(0).getProject()),
+                () -> assertEquals("", current.get(0).getStatus()));
     }
 
 }
