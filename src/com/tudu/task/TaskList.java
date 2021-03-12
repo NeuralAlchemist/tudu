@@ -7,6 +7,7 @@ public class TaskList {
     // Private fields
     private TreeMap<String, ArrayList<Task>> projectSortedMap;
     private LinkedList<Task> dueDateSortedList;
+    private int size = 0;
 
     protected TaskList() {
         projectSortedMap = new TreeMap<>();
@@ -14,20 +15,25 @@ public class TaskList {
     }
 
     // Methods : ~~addTask~~, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
+    // update to check for already present tasks and return false if not added
     protected void addTask(Task task) {
         String projectName = task.getProject();
-        Boolean projectExistsAlready = projectSortedMap.containsKey(projectName);
+        boolean addedToProjectSortedMap = false;
+        boolean addedToDueDateSortedList = false;
+        boolean projectExistsAlready = projectSortedMap.containsKey(projectName);
         ArrayList<Task> tasksOfProject = projectExistsAlready ? projectSortedMap.get(projectName) : new ArrayList<>(100);
         if (projectExistsAlready && tasksOfProject.contains(task)) {
+            addedToProjectSortedMap = false;
         } else if (!tasksOfProject.contains(task)) {
             // Improve adding to sort it out by dueDate
             tasksOfProject.add(task);
             projectSortedMap.put(projectName, tasksOfProject);
+            addedToProjectSortedMap = true;
         }
 
         if (dueDateSortedList.isEmpty()) {
             dueDateSortedList.add(task);
-        } else {
+        } else if(!dueDateSortedList.contains(task)) {
             Iterator<Task> listItr = dueDateSortedList.descendingIterator();
             int currentIndex = dueDateSortedList.size()-1;
             while(listItr.hasNext()){
@@ -40,6 +46,16 @@ public class TaskList {
                 }
                 currentIndex--;
             }
+            addedToDueDateSortedList = true;
+        } else {
+            addedToDueDateSortedList = false;
+        }
+
+        if(addedToDueDateSortedList && addedToProjectSortedMap){
+            size++;
+            //Implement boolean return
+        } else {
+            // Implement boolean return
         }
     }
 
@@ -72,6 +88,7 @@ public class TaskList {
     }
 
     protected boolean findTask(Task task){
+        //return the task otherwise null;
         return dueDateSortedList.contains(task);
     }
 
