@@ -12,18 +12,11 @@ public class Task{
     private TaskStatus status;
     private TaskProject project;
 
-    protected Task(LocalDateTime dueDate){
-        // Update name to "no name"
-        this.name = "DEFAULT";
-        this.dueDate = dueDate;
-        this.status = TaskStatus.UNSTARTED;
-        this.project = new TaskProject("DEFAULT");
-    }
 
-    protected Task(String name, LocalDateTime dueDate, TaskStatus status, String project) {
-        this.name = name;
+    protected Task(String name, LocalDateTime dueDate, boolean status, String project) {
+        this.name = name.isEmpty() ? "NO NAME" : name;
         this.dueDate = dueDate;
-        this.status = status;
+        this.status = status ? TaskStatus.ONGOING : TaskStatus.UNSTARTED;
         this.project = new TaskProject(project);
     }
 
