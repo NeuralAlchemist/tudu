@@ -98,7 +98,7 @@ public class TaskList {
                 listOfTasksFound.add(current);
             }
         }
-        return listOfTasksFound;
+        return listOfTasksFound.isEmpty()? null : listOfTasksFound;
     }
 
     protected int getNumberOfTasks(){
