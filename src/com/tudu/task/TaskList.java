@@ -56,6 +56,7 @@ public class TaskList {
         }
         if(addedToDueDateSortedList && addedToProjectSortedMap){
             numberOfTasks++;
+            System.out.println("Task has been added");
             //Implement boolean return
         } else {
             // Implement boolean return
