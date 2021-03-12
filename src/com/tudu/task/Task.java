@@ -13,6 +13,7 @@ public class Task{
     private TaskProject project;
 
     protected Task(LocalDateTime dueDate){
+        // Update name to "no name"
         this.name = "DEFAULT";
         this.dueDate = dueDate;
         this.status = TaskStatus.UNSTARTED;
