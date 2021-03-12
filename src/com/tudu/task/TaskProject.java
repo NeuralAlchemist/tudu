@@ -4,7 +4,9 @@ public class TaskProject {
     private String name, color;
 
     public TaskProject(String name) {
-        this.name = name;
+        System.out.println("This");
+        this.name = name.isEmpty() ? "NO NAME" : name;
+        System.out.println(this.name);
     }
 
     public TaskProject(String name, boolean pickColor){
