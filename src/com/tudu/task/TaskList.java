@@ -97,7 +97,7 @@ public class TaskList {
         Task current;
         while(itr.hasNext()){
             current = itr.next();
-            if(current.getName().contains(taskName)){
+            if(current.getName().equalsIgnoreCase(taskName)){
                 listOfTasksFound.add(current);
             }
         }
