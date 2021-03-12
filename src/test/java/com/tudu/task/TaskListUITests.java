@@ -46,21 +46,21 @@ public class TaskListUITests {
     void taskIsAddedWithCorrectInputsAndShouldBeInTheTasklist() {
         String input = VIEW+ADD+taskNamesForInput[0]+dueDates[3]+NO+projectNamesForInput[0]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
-        tudu.taskList.displayByDueDate(true);
-        ArrayList<Task> foundTasks = tudu.taskList.findTaskByName(taskNames[0]);
+        tudu.displayByDueDate(true);
+        ArrayList<Task> foundTasks = tudu.findTaskByName(taskNames[0]);
         Assertions.assertAll(() -> Assertions.assertEquals(foundTasks.get(0).getDueDate(), localDueDates[3]),
                 () -> Assertions.assertEquals(foundTasks.get(0).getStatus(), TaskStatus.UNSTARTED),
                 () -> Assertions.assertEquals(foundTasks.get(0).getProject(), projectNames[0]));
-        Assertions.assertEquals(1, tudu.taskList.getNumberOfTasks());
+        Assertions.assertEquals(1, tudu.getNumberOfTasks());
     }
    @Test
     @DisplayName("task with wrong year is forced to correct by validate Date")
     void taskWithWrongYearIsForcedToCorrectByValidateDate() {
         String input = ADD+taskNamesForInput[3]+"-00-1-1 1:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
-       LinkedList<Task> tasks = tudu.taskList.getSortedByDueDate();
+       LinkedList<Task> tasks = tudu.getSortedByDueDate();
        Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
-               () -> Assertions.assertNotEquals(0, tudu.taskList.getNumberOfTasks()));
+               () -> Assertions.assertNotEquals(0, tudu.getNumberOfTasks()));
     }
 
 
@@ -69,9 +69,9 @@ public class TaskListUITests {
     void taskWithWrongMonthIsForcedToCorrectByValidateDate() {
         String input = ADD+taskNamesForInput[3]+"00-14-1 1:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
-        LinkedList<Task> tasks = tudu.taskList.getSortedByDueDate();
+        LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
-                () -> Assertions.assertNotEquals(0, tudu.taskList.getNumberOfTasks()));
+                () -> Assertions.assertNotEquals(0, tudu.getNumberOfTasks()));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class TaskListUITests {
     void taskWithWrongDayOfMonthIsForcedToCorrectByValidateDate() {
         String input = ADD+taskNamesForInput[3]+"00-12-300 1:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
-        LinkedList<Task> tasks = tudu.taskList.getSortedByDueDate();
+        LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
                 () -> Assertions.assertNotEquals(0, 1));
     }
@@ -89,7 +89,7 @@ public class TaskListUITests {
     void taskWithWrongHourIsForcedToCorrectByValidateDate() {
         String input = ADD+taskNamesForInput[3]+"00-12-20 26:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
-        LinkedList<Task> tasks = tudu.taskList.getSortedByDueDate();
+        LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
                 () -> Assertions.assertNotEquals(0, 1));
     }
@@ -99,7 +99,7 @@ public class TaskListUITests {
     void taskWithWrongMinuteIsForcedToCorrectByuValidateDate() {
         String input = ADD+taskNamesForInput[3]+"00-12-20 1:60\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
-        LinkedList<Task> tasks = tudu.taskList.getSortedByDueDate();
+        LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
                 () -> Assertions.assertNotEquals(0, 1));
     }
