@@ -9,9 +9,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class TaskListUI {
+public class TaskListUI extends TaskList {
     private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
-    protected TaskList taskList = new TaskList();
     private final static int DEFAULT_NUMBER_OPTION = 26;
     private final static String DEFAULT_STRING_OPTION = "n";
     private BufferedReader bufferedReader;
@@ -80,7 +79,7 @@ public class TaskListUI {
             } while (!successful);
             TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED);
             String project = questionPrompt("What type of project is this task?");
-            taskList.addTask(new Task(taskName, dueDate, status, project));
+            this.addTask(new Task(taskName, dueDate, status, project));
             System.out.println("Task has been added to Tudu!");
             addTask = yesOrNoPrompt("Add more tasks?(y/n)", true, false);
         }
