@@ -3,37 +3,36 @@ package com.tudu.task;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 
 public class Task{
-    // Task class contains : title, dueDate, TaskStatus, project, IF:project color
+    // Task class contains : name, dueDate, TaskStatus, project, IF:project color
     // All fields are private
-    private String title;
+    private String name;
     private LocalDateTime dueDate;
     private TaskStatus status;
     private TaskProject project;
 
     protected Task(LocalDateTime dueDate){
-        this.title = "DEFAULT";
+        this.name = "DEFAULT";
         this.dueDate = dueDate;
         this.status = TaskStatus.UNSTARTED;
         this.project = new TaskProject("DEFAULT");
     }
 
-    protected Task(String title, LocalDateTime dueDate, TaskStatus status, String project) {
-        this.title = title;
+    protected Task(String name, LocalDateTime dueDate, TaskStatus status, String project) {
+        this.name = name;
         this.dueDate = dueDate;
         this.status = status;
         this.project = new TaskProject(project);
     }
 
     // Getters and setters for all fields
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     protected LocalDateTime getDueDate() {
@@ -66,7 +65,7 @@ public class Task{
     public String toString() {
         LocalDate dueDate = this.dueDate.toLocalDate();
         LocalTime dueTime = this.dueDate.toLocalTime();
-        return  "Task: "+title+", due at: " +dueDate+" "+dueTime +", current status: " +status +", project type: " +project.getName() ;
+        return  "Task: "+ name +", due at: " +dueDate+" "+dueTime +", current status: " +status +", project type: " +project.getName() ;
     }
 
     // IF: add colored display based on project color
