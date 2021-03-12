@@ -77,7 +77,8 @@ public class TaskListUI extends TaskList {
                     System.out.println("The chosen date does not exist, please input a valid date in the form" + DATE_FORMAT);
                 }
             } while (!successful);
-            TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED);
+            //TaskStatus status = yesOrNoPrompt("Have you already begun the task?(y/n)", TaskStatus.ONGOING, TaskStatus.UNSTARTED);
+            boolean status = yesOrNoPrompt("Have you already begun the task?(y/n)", true, false);
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
             System.out.println("Task has been added to Tudu!");
