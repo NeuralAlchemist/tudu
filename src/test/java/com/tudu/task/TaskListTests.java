@@ -47,10 +47,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      public void tasksAddedSequentiallyWithAscendingDueDateAreSortedByAscendingDueDate() {
          testDates();
          TaskList example = new TaskList();
-         example.addTask("Workout", dates.get(0), TaskStatus.UNSTARTED, "Exercise");
-         example.addTask("Read LOTR", dates.get(1), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Collect package", dates.get(2), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Write a good test", dates.get(3), TaskStatus.UNSTARTED, "Work");
+         example.addTask("Workout", dates.get(0), false, "Exercise");
+         example.addTask("Read LOTR", dates.get(1), false, "Personal");
+         example.addTask("Collect package", dates.get(2), false, "Personal");
+         example.addTask("Write a good test", dates.get(3), false, "Work");
          LinkedList<Task> sortedDueDate = example.getSortedByDueDate();
          Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
@@ -65,10 +65,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     public void tasksAddedSequentiallyWithAscendingDueDateAreSortedByAscendingDueDate() {
         testDates();
         TaskList example = new TaskList();
-        example.addTask("Workout", dates.get(0), TaskStatus.UNSTARTED, "Exercise");
-        example.addTask("Read LOTR", dates.get(1), TaskStatus.UNSTARTED, "Personal");
-        example.addTask("Collect package", dates.get(2), TaskStatus.UNSTARTED, "Personal");
-        example.addTask("Write a good test", dates.get(3), TaskStatus.UNSTARTED, "Work");
+        example.addTask("Workout", dates.get(0), false, "Exercise");
+        example.addTask("Read LOTR", dates.get(1), false, "Personal");
+        example.addTask("Collect package", dates.get(2), false, "Personal");
+        example.addTask("Write a good test", dates.get(3), false, "Work");
         LinkedList<Task> sortedDueDate = example.getSortedByDueDate();
         Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                 () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
@@ -83,10 +83,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      void tasksAddedSequentiallyWithDescendingDueDateAreSortedByAscendingDueDate() {
          testDates();
          TaskList example = new TaskList();
-         example.addTask("Workout", dates.get(3), TaskStatus.UNSTARTED, "Exercise");
-         example.addTask("Read LOTR", dates.get(2), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Collect package", dates.get(1), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Write a good test", dates.get(0), TaskStatus.UNSTARTED, "Work");
+         example.addTask("Workout", dates.get(3), false, "Exercise");
+         example.addTask("Read LOTR", dates.get(2), false, "Personal");
+         example.addTask("Collect package", dates.get(1), false, "Personal");
+         example.addTask("Write a good test", dates.get(0), false, "Work");
          LinkedList<Task> sortedDueDate = example.getSortedByDueDate();
          Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
@@ -100,10 +100,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      void tasksAddedSequentiallyWithRandomDueDateAreSortedByAscendingDueDate() {
          testDates();
          TaskList example = new TaskList();
-         example.addTask("Workout", dates.get(2), TaskStatus.UNSTARTED, "Exercise");
-         example.addTask("Read LOTR", dates.get(0), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Collect package", dates.get(3), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Write a good test", dates.get(1), TaskStatus.UNSTARTED, "Work");
+         example.addTask("Workout", dates.get(2), false, "Exercise");
+         example.addTask("Read LOTR", dates.get(0), false, "Personal");
+         example.addTask("Collect package", dates.get(3), false, "Personal");
+         example.addTask("Write a good test", dates.get(1), false, "Work");
          LinkedList<Task> sortedDueDate = example.getSortedByDueDate();
          Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
@@ -116,15 +116,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      void tasksAddedSequentiallyWithDuplicateDueDatesInRandomOrderAreSortedByAscendingDueDate() {
          testDates();
          TaskList example = new TaskList();
-         example.addTask("Workout", dates.get(2), TaskStatus.UNSTARTED, "Exercise");
-         example.addTask("Read LOTR", dates.get(0), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Collect package", dates.get(1), TaskStatus.UNSTARTED, "Personal");
-         example.addTask("Write a good test", dates.get(1), TaskStatus.UNSTARTED, "Work");
+         example.addTask("Workout", dates.get(2), false, "Exercise");
+         example.addTask("Read LOTR", dates.get(0), false, "Personal");
+         example.addTask("Collect package", dates.get(1), false, "Personal");
+         example.addTask("Write a good test", dates.get(1), false, "Work");
          LinkedList<Task> sortedDueDate = example.getSortedByDueDate();
          Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(2).getDueDate()),
                  () -> assertEquals(dates.get(2), sortedDueDate.get(3).getDueDate()));
+     }
+
+     @Test
+     @DisplayName("empty task name results in default name for task")
+     void emptyTaskNameResultsInDefaultNameForTask() {
+         testDates();
+         TaskList example = new TaskList();
+         example.addTask("", dates.get(2), false, "Empty");
+         LinkedList<Task> tasks = example.getSortedByDueDate();
+         Assertions.assertAll(() -> assertEquals(1, example.getNumberOfTasks()),
+                 () -> assertEquals("NO NAME", tasks.get(0).getName()));
+     }
+
+     @Test
+     @DisplayName("empty project name results in default name for project")
+     void emptyProjectNameResultsInDefaultNameForProject() {
+         testDates();
+         TaskList example = new TaskList();
+         example.addTask("Empty", dates.get(2), false, "");
+         Assertions.assertEquals(true, example.getSortedByProject().containsKey("NO NAME"));
+         assertEquals(1, example.getNumberOfTasks());
      }
 
 }
