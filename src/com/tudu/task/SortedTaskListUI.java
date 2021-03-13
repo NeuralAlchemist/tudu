@@ -36,12 +36,17 @@ public class SortedTaskListUI extends SortedTaskList {
         while (cont) {
             displayMenu();
             int input = 0;
-            try {
-                String temp = bufferedReader.readLine();
-                input = temp.isEmpty()? DEFAULT_NUMBER_OPTION : Integer.parseInt(temp); //DEFAULT
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            boolean successful;
+            do{
+                try {
+                    String temp = bufferedReader.readLine();
+                    input = temp.isEmpty()? DEFAULT_NUMBER_OPTION : Integer.parseInt(temp); //DEFAULT
+                    successful = true;
+                } catch (IOException | NumberFormatException e) {
+                    System.out.println("Invalid input! Please type a number in the range [1-4]");
+                    successful = false;
+                }
+            }while(!successful);
             switch (input) {
                 case 1:
                     System.out.println("Viewing all tasks");
@@ -90,9 +95,11 @@ public class SortedTaskListUI extends SortedTaskList {
         format.setLenient(false);
         try {
             Date example = format.parse(in);
+            System.out.println(example);
             result = example.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         } catch (ParseException e) {
+            System.out.println("Exception for date");
             result = null;
         }
         return result;
