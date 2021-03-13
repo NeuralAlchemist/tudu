@@ -9,7 +9,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class TaskListUI extends SortedTaskList {
+public class SortedTaskListUI extends SortedTaskList {
     private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
     private final static int DEFAULT_NUMBER_OPTION = 26;
     private final static String DEFAULT_STRING_OPTION = "n";

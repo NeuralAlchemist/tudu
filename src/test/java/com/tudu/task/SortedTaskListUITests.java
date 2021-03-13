@@ -3,16 +3,14 @@ package com.tudu.task;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-public class TaskListUITests {
+public class SortedTaskListUITests {
 
-    private TaskListUI tudu;
+    private SortedTaskListUI tudu;
     private String[] taskNamesForInput = {"stretch\n", "kill a zombie\n", "do not smoke\n", "eat icecream\n"};
     private String[] taskNames = {"stretch", "kill a zombie", "do not smoke", "eat icecream"};
     private LocalDateTime[] localDueDates = {LocalDateTime.of(2021,3,11,13,0),
@@ -32,7 +30,7 @@ public class TaskListUITests {
 
     @BeforeEach
     public void init(){
-        tudu = new TaskListUI();
+        tudu = new SortedTaskListUI();
     }
 
     @Test
