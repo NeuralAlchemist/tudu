@@ -3,7 +3,7 @@ package com.tudu.task;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class SortedTaskList {
+public class SortedTaskList extends TaskListObject{
     // Probably a set Collection of Tasks is TaskList
     // Private fields
     private TreeMap<String, ArrayList<Task>> projectSortedMap;
@@ -17,7 +17,8 @@ public class SortedTaskList {
 
     // Methods : ~~addTask~~, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
     // update to check for already present tasks and return false if not added
-    public void addTask(String taskName, LocalDateTime dueDate, boolean status, String project) {
+    @Override
+    protected void addTask(String taskName, LocalDateTime dueDate, boolean status, String project) {
         Task task = new Task(taskName, dueDate, status, project);
         String projectName = task.getProject();
         boolean addedToProjectSortedMap = false;
@@ -73,6 +74,7 @@ public class SortedTaskList {
 
 
     // Methods : sortByDate(ascending/descending), sortByProjectFlag(ascending/descending)
+    @Override
     protected void displayByDueDate(boolean ascending){
         Iterator<Task> itr = ascending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
         while(itr.hasNext()){
@@ -80,6 +82,7 @@ public class SortedTaskList {
         }
     }
 
+    @Override
     protected void displayByProject(boolean ascending){
         NavigableSet<String> entries = ascending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
         for(String entry : entries){
