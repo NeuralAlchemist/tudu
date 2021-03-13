@@ -1,10 +1,10 @@
 package com.tudu;
 
-import com.tudu.task.TaskListUI;
+import com.tudu.task.SortedTaskListUI;
 
 public class Main {
     public static void main(String[] args) {
-        TaskListUI tudu = new TaskListUI();
+        SortedTaskListUI tudu = new SortedTaskListUI();
         tudu.readInput(System.in);
     }
 }
