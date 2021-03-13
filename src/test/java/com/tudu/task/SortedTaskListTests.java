@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
  public class SortedTaskListTests {
 
-     private TaskListUI tudu;
      private String[] taskNamesForInput = {"stretch\n", "kill a zombie\n", "do not smoke\n", "eat icecream\n"};
      private String[] taskNames = {"stretch", "kill a zombie", "do not smoke", "eat icecream"};
      private LocalDateTime[] localDueDates = {LocalDateTime.of(2021,3,11,13,0),
@@ -27,11 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      private String[] dueDates = {"21-3-11 13:00\n","00-1-1 1:1\n","87-12-12 20:00\n","2050-10-23 10:0\n"};
      private String[] projectNamesForInput = {"personal\n", "work\n", "health\n", "culinary\n"};
      private String[] projectNames = {"personal", "work", "health", "culinary"};
-
-     @BeforeEach
-     public void init(){
-         tudu = new TaskListUI();
-     }
 
      static ArrayList<LocalDateTime> dates = new ArrayList<>(4); ;
      public void testDates(){
