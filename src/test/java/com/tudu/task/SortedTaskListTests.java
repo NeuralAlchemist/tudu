@@ -4,7 +4,6 @@ package com.tudu.task;
 import org.junit.jupiter.api.*;
 
 
-import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,7 +11,7 @@ import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
- public class TaskListTests{
+ public class SortedTaskListTests {
 
      private TaskListUI tudu;
      private String[] taskNamesForInput = {"stretch\n", "kill a zombie\n", "do not smoke\n", "eat icecream\n"};
@@ -46,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @DisplayName("tasks added sequentially with ascending due date are sorted by ascending due date")
      public void tasksAddedSequentiallyWithAscendingDueDateAreSortedByAscendingDueDate() {
          testDates();
-         TaskList example = new TaskList();
+         SortedTaskList example = new SortedTaskList();
          example.addTask("Workout", dates.get(0), false, "Exercise");
          example.addTask("Read LOTR", dates.get(1), false, "Personal");
          example.addTask("Collect package", dates.get(2), false, "Personal");
@@ -82,7 +81,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @DisplayName("tasks added sequentially with descending due date are sorted by ascending due date")
      void tasksAddedSequentiallyWithDescendingDueDateAreSortedByAscendingDueDate() {
          testDates();
-         TaskList example = new TaskList();
+         SortedTaskList example = new SortedTaskList();
          example.addTask("Workout", dates.get(3), false, "Exercise");
          example.addTask("Read LOTR", dates.get(2), false, "Personal");
          example.addTask("Collect package", dates.get(1), false, "Personal");
@@ -99,7 +98,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @DisplayName("tasks added sequentially with random due date are sorted by ascending due date")
      void tasksAddedSequentiallyWithRandomDueDateAreSortedByAscendingDueDate() {
          testDates();
-         TaskList example = new TaskList();
+         SortedTaskList example = new SortedTaskList();
          example.addTask("Workout", dates.get(2), false, "Exercise");
          example.addTask("Read LOTR", dates.get(0), false, "Personal");
          example.addTask("Collect package", dates.get(3), false, "Personal");
@@ -115,7 +114,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @DisplayName("tasks added sequentially with duplicate due dates in random order are sorted by ascending due date")
      void tasksAddedSequentiallyWithDuplicateDueDatesInRandomOrderAreSortedByAscendingDueDate() {
          testDates();
-         TaskList example = new TaskList();
+         SortedTaskList example = new SortedTaskList();
          example.addTask("Workout", dates.get(2), false, "Exercise");
          example.addTask("Read LOTR", dates.get(0), false, "Personal");
          example.addTask("Collect package", dates.get(1), false, "Personal");
@@ -131,7 +130,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @DisplayName("empty task name results in default name for task")
      void emptyTaskNameResultsInDefaultNameForTask() {
          testDates();
-         TaskList example = new TaskList();
+         SortedTaskList example = new SortedTaskList();
          example.addTask("", dates.get(2), false, "Empty");
          LinkedList<Task> tasks = example.getSortedByDueDate();
          Assertions.assertAll(() -> assertEquals(1, example.getNumberOfTasks()),
@@ -142,7 +141,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @DisplayName("empty project name results in default name for project")
      void emptyProjectNameResultsInDefaultNameForProject() {
          testDates();
-         TaskList example = new TaskList();
+         SortedTaskList example = new SortedTaskList();
          example.addTask("Empty", dates.get(2), false, "");
          Assertions.assertEquals(true, example.getSortedByProject().containsKey("NO NAME"));
          assertEquals(1, example.getNumberOfTasks());
