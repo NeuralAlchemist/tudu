@@ -1,7 +1,11 @@
 package com.tudu.task;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class SortedTaskList extends TaskListObject{
@@ -66,6 +70,7 @@ public class SortedTaskList extends TaskListObject{
         }
     }
 
+
     protected LinkedList<Task> getSortedByDueDate() {
         return dueDateSortedList;
     }
@@ -113,20 +118,21 @@ public class SortedTaskList extends TaskListObject{
         return numberOfTasks;
     }
 
+    @Override
     protected void saveTaskListToFile(String stringPathToDatabase){
-        File test = new File(stringPathToDatabase);
+        File databaseFile = new File(stringPathToDatabase);
         PrintWriter writer;
         try {
             // Creates a new file if it does not exist
-            test.createNewFile();
-            writer = new PrintWriter(new FileOutputStream(test, true));
+            databaseFile.createNewFile();
+            writer = new PrintWriter(new FileOutputStream(databaseFile, true));
             Iterator<Task> itr = dueDateSortedList.iterator();
             Task current;
             while(itr.hasNext()){
                 current = itr.next();
                 writer.println(current.getName());
                 writer.println(current.getDueDate());
-                writer.println(current.getStatus());
+                writer.println(current.getStatus().ordinal());
                 writer.println(current.getProject());
             }
             writer.close();
@@ -138,8 +144,24 @@ public class SortedTaskList extends TaskListObject{
 
     }
 
-    protected void loadTaskListFromFile(){
-
+    protected void loadTaskListFromFile(String stringPathToDatabase){
+        /*File databaseFile = new File(stringPathToDatabase);
+        Path pathToDatabase = Paths.get(stringPathToDatabase);
+        ArrayList<String> content;
+        if(databaseFile.exists()){
+            try {
+                content = new ArrayList<>(Files.readAllLines(pathToDatabase));
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+                for(int i = 0; i < content.size(); i = i+4){
+                    addTask(content.get(i),
+                            LocalDateTime.parse(content.get(i+1), formatter),
+                            TaskStatus.valueOf(content.get(i+2)),
+                            content.get(i+3));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
     }
 
     /*public void editByProject(){
