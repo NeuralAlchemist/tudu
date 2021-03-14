@@ -85,7 +85,10 @@ public class SortedTaskListUI extends SortedTaskList {
                     System.out.println("The chosen date does not exist (OR) please input a valid date in the format" + DATE_FORMAT);
                 }
             } while (!successful);
-            boolean status = yesOrNoPrompt("Have you already begun the task?(y/n)");
+            int status = Integer.parseInt(questionPrompt("Choose one of the following options about your task status[1-3]" +
+                    "\n1 -> I'm currently doing it"+
+                    "\n2 -> I have finished it"+
+                    "\n3 -> I have not begun it yet"));
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
             addTask = yesOrNoPrompt("Add more tasks?(y/n)");
