@@ -9,6 +9,6 @@ abstract class TaskListObject {
     // Method to edit fields of a Task
     // Method to mark task as done
     // Method to remove tasks
-    // Method to save to a file
+    protected abstract void saveTaskListToFile(String stringPathToDatabase);
     // Method to load from a file
 }
