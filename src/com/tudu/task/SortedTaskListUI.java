@@ -32,10 +32,10 @@ public class SortedTaskListUI extends SortedTaskList {
         bufferedReader = new BufferedReader(new InputStreamReader(in));
         System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1,1));
         System.out.println("Get organizing with TuDu! \n");
-        //Display "welcome back if loading from a file
         boolean cont = true;
+        //Display welcome/loading messagega
+        loadTaskListFromFile(stringPathToDatabase);
         while (cont) {
-            // add method to look for tudu-databse.txt
             displayMenu();
             int input = 0;
             boolean successful;
