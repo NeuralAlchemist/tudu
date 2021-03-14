@@ -1,5 +1,6 @@
 package com.tudu.task;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -111,6 +112,34 @@ public class SortedTaskList extends TaskListObject{
         return numberOfTasks;
     }
 
+    protected void saveTaskListToFile(){
+        File test = new File("tudu-database.txt");
+        PrintWriter writer;
+        try {
+            // Creates a new file if it does not exist
+            test.createNewFile();
+            writer = new PrintWriter(new FileOutputStream(test, true));
+            Iterator<Task> itr = dueDateSortedList.iterator();
+            Task current;
+            while(itr.hasNext()){
+                current = itr.next();
+                writer.println(current.getName());
+                writer.println(current.getDueDate());
+                writer.println(current.getStatus());
+                writer.println(current.getProject());
+            }
+            writer.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot save to file, as file not found!");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    protected void loadTaskListFromFile(){
+
+    }
 
     /*public void editByProject(){
         NavigableSet<String> entries = projectSortedMap.navigableKeySet();
