@@ -2,6 +2,7 @@ package com.tudu.task;
 
 
 import org.junit.jupiter.api.*;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,11 +31,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
              LocalDateTime.of(1980, 1, 1, 12, 0),
              LocalDateTime.of(2080, 1, 1, 12, 0),
              LocalDateTime.of(2180, 1, 1, 12, 0));
+     private String DEFAULT_STATUS = String.valueOf(TaskStatus.values().length-1);
+     private String ONGOING_STATUS = "0";
+     private String DONE_STATUS = "1";
      private SortedTaskList sortedTaskList;
      private final String stringPathToDatabase = "tudu-database.txt";
      private final Path pathToDatabase = Paths.get(stringPathToDatabase);
      private final int numberOfTaskFields = 4;
      private final String DEFAULT_NAME = "NO NAME";
+     File databaseFile = new File(stringPathToDatabase);
     @BeforeEach
     public void init(){
          sortedTaskList = new SortedTaskList();
@@ -157,8 +162,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          }
          sortedTaskList.addTask("", localDueDates[3], false, "");
          sortedTaskList.addTask(taskNames[2], localDueDates[2],  false, projectNames[2]);
-         List<String> actual = Arrays.asList(taskNames[2], localDueDates[2].toString(), TaskStatus.UNSTARTED.toString(), projectNames[2],
-                 DEFAULT_NAME, localDueDates[3].toString(), TaskStatus.UNSTARTED.toString(), DEFAULT_NAME);
+         List<String> actual = Arrays.asList(taskNames[2], localDueDates[2].toString(), DEFAULT_STATUS, projectNames[2],
+                 DEFAULT_NAME, localDueDates[3].toString(), DEFAULT_STATUS, DEFAULT_NAME);
          ArrayList<String> content;
          sortedTaskList.saveTaskListToFile(stringPathToDatabase);
          try {
@@ -167,5 +172,101 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          } catch (IOException e) {
              e.printStackTrace();
          }
+     }
+
+     @Test
+     @Disabled
+     @DisplayName("empty task list remains empty after reading a non existing database")
+     void emptyTaskListRemainsEmptyAfterReadingANonExistingDatabase() {
+        databaseFile.delete();
+        int expectedNumberOfTasksBeforeLoading = 0;
+        int expectedNumberOfTasksAfterLoading = 0;
+        Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getNumberOfTasks());
+        Assertions.assertFalse(databaseFile.exists());
+        sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
+        Assertions.assertEquals(expectedNumberOfTasksAfterLoading, sortedTaskList.getNumberOfTasks());
+     }
+
+     @Test
+     @Disabled
+     @DisplayName("empty task list remains empty after reading an empty database")
+     void emptyTaskListRemainsEmptyAfterReadingAnEmptyDatabase() {
+         databaseFile.delete();
+         try {
+             databaseFile.createNewFile();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+         int expectedNumberOfTasksBeforeLoading = 0;
+         int expectedNumberOfTasksAfterLoading = 0;
+         Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getNumberOfTasks());
+         Assertions.assertTrue(databaseFile.length() == 0);
+         sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
+         Assertions.assertEquals(expectedNumberOfTasksAfterLoading, sortedTaskList.getNumberOfTasks());
+     }
+
+     @Test
+     @Disabled
+     @DisplayName("non empty task list remains unchanged after reading a non existing database")
+     void nonEmptyTaskListRemainsUnchangedAfterReadingANonExistingDatabase() {
+        databaseFile.delete();
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+        int expectedNumberOfTasksBeforeLoading = 1;
+        int expectedNumberOfTasksAfterLoading = 1;
+        Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getNumberOfTasks());
+        Assertions.assertFalse(databaseFile.exists());
+        sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
+        assertEquals(expectedNumberOfTasksAfterLoading, sortedTaskList.getNumberOfTasks());
+
+     }
+
+     @Test
+     @Disabled
+     @DisplayName("non empty task list remains unchanged after reading an empty database")
+     void nonEmptyTaskListRemainsUnchangedAfterReadingAnEmptyDatabase() {
+         databaseFile.delete();
+         try {
+             databaseFile.createNewFile();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+         int expectedNumberOfTasksBeforeLoading = 1;
+         int expectedNumberOfTasksAfterLoading = 1;
+         Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getNumberOfTasks());
+         Assertions.assertTrue(databaseFile.length() == 0);
+         sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
+         Assertions.assertEquals(expectedNumberOfTasksAfterLoading, sortedTaskList.getNumberOfTasks());
+     }
+
+     @Test
+     @Disabled
+     @DisplayName("empty task list includes tasks from database after reading from non-empty database")
+     void emptyTaskListIncludesTasksFromDatabaseAfterReadingFromNonEmptyDatabase() {
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+         sortedTaskList.saveTaskListToFile(stringPathToDatabase);
+         Assertions.assertTrue(databaseFile.length() != 0);
+         int numberOfTasksToLoadFromDatabase = sortedTaskList.getNumberOfTasks();
+         sortedTaskList = new SortedTaskList();
+         int numberOfTasksInEmptySortedTaskList = 0;
+         assertEquals(numberOfTasksInEmptySortedTaskList, sortedTaskList.getNumberOfTasks());
+         sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
+         assertEquals(numberOfTasksInEmptySortedTaskList + numberOfTasksToLoadFromDatabase, sortedTaskList.getNumberOfTasks());
+     }
+
+     @Test
+     @Disabled
+     @DisplayName("non empty task list includes unique tasks from database after reading from non-empty database")
+     void nonEmptyTaskListIncludesUniqueTasksFromDatabaseAfterReadingFromNonEmptyDatabase() {
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+         sortedTaskList.saveTaskListToFile(stringPathToDatabase);
+         Assertions.assertTrue(databaseFile.length() != 0);
+         int numberOfTasksToLoadFromDatabase = sortedTaskList.getNumberOfTasks();
+         sortedTaskList = new SortedTaskList();
+         sortedTaskList.addTask(taskNames[0], localDueDates[2], true, projectNames[3]);
+         int numberOfTasksInSortedTaskList = 1;
+         assertEquals(numberOfTasksInSortedTaskList, sortedTaskList.getNumberOfTasks());
+         sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
+         assertEquals(numberOfTasksInSortedTaskList + numberOfTasksToLoadFromDatabase, sortedTaskList.getNumberOfTasks());
      }
 }
