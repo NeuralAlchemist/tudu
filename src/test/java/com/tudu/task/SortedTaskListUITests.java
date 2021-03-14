@@ -2,11 +2,14 @@ package com.tudu.task;
 
 import org.junit.jupiter.api.*;
 
-import java.io.ByteArrayInputStream;
+import java.io.*;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.TreeMap;
+import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SortedTaskListUITests {
 
@@ -27,6 +30,9 @@ public class SortedTaskListUITests {
     private final String YES = "yah\n";
     private final String NO = "nah\n";
     private final String EMPTY = "\n";
+    private final String DEFAULT_NAME = "NO NAME";
+    private final String stringPathToDatabase = "tudu-database.txt";
+    private final Path pathToDatabase = Paths.get(stringPathToDatabase);
 
     @BeforeEach
     public void init(){
@@ -95,8 +101,8 @@ public class SortedTaskListUITests {
     }
 
     @Test
-    @DisplayName("task with wrong minute is forced to correct byu validate date")
-    void taskWithWrongMinuteIsForcedToCorrectByuValidateDate() {
+    @DisplayName("task with wrong minute is forced to correct by validate date")
+    void taskWithWrongMinuteIsForcedToCorrectByValidateDate() {
         String input = ADD+taskNamesForInput[3]+"00-12-20 1:60\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         LinkedList<Task> tasks = tudu.getSortedByDueDate();
@@ -114,6 +120,49 @@ public class SortedTaskListUITests {
         ArrayList<Task> current = tasks.get("");
         Assertions.assertAll( () -> assertEquals("", current.get(0).getProject()),
                 () -> assertEquals(TaskStatus.UNSTARTED, current.get(0).getStatus()));
+    }
+
+    @Test
+    @DisplayName("saved file contains all the entered task details in newline delimited form")
+    void savedFileContainsAllTheEnteredTaskDetailsInNewlineDelimitedForm() {
+        //Delete contents of file to start with a clean file
+        try {
+            new FileOutputStream(stringPathToDatabase).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String input = ADD+EMPTY+dueDates[3]+EMPTY+EMPTY+YES+taskNamesForInput[2]+dueDates[2]+EMPTY+projectNamesForInput[2]+NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        ArrayList<String> content;
+        try {
+            content = new ArrayList<>(Files.readAllLines(pathToDatabase));
+            assertEquals(8, content.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @DisplayName("saved file contains the inputted task details in due date sorted order")
+    void savedFileContainsTheInputtedTaskDetailsInDueDateSortedOrder() {
+        //Delete contents of file to start with a clean file
+        try {
+            new FileOutputStream(stringPathToDatabase).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String input = ADD+EMPTY+dueDates[3]+EMPTY+EMPTY+YES+
+                        taskNamesForInput[2]+dueDates[2]+EMPTY+projectNamesForInput[2]+NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        List<String> actual = Arrays.asList(taskNames[2], localDueDates[2].toString(), TaskStatus.UNSTARTED.toString(), projectNames[2],
+                DEFAULT_NAME, localDueDates[3].toString(), TaskStatus.UNSTARTED.toString(), DEFAULT_NAME);
+        ArrayList<String> content;
+        try {
+            content = new ArrayList<>(Files.readAllLines(pathToDatabase));
+            Assertions.assertAll(() -> Assertions.assertLinesMatch(actual, content));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
