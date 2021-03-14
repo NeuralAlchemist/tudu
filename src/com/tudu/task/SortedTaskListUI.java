@@ -60,6 +60,7 @@ public class SortedTaskListUI extends SortedTaskList {
                     break;
                 case 4:
                     System.out.println("Saving and quitting");
+                    saveTaskListToFile();
                     cont = false;
                     break;
                 default:
@@ -79,7 +80,7 @@ public class SortedTaskListUI extends SortedTaskList {
                 dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")"));
                 successful = (dueDate != null);
                 if (!successful) {
-                    System.out.println("The chosen date does not exist, please input a valid date in the form" + DATE_FORMAT);
+                    System.out.println("The chosen date does not exist (OR) please input a valid date in the format" + DATE_FORMAT);
                 }
             } while (!successful);
             boolean status = yesOrNoPrompt("Have you already begun the task?(y/n)");
@@ -142,5 +143,7 @@ public class SortedTaskListUI extends SortedTaskList {
         } while (!successful);
         return result;
     }
+
+
 
 }
