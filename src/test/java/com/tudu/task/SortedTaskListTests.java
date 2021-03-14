@@ -34,6 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      private String DEFAULT_STATUS = String.valueOf(TaskStatus.values().length-1);
      private String ONGOING_STATUS = "0";
      private String DONE_STATUS = "1";
+     private int ONGOING_STATUS_INPUT = 1;
+     private int DONE_STATUS_INPUT = 2;
+     private int UNSTARTED_STATUS_INPUT = 3;
      private SortedTaskList sortedTaskList;
      private final String stringPathToDatabase = "tudu-database.txt";
      private final Path pathToDatabase = Paths.get(stringPathToDatabase);
@@ -48,10 +51,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Test
      @DisplayName("tasks added sequentially with ascending due date are sorted by ascending due date")
      public void tasksAddedSequentiallyWithAscendingDueDateAreSortedByAscendingDueDate() {
-         sortedTaskList.addTask("Workout", dates.get(0), false, "Exercise");
-         sortedTaskList.addTask("Read LOTR", dates.get(1), false, "Personal");
-         sortedTaskList.addTask("Collect package", dates.get(2), false, "Personal");
-         sortedTaskList.addTask("Write a good test", dates.get(3), false, "Work");
+         sortedTaskList.addTask("Workout", dates.get(0), UNSTARTED_STATUS_INPUT, "Exercise");
+         sortedTaskList.addTask("Read LOTR", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Collect package", dates.get(2), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Write a good test", dates.get(3), UNSTARTED_STATUS_INPUT, "Work");
          LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
          List<LocalDateTime> actual = Arrays.asList(
                  sortedDueDate.get(0).getDueDate(),
@@ -65,10 +68,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Test
      @DisplayName("tasks added sequentially with descending due date are sorted by ascending due date")
      void tasksAddedSequentiallyWithDescendingDueDateAreSortedByAscendingDueDate() {
-         sortedTaskList.addTask("Workout", dates.get(3), false, "Exercise");
-         sortedTaskList.addTask("Read LOTR", dates.get(2), false, "Personal");
-         sortedTaskList.addTask("Collect package", dates.get(1), false, "Personal");
-         sortedTaskList.addTask("Write a good test", dates.get(0), false, "Work");
+         sortedTaskList.addTask("Workout", dates.get(3), UNSTARTED_STATUS_INPUT, "Exercise");
+         sortedTaskList.addTask("Read LOTR", dates.get(2), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Collect package", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Write a good test", dates.get(0), UNSTARTED_STATUS_INPUT, "Work");
          LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
          List<LocalDateTime> actual = Arrays.asList(
                  sortedDueDate.get(0).getDueDate(),
@@ -83,10 +86,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Test
      @DisplayName("tasks added sequentially with random due date are sorted by ascending due date")
      void tasksAddedSequentiallyWithRandomDueDateAreSortedByAscendingDueDate() {
-         sortedTaskList.addTask("Workout", dates.get(2), false, "Exercise");
-         sortedTaskList.addTask("Read LOTR", dates.get(0), false, "Personal");
-         sortedTaskList.addTask("Collect package", dates.get(3), false, "Personal");
-         sortedTaskList.addTask("Write a good test", dates.get(1), false, "Work");
+         sortedTaskList.addTask("Workout", dates.get(2), UNSTARTED_STATUS_INPUT, "Exercise");
+         sortedTaskList.addTask("Read LOTR", dates.get(0), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Collect package", dates.get(3), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Write a good test", dates.get(1), UNSTARTED_STATUS_INPUT, "Work");
          LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
          List<LocalDateTime> actual = Arrays.asList(
                  sortedDueDate.get(0).getDueDate(),
@@ -100,10 +103,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Test
      @DisplayName("tasks added sequentially with duplicate due dates in random order are sorted by ascending due date")
      void tasksAddedSequentiallyWithDuplicateDueDatesInRandomOrderAreSortedByAscendingDueDate() {
-         sortedTaskList.addTask("Workout", dates.get(2), false, "Exercise");
-         sortedTaskList.addTask("Read LOTR", dates.get(0), false, "Personal");
-         sortedTaskList.addTask("Collect package", dates.get(1), false, "Personal");
-         sortedTaskList.addTask("Write a good test", dates.get(1), false, "Work");
+         sortedTaskList.addTask("Workout", dates.get(2), UNSTARTED_STATUS_INPUT, "Exercise");
+         sortedTaskList.addTask("Read LOTR", dates.get(0), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Collect package", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
+         sortedTaskList.addTask("Write a good test", dates.get(1), UNSTARTED_STATUS_INPUT, "Work");
          LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
          Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
@@ -114,7 +117,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Test
      @DisplayName("empty task name results in default name for task")
      void emptyTaskNameResultsInDefaultNameForTask() {
-         sortedTaskList.addTask("", dates.get(2), false, "Empty");
+         sortedTaskList.addTask("", dates.get(2), UNSTARTED_STATUS_INPUT, "Empty");
          LinkedList<Task> tasks = sortedTaskList.getSortedByDueDate();
          Assertions.assertAll(() -> assertEquals(1, sortedTaskList.getNumberOfTasks()),
                  () -> assertEquals("NO NAME", tasks.get(0).getName()));
@@ -123,7 +126,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Test
      @DisplayName("empty project name results in default name for project")
      void emptyProjectNameResultsInDefaultNameForProject() {
-         sortedTaskList.addTask("Empty", dates.get(2), false, "");
+         sortedTaskList.addTask("Empty", dates.get(2), UNSTARTED_STATUS_INPUT, "");
          Assertions.assertEquals(true, sortedTaskList.getSortedByProject().containsKey("NO NAME"));
          assertEquals(1, sortedTaskList.getNumberOfTasks());
      }
@@ -137,8 +140,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          } catch (IOException e) {
              e.printStackTrace();
          }
-         sortedTaskList.addTask("", localDueDates[3], false, "");
-         sortedTaskList.addTask(taskNames[2], localDueDates[2],  false, projectNames[2]);
+         sortedTaskList.addTask("", localDueDates[3], UNSTARTED_STATUS_INPUT, "");
+         sortedTaskList.addTask(taskNames[2], localDueDates[2],  UNSTARTED_STATUS_INPUT, projectNames[2]);
          int numberOfTasksAdded = 2;
          assertEquals(2, sortedTaskList.getNumberOfTasks());
          ArrayList<String> content;
@@ -160,8 +163,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          } catch (IOException e) {
              e.printStackTrace();
          }
-         sortedTaskList.addTask("", localDueDates[3], false, "");
-         sortedTaskList.addTask(taskNames[2], localDueDates[2],  false, projectNames[2]);
+         sortedTaskList.addTask("", localDueDates[3], UNSTARTED_STATUS_INPUT, "");
+         sortedTaskList.addTask(taskNames[2], localDueDates[2],  UNSTARTED_STATUS_INPUT, projectNames[2]);
          List<String> actual = Arrays.asList(taskNames[2], localDueDates[2].toString(), DEFAULT_STATUS, projectNames[2],
                  DEFAULT_NAME, localDueDates[3].toString(), DEFAULT_STATUS, DEFAULT_NAME);
          ArrayList<String> content;
@@ -210,7 +213,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @DisplayName("non empty task list remains unchanged after reading a non existing database")
      void nonEmptyTaskListRemainsUnchangedAfterReadingANonExistingDatabase() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
         int expectedNumberOfTasksBeforeLoading = 1;
         int expectedNumberOfTasksAfterLoading = 1;
         Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getNumberOfTasks());
@@ -230,7 +233,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          } catch (IOException e) {
              e.printStackTrace();
          }
-         sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
          int expectedNumberOfTasksBeforeLoading = 1;
          int expectedNumberOfTasksAfterLoading = 1;
          Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getNumberOfTasks());
@@ -243,7 +246,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Disabled
      @DisplayName("empty task list includes tasks from database after reading from non-empty database")
      void emptyTaskListIncludesTasksFromDatabaseAfterReadingFromNonEmptyDatabase() {
-         sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
          sortedTaskList.saveTaskListToFile(stringPathToDatabase);
          Assertions.assertTrue(databaseFile.length() != 0);
          int numberOfTasksToLoadFromDatabase = sortedTaskList.getNumberOfTasks();
@@ -258,12 +261,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      @Disabled
      @DisplayName("non empty task list includes unique tasks from database after reading from non-empty database")
      void nonEmptyTaskListIncludesUniqueTasksFromDatabaseAfterReadingFromNonEmptyDatabase() {
-         sortedTaskList.addTask(taskNames[2], localDueDates[1], true, projectNames[0]);
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
          sortedTaskList.saveTaskListToFile(stringPathToDatabase);
          Assertions.assertTrue(databaseFile.length() != 0);
          int numberOfTasksToLoadFromDatabase = sortedTaskList.getNumberOfTasks();
          sortedTaskList = new SortedTaskList();
-         sortedTaskList.addTask(taskNames[0], localDueDates[2], true, projectNames[3]);
+         sortedTaskList.addTask(taskNames[0], localDueDates[2], ONGOING_STATUS_INPUT, projectNames[3]);
          int numberOfTasksInSortedTaskList = 1;
          assertEquals(numberOfTasksInSortedTaskList, sortedTaskList.getNumberOfTasks());
          sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
