@@ -178,7 +178,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      }
 
      @Test
-     @Disabled
      @DisplayName("empty task list remains empty after reading a non existing database")
      void emptyTaskListRemainsEmptyAfterReadingANonExistingDatabase() {
         databaseFile.delete();
@@ -191,7 +190,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      }
 
      @Test
-     @Disabled
      @DisplayName("empty task list remains empty after reading an empty database")
      void emptyTaskListRemainsEmptyAfterReadingAnEmptyDatabase() {
          databaseFile.delete();
@@ -209,7 +207,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      }
 
      @Test
-     @Disabled
      @DisplayName("non empty task list remains unchanged after reading a non existing database")
      void nonEmptyTaskListRemainsUnchangedAfterReadingANonExistingDatabase() {
         databaseFile.delete();
@@ -224,7 +221,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      }
 
      @Test
-     @Disabled
      @DisplayName("non empty task list remains unchanged after reading an empty database")
      void nonEmptyTaskListRemainsUnchangedAfterReadingAnEmptyDatabase() {
          databaseFile.delete();
@@ -243,9 +239,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      }
 
      @Test
-     @Disabled
      @DisplayName("empty task list includes tasks from database after reading from non-empty database")
      void emptyTaskListIncludesTasksFromDatabaseAfterReadingFromNonEmptyDatabase() {
+         databaseFile.delete();
+         try {
+             databaseFile.createNewFile();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
          sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
          sortedTaskList.saveTaskListToFile(stringPathToDatabase);
          Assertions.assertTrue(databaseFile.length() != 0);
@@ -258,9 +259,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      }
 
      @Test
-     @Disabled
      @DisplayName("non empty task list includes unique tasks from database after reading from non-empty database")
      void nonEmptyTaskListIncludesUniqueTasksFromDatabaseAfterReadingFromNonEmptyDatabase() {
+         databaseFile.delete();
+         try {
+             databaseFile.createNewFile();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
          sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
          sortedTaskList.saveTaskListToFile(stringPathToDatabase);
          Assertions.assertTrue(databaseFile.length() != 0);
@@ -272,4 +278,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
          assertEquals(numberOfTasksInSortedTaskList + numberOfTasksToLoadFromDatabase, sortedTaskList.getNumberOfTasks());
      }
+
+     //database file should not contain re-write content that is already in it.
 }
