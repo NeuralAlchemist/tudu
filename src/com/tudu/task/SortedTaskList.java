@@ -125,6 +125,8 @@ public class SortedTaskList extends TaskListObject{
         try {
             // Creates a new file if it does not exist
             databaseFile.createNewFile();
+            // Clear the file before writing data into
+            new PrintWriter(databaseFile).close();
             writer = new PrintWriter(new FileOutputStream(databaseFile, true));
             Iterator<Task> itr = dueDateSortedList.iterator();
             Task current;
@@ -145,7 +147,7 @@ public class SortedTaskList extends TaskListObject{
     }
 
     protected void loadTaskListFromFile(String stringPathToDatabase){
-        /*File databaseFile = new File(stringPathToDatabase);
+        File databaseFile = new File(stringPathToDatabase);
         Path pathToDatabase = Paths.get(stringPathToDatabase);
         ArrayList<String> content;
         if(databaseFile.exists()){
@@ -155,13 +157,13 @@ public class SortedTaskList extends TaskListObject{
                 for(int i = 0; i < content.size(); i = i+4){
                     addTask(content.get(i),
                             LocalDateTime.parse(content.get(i+1), formatter),
-                            TaskStatus.valueOf(content.get(i+2)),
+                            Integer.parseInt(content.get(i+2))+1,
                             content.get(i+3));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
     /*public void editByProject(){
