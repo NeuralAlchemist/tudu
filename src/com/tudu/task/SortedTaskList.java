@@ -24,7 +24,7 @@ public class SortedTaskList extends TaskListObject{
     // Methods : ~~addTask~~, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
     // update to check for already present tasks and return false if not added
     @Override
-    protected void addTask(String taskName, LocalDateTime dueDate, boolean status, String project) {
+    protected void addTask(String taskName, LocalDateTime dueDate, int status, String project) {
         Task task = new Task(taskName, dueDate, status, project);
         String projectName = task.getProject();
         boolean addedToProjectSortedMap = false;
