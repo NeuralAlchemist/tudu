@@ -21,11 +21,11 @@ public class Task{
     }
 
     // Getters and setters for all fields
-    public String getName() {
+    protected String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 
@@ -33,15 +33,15 @@ public class Task{
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    protected void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    public TaskStatus getStatus() {
+    protected TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    protected void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -49,7 +49,7 @@ public class Task{
         return project.getName();
     }
 
-    public void setProject(String project) {
+    protected void setProject(String project) {
         this.project = new TaskProject(project);
     }
 
