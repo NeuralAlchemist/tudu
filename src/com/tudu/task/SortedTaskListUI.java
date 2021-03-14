@@ -13,6 +13,7 @@ public class SortedTaskListUI extends SortedTaskList {
     private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
     private final static int DEFAULT_NUMBER_OPTION = 26;
     private final static String DEFAULT_STRING_OPTION = "n";
+    private static String stringPathToDatabase = "tudu-database.txt";
     private BufferedReader bufferedReader;
 
     // Class to display TaskList and read user input from terminal
@@ -34,6 +35,7 @@ public class SortedTaskListUI extends SortedTaskList {
         //Display "welcome back if loading from a file
         boolean cont = true;
         while (cont) {
+            // add method to look for tudu-databse.txt
             displayMenu();
             int input = 0;
             boolean successful;
@@ -60,7 +62,7 @@ public class SortedTaskListUI extends SortedTaskList {
                     break;
                 case 4:
                     System.out.println("Saving and quitting");
-                    saveTaskListToFile();
+                    saveTaskListToFile(stringPathToDatabase);
                     cont = false;
                     break;
                 default:
