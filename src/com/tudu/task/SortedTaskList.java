@@ -11,6 +11,7 @@ public class SortedTaskList extends TaskListObject{
     private LinkedList<Task> dueDateSortedList;
     private int numberOfTasks = 0;
 
+
     protected SortedTaskList() {
         projectSortedMap = new TreeMap<>();
         dueDateSortedList = new LinkedList<>();
@@ -112,8 +113,8 @@ public class SortedTaskList extends TaskListObject{
         return numberOfTasks;
     }
 
-    protected void saveTaskListToFile(){
-        File test = new File("tudu-database.txt");
+    protected void saveTaskListToFile(String stringPathToDatabase){
+        File test = new File(stringPathToDatabase);
         PrintWriter writer;
         try {
             // Creates a new file if it does not exist
