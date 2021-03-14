@@ -13,10 +13,11 @@ public class Task{
     private TaskProject project;
 
 
-    protected Task(String name, LocalDateTime dueDate, boolean status, String project) {
+    protected Task(String name, LocalDateTime dueDate, int status, String project) {
+        TaskStatus[] statusList = TaskStatus.values();
         this.name = name.isEmpty() ? "NO NAME" : name;
         this.dueDate = dueDate;
-        this.status = status ? TaskStatus.ONGOING : TaskStatus.UNSTARTED;
+        this.status = statusList[status-1];
         this.project = new TaskProject(project);
     }
 
