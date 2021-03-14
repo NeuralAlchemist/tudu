@@ -15,6 +15,9 @@ public class SortedTaskListUITests {
                                         LocalDateTime.of(1987, 12, 12, 20, 0),
                                         LocalDateTime.of(2050, 10, 23, 10,0)};
     private String[] dueDates = {"21-3-11 13:00\n","00-1-1 1:1\n","87-12-12 20:00\n","2050-10-23 10:0\n"};
+    private String DEFAULT_STATUS = "3\n";
+    private String ONGOING_STATUS = "1\n";
+    private String DONE_STATUS = "2\n";
     private String[] projectNamesForInput = {"personal\n", "work\n", "health\n", "culinary\n"};
     private String[] projectNames = {"personal", "work", "health", "culinary"};
     private final String VIEW = "1\n";
@@ -42,7 +45,7 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("task is added with correct inputs and should be in the tasklist")
     void taskIsAddedWithCorrectInputsAndShouldBeInTheTasklist() {
-        String input = VIEW+ADD+taskNamesForInput[0]+dueDates[3]+NO+projectNamesForInput[0]+NO+QUIT;
+        String input = VIEW+ADD+taskNamesForInput[0]+dueDates[3]+DEFAULT_STATUS+projectNamesForInput[0]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         tudu.displayByDueDate(true);
         ArrayList<Task> foundTasks = tudu.findTaskByName(taskNames[0]);
@@ -54,7 +57,7 @@ public class SortedTaskListUITests {
    @Test
     @DisplayName("task with wrong year is forced to correct by validate Date")
     void taskWithWrongYearIsForcedToCorrectByValidateDate() {
-        String input = ADD+taskNamesForInput[3]+"-00-1-1 1:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
+        String input = ADD+taskNamesForInput[3]+"-00-1-1 1:1\n"+dueDates[1]+DEFAULT_STATUS+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
        LinkedList<Task> tasks = tudu.getSortedByDueDate();
        Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
@@ -65,7 +68,7 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("task with wrong month is forced to correct by validate Date")
     void taskWithWrongMonthIsForcedToCorrectByValidateDate() {
-        String input = ADD+taskNamesForInput[3]+"00-14-1 1:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
+        String input = ADD+taskNamesForInput[3]+"00-14-1 1:1\n"+dueDates[1]+DEFAULT_STATUS+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
@@ -75,7 +78,7 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("task with wrong day of month is forced to correct by validate Date")
     void taskWithWrongDayOfMonthIsForcedToCorrectByValidateDate() {
-        String input = ADD+taskNamesForInput[3]+"00-12-300 1:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
+        String input = ADD+taskNamesForInput[3]+"00-12-300 1:1\n"+dueDates[1]+DEFAULT_STATUS+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
@@ -85,7 +88,7 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("task with wrong hour is forced to correct by validate Date")
     void taskWithWrongHourIsForcedToCorrectByValidateDate() {
-        String input = ADD+taskNamesForInput[3]+"00-12-20 26:1\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
+        String input = ADD+taskNamesForInput[3]+"00-12-20 26:1\n"+dueDates[1]+DEFAULT_STATUS+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
@@ -95,7 +98,7 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("task with wrong minute is forced to correct by validate date")
     void taskWithWrongMinuteIsForcedToCorrectByValidateDate() {
-        String input = ADD+taskNamesForInput[3]+"00-12-20 1:60\n"+dueDates[1]+NO+projectNamesForInput[2]+NO+QUIT;
+        String input = ADD+taskNamesForInput[3]+"00-12-20 1:60\n"+dueDates[1]+DEFAULT_STATUS+projectNamesForInput[2]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         LinkedList<Task> tasks = tudu.getSortedByDueDate();
         Assertions.assertAll( () -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
@@ -105,7 +108,7 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("Input to add task can be empty except for due date")
     void inputToAddTaskCanBeEmptyExceptForDueDate() {
-        String input = ADD+EMPTY+dueDates[1]+EMPTY+EMPTY+NO+QUIT;
+        String input = ADD+EMPTY+dueDates[1]+DEFAULT_STATUS+EMPTY+NO+QUIT;
         Assertions.assertEquals(0,tudu.getNumberOfTasks());
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         Assertions.assertEquals(1, tudu.getNumberOfTasks());
