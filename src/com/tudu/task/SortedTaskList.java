@@ -69,6 +69,7 @@ public class SortedTaskList extends TaskListObject {
         }
         if (addedToDueDateSortedList && addedToProjectSortedMap) {
             numberOfTasks++;
+            // Remove this line -> make UI use the return value to print
             System.out.println("Task has been added");
             result = task;
         } else {
@@ -77,11 +78,15 @@ public class SortedTaskList extends TaskListObject {
         return result;
     }
 
+    private int getProjectSortedMapIndex(Task task){
+        return projectSortedMap.get(task.getProject()).indexOf(task);
+    }
 
+    // Remove these
     protected LinkedList<Task> getSortedByDueDate() {
         return dueDateSortedList;
     }
-
+    // Remove these
     protected TreeMap<String, ArrayList<Task>> getSortedByProject() {
         return projectSortedMap;
     }
@@ -114,7 +119,7 @@ public class SortedTaskList extends TaskListObject {
         Task current;
         while (itr.hasNext()) {
             current = itr.next();
-            if (current.getName().equalsIgnoreCase(taskName)) {
+            if (current.getName().toLowerCase().contains(taskName.toLowerCase())){
                 listOfTasksFound.add(current);
             }
         }
@@ -176,6 +181,7 @@ public class SortedTaskList extends TaskListObject {
         if (searchForDatabaseFile(stringPathToDatabase)) {
             result = loadTaskListFromFile(stringPathToDatabase);
         } else {
+            // Display database unavailable! Let's start fresh!
             result = false;
         }
         return result;
