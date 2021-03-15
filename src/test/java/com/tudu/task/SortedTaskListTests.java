@@ -3,7 +3,6 @@ package com.tudu.task;
 
 import org.junit.jupiter.api.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,8 +11,9 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
- public class SortedTaskListTests {
+public class SortedTaskListTests {
 
      private String[] taskNamesForInput = {"stretch\n", "kill a zombie\n", "do not smoke\n", "eat icecream\n"};
      private String[] taskNames = {"stretch", "kill a zombie", "do not smoke", "eat icecream"};
@@ -350,5 +350,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          sortedTaskList.setTaskInTaskList(new Task(taskNames[3], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]),
                  possibleTasks.get(0));
          Assertions.assertEquals(taskNames[3], sortedTaskList.dueDateSortedList.get(0).getName());
+     }
+
+     @Test
+     @DisplayName("removed task is not present in the project sorted map")
+     void removedTaskIsNotPresentInTheProjectSortedMap() {
+         databaseFile.delete();
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+         sortedTaskList.removeTaskInTaskList(sortedTaskList.dueDateSortedList.get(0));
+         Assertions.assertEquals(true, sortedTaskList.projectSortedMap.get(projectNames[0]).isEmpty());
+     }
+
+    @Test
+    @DisplayName("removed task is not present in the due date sorted list")
+    void removedTaskIsNotPresentInTheDueDateSortedList() {
+        databaseFile.delete();
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.removeTaskInTaskList(sortedTaskList.dueDateSortedList.get(0));
+        Assertions.assertEquals(true, sortedTaskList.dueDateSortedList.isEmpty());
+        Assertions.assertNull(sortedTaskList.findTaskByName(taskNames[2]));
+    }
+
+     @Test
+     @DisplayName("remove task method does not increase the number of tasks")
+     void removeTaskMethodDoesNotIncreaseTheNumberOfTasks() {
+         databaseFile.delete();
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+         int numberOfTasksBeforeRemove = sortedTaskList.getNumberOfTasks();
+         sortedTaskList.removeTaskInTaskList(sortedTaskList.dueDateSortedList.get(0));
+         assertFalse(sortedTaskList.getNumberOfTasks() > numberOfTasksBeforeRemove);
      }
 }
