@@ -3,6 +3,7 @@ package com.tudu.task;
 
 import org.junit.jupiter.api.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -178,7 +179,45 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
      }
 
      @Test
-     @DisplayName("empty task list remains empty after reading a non existing database")
+     @DisplayName("search for non existing database returns false")
+     void searchForNonExistingDatabaseReturnsFalse() {
+         databaseFile.delete();
+         assertEquals(false, sortedTaskList.searchForDatabaseFile(stringPathToDatabase));
+     }
+
+     @Test
+     @DisplayName("search for existing empty database returns true")
+     void searchForexistingEmptyDatabaseReturnsTrue() {
+         databaseFile.delete();
+         try {
+             databaseFile.createNewFile();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+         assertEquals(true, sortedTaskList.searchForDatabaseFile(stringPathToDatabase));
+     }
+
+     @Test
+     @DisplayName("loading a non existing file will return false")
+     void loadingANonExistingFileWillReturnFalse() {
+         databaseFile.delete();
+         assertEquals(false, sortedTaskList.loadTaskListFromFile(stringPathToDatabase));
+     }
+
+     @Test
+     @DisplayName("loading a existing file will return true")
+     void loadingANonExistingFileWillThrowIoException() {
+        databaseFile.delete();
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.saveTaskListToFile(stringPathToDatabase);
+        sortedTaskList = new SortedTaskList();
+        assertEquals(true, sortedTaskList.loadTaskListFromFile(stringPathToDatabase));
+
+
+     }
+
+     @Test
+     @DisplayName("empty task list remains empty after loading a non existing database")
      void emptyTaskListRemainsEmptyAfterReadingANonExistingDatabase() {
         databaseFile.delete();
         int expectedNumberOfTasksBeforeLoading = 0;
@@ -279,5 +318,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          assertEquals(numberOfTasksInSortedTaskList + numberOfTasksToLoadFromDatabase, sortedTaskList.getNumberOfTasks());
      }
 
-     //database file should not contain re-write content that is already in it.
+     //database file should contain re-write content that is already in it.
+
+
+     @Test
+     @DisplayName("empty database is not loaded into tasklist")
+     void emptyDatabaseIsNotLoadedIntoTasklist() {
+         databaseFile.delete();
+         assertEquals(false, sortedTaskList.loadTaskList(stringPathToDatabase));
+     }
 }
