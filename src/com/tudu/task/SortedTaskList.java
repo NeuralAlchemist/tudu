@@ -86,6 +86,12 @@ public class SortedTaskList extends TaskListObject {
         return dueDateSortedList.indexOf(task);
     }
 
+    protected void setTaskInProjectSortedMap(int index, Task task){
+        ArrayList<Task> updated = projectSortedMap.get(task.getProject());
+        updated.set(index, task);
+        projectSortedMap.put(task.getProject(), updated);
+    }
+
     // Remove these
     protected LinkedList<Task> getSortedByDueDate() {
         return dueDateSortedList;
