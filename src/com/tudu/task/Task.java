@@ -63,6 +63,23 @@ public class Task{
         return  "Task: "+ name +", due at: " +dueDate+" "+dueTime +", current status: " +status +", project type: " +project.getName() ;
     }
 
+
+    public boolean equals(Object o){
+        if(o == this){
+            return true;
+        }
+
+        if(!(o instanceof Task)){
+            return false;
+        }
+
+        Task task = (Task) o;
+        return ((task.getName().equals(this.name)) &&
+                (task.getDueDate().isEqual(this.dueDate)) &&
+                ((task.getStatus().compareTo(this.status)) == 0) &&
+                (task.getProject().equals(this.getProject())));
+    }
+
     // IF: add colored display based on project color
     // IF: add a font style : Italics for finished, Bold for those that need to be done, normal for ongoing
 }
