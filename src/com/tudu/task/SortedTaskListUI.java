@@ -60,6 +60,7 @@ public class SortedTaskListUI extends SortedTaskList {
             switch (input) {
                 case 1:
                     System.out.println("Viewing all tasks");
+                    viewTask();
                     break;
                 case 2:
                     System.out.println("Add a new task");
@@ -102,21 +103,19 @@ public class SortedTaskListUI extends SortedTaskList {
         }
     }
 
-    /*private void viewTask(){
+    private void viewTask(){
         boolean viewTask = true;
         while(viewTask){
-            boolean successful;
-            do{
-                int displayOption = Integer.parseInt(questionPrompt("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date"));
-                if(displayOption < 1 || displayOption > 2){
-                    System.out.println("Invalid option was chosen, please select a valid option");
-                    successful = false;
-                } else {
-
-                }
+            int displayOption = doUntilConditionBreaks("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
+            boolean isAscending = yesOrNoPrompt("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
+            if(displayOption == 1){
+                displayByProject(isAscending);
+            }else{
+                displayByDueDate(isAscending);
             }
+            viewTask = yesOrNoPrompt("Continue viewing tasks?(y/n)");
         }
-    }*/
+    }
 
    /* private void editTask() {
         boolean editTask = true;
@@ -246,6 +245,7 @@ public class SortedTaskListUI extends SortedTaskList {
         return result;
     }
 
+    // Maybe improve with varargs, if empty varargs check != null?
     protected int doUntilConditionBreaks(String prompt, int lowerLimit, int upperLimit) {
         boolean successful;
         int status;
