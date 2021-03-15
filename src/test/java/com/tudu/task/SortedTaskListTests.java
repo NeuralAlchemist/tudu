@@ -336,7 +336,7 @@ public class SortedTaskListTests {
         sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]);
         int positionOfTaskUnderTest = 0;
         Task toBeUpdated = sortedTaskList.dueDateSortedList.get(positionOfTaskUnderTest);
-        sortedTaskList.setTaskInTaskList(new Task(taskNames[1], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]), toBeUpdated);
+        sortedTaskList.setTaskInTaskList(taskNames[1], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1], toBeUpdated);
         assertEquals(taskNames[1], sortedTaskList.dueDateSortedList.get(positionOfTaskUnderTest).getName());
     }
 
@@ -348,7 +348,7 @@ public class SortedTaskListTests {
         sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]);
         // Task is in the first index position of the arraylist mapped to the task's project
         Task toBeUpdated = sortedTaskList.projectSortedMap.get(projectNames[1]).get(0);
-        sortedTaskList.setTaskInTaskList(new Task(taskNames[3], localDueDates[firstDate], DONE_STATUS_INPUT, projectNames[1]), toBeUpdated);
+        sortedTaskList.setTaskInTaskList(taskNames[3], localDueDates[firstDate], DONE_STATUS_INPUT, projectNames[1], toBeUpdated);
         assertEquals(taskNames[3], sortedTaskList.projectSortedMap.get(projectNames[1]).get(0).getName());
     }
 
