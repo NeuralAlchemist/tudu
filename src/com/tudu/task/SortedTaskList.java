@@ -89,11 +89,16 @@ public class SortedTaskList extends TaskListObject {
 
     // Return the element that was set
     protected void setTaskInTaskList(Task newTask, Task oldTask){
-        ArrayList<Task> arrayListToBeUpdated = projectSortedMap.get(oldTask.getProject());
-        arrayListToBeUpdated.set(getProjectSortedMapIndex(oldTask), newTask);
-        projectSortedMap.put(newTask.getProject(), arrayListToBeUpdated);
-        dueDateSortedList.set(getDueDateSortedListIndex(oldTask), newTask);
+        if(!newTask.getName().equals(oldTask.getName())){
+            oldTask.setName(newTask.getName());
+        } else if ((newTask.getStatus().compareTo(oldTask.getStatus())) != 0) {
+            oldTask.setStatus(newTask.getStatus());
+        } else {
+            removeTaskInTaskList(oldTask);
+            addTask(newTask.getName(), newTask.getDueDate(), newTask.getStatus().ordinal()+1, newTask.getProject());
+        }
     }
+
 
     protected boolean removeTaskInTaskList(Task task){
         return projectSortedMap.get(task.getProject()).remove(task) && dueDateSortedList.remove(task);
