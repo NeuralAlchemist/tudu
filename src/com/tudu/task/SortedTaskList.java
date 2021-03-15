@@ -1,5 +1,7 @@
 package com.tudu.task;
 
+import org.fusesource.jansi.Ansi;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,6 +9,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class SortedTaskList extends TaskListObject{
     // Probably a set Collection of Tasks is TaskList
@@ -147,11 +150,38 @@ public class SortedTaskList extends TaskListObject{
     }
 
     protected void loadTaskListFromFile(String stringPathToDatabase){
+        System.out.print("Searching for database ..");
+        System.out.print(ansi().a(Ansi.Attribute.BLINK_SLOW).a("."));
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //System.out.print(ansi().reset());
+        //System.out.flush();
+        System.out.print(ansi().reset());
+        System.out.print(ansi().eraseLine(Ansi.Erase.BACKWARD).cursorToColumn(1));
+        //System.out.print(ansi().eraseLine(Ansi.Erase.BACKWARD).cursorToColumn(1).reset());
+        System.out.println("Searching for database ...");
         File databaseFile = new File(stringPathToDatabase);
         Path pathToDatabase = Paths.get(stringPathToDatabase);
         ArrayList<String> content;
         if(databaseFile.exists()){
+            System.out.print("Loading tasks ");
             try {
+                String[] loadingPattern = {"-","\\","|","/","-"};
+                System.out.print("/");
+                for(int i = 0; i < loadingPattern.length ; i++){
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.print(loadingPattern[i% (loadingPattern.length)]);
+                    System.out.print(ansi().cursorLeft(1));
+
+                }
+                System.out.println("");
                 content = new ArrayList<>(Files.readAllLines(pathToDatabase));
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
                 for(int i = 0; i < content.size(); i = i+4){
