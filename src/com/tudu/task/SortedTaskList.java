@@ -16,8 +16,8 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class SortedTaskList extends TaskListObject {
     // Probably a set Collection of Tasks is TaskList
     // Private fields
-    private TreeMap<String, ArrayList<Task>> projectSortedMap;
-    private LinkedList<Task> dueDateSortedList;
+    protected TreeMap<String, ArrayList<Task>> projectSortedMap;
+    protected LinkedList<Task> dueDateSortedList;
     private int numberOfTasks = 0;
 
 
@@ -79,6 +79,7 @@ public class SortedTaskList extends TaskListObject {
     }
 
     private int getProjectSortedMapIndex(Task task){
+
         return projectSortedMap.get(task.getProject()).indexOf(task);
     }
 
@@ -86,10 +87,11 @@ public class SortedTaskList extends TaskListObject {
         return dueDateSortedList.indexOf(task);
     }
 
-    protected void setTaskInProjectSortedMap(int index, Task task){
-        ArrayList<Task> updated = projectSortedMap.get(task.getProject());
-        updated.set(index, task);
-        projectSortedMap.put(task.getProject(), updated);
+    protected void setTaskInTaskList(Task newTask, Task oldTask){
+        ArrayList<Task> arrayListToBeUpdated = projectSortedMap.get(oldTask.getProject());
+        arrayListToBeUpdated.set(getProjectSortedMapIndex(oldTask), newTask);
+        projectSortedMap.put(newTask.getProject(), arrayListToBeUpdated);
+        dueDateSortedList.set(getDueDateSortedListIndex(oldTask), newTask);
     }
 
     // Remove these
