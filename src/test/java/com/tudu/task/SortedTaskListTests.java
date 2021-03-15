@@ -327,4 +327,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          databaseFile.delete();
          assertEquals(false, sortedTaskList.loadTaskList(stringPathToDatabase));
      }
+
+     @Test
+     @DisplayName("set a task at available index is present in project sorted map")
+     void setATaskAtAvailableIndex() {
+        databaseFile.delete();
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        ArrayList<Task> possibleTasks = sortedTaskList.findTaskByName(taskNames[2]);
+         System.out.println(possibleTasks.toString());
+        sortedTaskList.setTaskInTaskList(new Task(taskNames[3], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]),
+                possibleTasks.get(0));
+        Assertions.assertEquals(taskNames[3], sortedTaskList.projectSortedMap.get(projectNames[0]).get(0).getName());
+     }
+
+     @Test
+     @DisplayName("set task at available index should be present in due date sorted list")
+     void setTaskAtAvailableIndexShouldBePresentInDueDateSortedList() {
+         databaseFile.delete();
+         sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+         ArrayList<Task> possibleTasks = sortedTaskList.findTaskByName(taskNames[2]);
+         System.out.println(possibleTasks.toString());
+         sortedTaskList.setTaskInTaskList(new Task(taskNames[3], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]),
+                 possibleTasks.get(0));
+         Assertions.assertEquals(taskNames[3], sortedTaskList.dueDateSortedList.get(0).getName());
+     }
 }
