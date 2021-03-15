@@ -88,7 +88,8 @@ public class SortedTaskList extends TaskListObject {
     }
 
     // Return the element that was set
-    protected void setTaskInTaskList(Task newTask, Task oldTask){
+    protected void setTaskInTaskList(String taskName, LocalDateTime dueDate, int status, String project, Task oldTask){
+        Task newTask = new Task(taskName, dueDate, status, project);
         if(!newTask.getName().equals(oldTask.getName())){
             oldTask.setName(newTask.getName());
         } else if ((newTask.getStatus().compareTo(oldTask.getStatus())) != 0) {
