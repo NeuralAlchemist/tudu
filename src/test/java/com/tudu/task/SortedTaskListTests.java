@@ -328,29 +328,29 @@ public class SortedTaskListTests {
          assertEquals(false, sortedTaskList.loadTaskList(stringPathToDatabase));
      }
 
-     @Test
-     @DisplayName("set a task at available index is present in project sorted map")
-     void setATaskAtAvailableIndex() {
+    @Test
+    @DisplayName("setting task name does not change the task position in due date sorted list")
+    void settingTaskNameDoesNotChangeTheTaskPositionInProjectSortedMap() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
-        ArrayList<Task> possibleTasks = sortedTaskList.findTaskByName(taskNames[2]);
-         System.out.println(possibleTasks.toString());
-        sortedTaskList.setTaskInTaskList(new Task(taskNames[3], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]),
-                possibleTasks.get(0));
-        Assertions.assertEquals(taskNames[3], sortedTaskList.projectSortedMap.get(projectNames[0]).get(0).getName());
-     }
+        sortedTaskList.addTask(taskNames[2], localDueDates[secondDate], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]);
+        int positionOfTaskUnderTest = 0;
+        Task toBeUpdated = sortedTaskList.dueDateSortedList.get(positionOfTaskUnderTest);
+        sortedTaskList.setTaskInTaskList(new Task(taskNames[1], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]), toBeUpdated);
+        assertEquals(taskNames[1], sortedTaskList.dueDateSortedList.get(positionOfTaskUnderTest).getName());
+    }
 
-     @Test
-     @DisplayName("set task at available index should be present in due date sorted list")
-     void setTaskAtAvailableIndexShouldBePresentInDueDateSortedList() {
-         databaseFile.delete();
-         sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
-         ArrayList<Task> possibleTasks = sortedTaskList.findTaskByName(taskNames[2]);
-         System.out.println(possibleTasks.toString());
-         sortedTaskList.setTaskInTaskList(new Task(taskNames[3], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]),
-                 possibleTasks.get(0));
-         Assertions.assertEquals(taskNames[3], sortedTaskList.dueDateSortedList.get(0).getName());
-     }
+    @Test
+    @DisplayName("setting task status does not change the task position in project sorted map")
+    void settingTaskStatusDoesNotChangeTheTaskPositionInProjectSortedMap() {
+        databaseFile.delete();
+        sortedTaskList.addTask(taskNames[2], localDueDates[secondDate], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]);
+        // Task is in the first index position of the arraylist mapped to the task's project
+        Task toBeUpdated = sortedTaskList.projectSortedMap.get(projectNames[1]).get(0);
+        sortedTaskList.setTaskInTaskList(new Task(taskNames[3], localDueDates[firstDate], DONE_STATUS_INPUT, projectNames[1]), toBeUpdated);
+        assertEquals(taskNames[3], sortedTaskList.projectSortedMap.get(projectNames[1]).get(0).getName());
+    }
 
      @Test
      @DisplayName("removed task is not present in the project sorted map")
