@@ -87,11 +87,16 @@ public class SortedTaskList extends TaskListObject {
         return dueDateSortedList.indexOf(task);
     }
 
+    // Return the element that was set
     protected void setTaskInTaskList(Task newTask, Task oldTask){
         ArrayList<Task> arrayListToBeUpdated = projectSortedMap.get(oldTask.getProject());
         arrayListToBeUpdated.set(getProjectSortedMapIndex(oldTask), newTask);
         projectSortedMap.put(newTask.getProject(), arrayListToBeUpdated);
         dueDateSortedList.set(getDueDateSortedListIndex(oldTask), newTask);
+    }
+
+    protected boolean removeTaskInTaskList(Task task){
+        return projectSortedMap.get(task.getProject()).remove(task) && dueDateSortedList.remove(task);
     }
 
     // Remove these
@@ -104,7 +109,7 @@ public class SortedTaskList extends TaskListObject {
     }
 
 
-    // Methods : sortByDate(ascending/descending), sortByProjectFlag(ascending/descending)
+
     @Override
     protected void displayByDueDate(boolean ascending) {
         Iterator<Task> itr = ascending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
