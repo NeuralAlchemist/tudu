@@ -2,6 +2,8 @@ package com.tudu.task;
 
 import org.junit.jupiter.api.*;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,10 +30,19 @@ public class SortedTaskListUITests {
     private final String NO = "nah\n";
     private final String EMPTY = "\n";
     private final String DEFAULT_NAME = "NO NAME";
+    private final String stringPathToDatabase = "tudu-database.txt";
+    private final Path pathToDatabase = Paths.get(stringPathToDatabase);
+    File databaseFile = new File(stringPathToDatabase);
 
     @BeforeEach
     public void init(){
         tudu = new SortedTaskListUI();
+        databaseFile.delete();
+        try {
+            databaseFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
