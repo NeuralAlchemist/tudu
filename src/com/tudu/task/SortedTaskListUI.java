@@ -1,6 +1,7 @@
 package com.tudu.task;
 
 import org.fusesource.jansi.Ansi;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.text.ParseException;
@@ -108,31 +109,66 @@ public class SortedTaskListUI extends SortedTaskList {
             int displayOption = doUntilConditionBreaks("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
             boolean isAscending = yesOrNoPrompt("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
             if (displayOption == 1) {
-                viewTaskByProject(isAscending);
+                viewTaskByProject(isAscending, false);
             } else {
-                viewTaskByDueDate(isAscending);
+                viewTaskByDueDate(isAscending, false);
             }
             viewTask = yesOrNoPrompt("Continue viewing tasks?(y/n)");
         }
     }
 
-    protected void viewTaskByProject(boolean isAscending){
+    protected void viewTaskByProject(boolean isAscending, boolean ableToShowTaskNumber){
         NavigableSet<String> navigableSet = isAscending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
+        int i = 1;
         for (String entry : navigableSet) {
             ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
-            System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size()+"\n");
+            System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size());
             for (Task task : tasksOfProject) {
+                if(ableToShowTaskNumber){
+                    System.out.print((i++)+" -> ");
+                }
                 System.out.println(task.toString());
+            }
+            System.out.println();
+        }
+    }
+
+    protected void viewTaskByDueDate(boolean isAscending, boolean ableToShowTaskNumber){
+        Iterator<Task> itr = isAscending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
+        int i = 1;
+        while (itr.hasNext()) {
+            if(ableToShowTaskNumber){
+                System.out.print((i++)+" -> ");
+            }
+            System.out.println(itr.next().toString());
+        }
+    }
+
+    private void editTask(){
+        boolean editTask = true;
+        while (editTask) {
+            int searchOption = doUntilConditionBreaks("Choose one of the following to begin editing[1-2]:\n" +
+                    "1 -> Show all tasks by project\n" +
+                    "2 -> Show all tasks by due date\n" +
+                    "3 -> Search using task name\n", 1, 3);
+            switch (searchOption) {
+                case 1:
+                    viewTaskByProject(true, true);
+                    break;
+                case 2:
+                    viewTaskByDueDate(true, true);
+                    break;
+                case 3:
+                    //searchByTaskName();
+                    break;
             }
         }
     }
 
-    protected void viewTaskByDueDate(boolean isAscending){
-        Iterator<Task> itr = isAscending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
-        while (itr.hasNext()) {
-            System.out.println(itr.next().toString());
-        }
-    }
+    /*private void searchByTaskName(){
+        String searchTerm = questionPrompt("Enter a word you remember from the task's name");
+        ArrayList<Task> possibleTasks = this.findTaskByName(searchTerm);
+    }*/
 
     /*private void editTask() {
         boolean editTask = true;
