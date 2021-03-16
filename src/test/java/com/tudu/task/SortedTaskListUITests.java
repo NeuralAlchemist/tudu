@@ -1,14 +1,12 @@
 package com.tudu.task;
 
 import org.junit.jupiter.api.*;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SortedTaskListUITests {
 
@@ -36,7 +34,6 @@ public class SortedTaskListUITests {
     private final String stringPathToDatabase = "tudu-database.txt";
     private final Path pathToDatabase = Paths.get(stringPathToDatabase);
     File databaseFile = new File(stringPathToDatabase);
-
     @BeforeEach
     public void init() {
         tudu = new SortedTaskListUI();
@@ -48,13 +45,15 @@ public class SortedTaskListUITests {
         }
     }
 
-    @Test
-    @DisplayName("sample test to check InputStream works for readInput")
-    void sampleTestToSeeInputStreamWorksForReadInput() {
-        String task = "5\n4\n";
-        tudu.readInput(new ByteArrayInputStream(task.getBytes()));
-    }
 
+    @Test
+    @DisplayName("validate date result is not null when input is proper format")
+    void validateDateResultIsNotNullWhenInputIsProperFormat() {
+        assertEquals(0, tudu.getNumberOfTasks());
+        String input = ADD+taskNamesForInput[3]+dueDates[3]+DEFAULT_STATUS+projectNamesForInput[3]+NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        assertNotEquals(null, tudu.dueDateSortedList.get(0).getDueDate());
+    }
 
     @Test
     @DisplayName("task is added with correct inputs and should be in the tasklist")
@@ -69,7 +68,6 @@ public class SortedTaskListUITests {
     }
 
     @Test
-    @Disabled
     @DisplayName("task with wrong year is forced to correct by validate Date")
     void taskWithWrongYearIsForcedToCorrectByValidateDate() {
         String input = ADD + taskNamesForInput[3] + "-00-1-1 1:1\n" + dueDates[1] + DEFAULT_STATUS + projectNamesForInput[2] + NO + QUIT;
@@ -81,7 +79,6 @@ public class SortedTaskListUITests {
 
 
     @Test
-    @Disabled
     @DisplayName("task with wrong month is forced to correct by validate Date")
     void taskWithWrongMonthIsForcedToCorrectByValidateDate() {
         String input = ADD + taskNamesForInput[3] + "00-14-1 1:1\n" + dueDates[1] + DEFAULT_STATUS + projectNamesForInput[2] + NO + QUIT;
@@ -92,7 +89,6 @@ public class SortedTaskListUITests {
     }
 
     @Test
-    @Disabled
     @DisplayName("task with wrong day of month is forced to correct by validate Date")
     void taskWithWrongDayOfMonthIsForcedToCorrectByValidateDate() {
         String input = ADD + taskNamesForInput[3] + "00-12-300 1:1\n" + dueDates[1] + DEFAULT_STATUS + projectNamesForInput[2] + NO + QUIT;
@@ -103,7 +99,6 @@ public class SortedTaskListUITests {
     }
 
     @Test
-    @Disabled
     @DisplayName("task with wrong hour is forced to correct by validate Date")
     void taskWithWrongHourIsForcedToCorrectByValidateDate() {
         String input = ADD + taskNamesForInput[3] + "00-12-20 26:1\n" + dueDates[1] + DEFAULT_STATUS + projectNamesForInput[2] + NO + QUIT;
@@ -114,7 +109,6 @@ public class SortedTaskListUITests {
     }
 
     @Test
-    @Disabled
     @DisplayName("task with wrong minute is forced to correct by validate date")
     void taskWithWrongMinuteIsForcedToCorrectByValidateDate() {
         String input = ADD + taskNamesForInput[3] + "00-12-20 1:60\n" + dueDates[1] + DEFAULT_STATUS + projectNamesForInput[2] + NO + QUIT;
@@ -148,6 +142,27 @@ public class SortedTaskListUITests {
     }*/
 
     @Test
+    @Disabled
+    @DisplayName("checking for word not in task list does not throw exception if list is null")
+    void checkingForWordNotInTaskListDoesNotThrowExceptionIfListIsNull() {
+        try{
+
+        }catch(Exception e){
+            e.printStackTrace();
+            fail("This should not have happened");
+        }
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("invalid input will not quit yes or no prompt")
+    void invalidInputWillNotQuitYesOrNoPrompt() {
+
+    }
+
+    //test what will happen if you pass values after QUIT/QUITING option
+
+    @Test
     @DisplayName("returns the correct task with index from project sorted map")
     void returnsTheCorrectTaskWithIndexFromProjectSortedMap() {
         String input = ADD + EMPTY + dueDates[1] + DEFAULT_STATUS + EMPTY
@@ -158,7 +173,7 @@ public class SortedTaskListUITests {
         assertEquals(3, tudu.getNumberOfTasks());
         Task actual = tudu.getTaskFromProjectSortedMap(2);
         assertEquals(projectNames[2], actual.getProject());
-
-
     }
+
+
 }
