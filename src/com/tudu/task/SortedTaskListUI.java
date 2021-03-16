@@ -47,19 +47,15 @@ public class SortedTaskListUI extends SortedTaskList {
             int input = doWhileConditionIsFalse("Select an option in range [1-4]:", 1, 4);
             switch (input) {
                 case 1:
-                    System.out.println("Viewing all tasks");
                     viewTaskMenu();
                     break;
                 case 2:
-                    System.out.println("Add a new task");
                     addTaskMenu();
                     break;
                 case 3:
-                    System.out.println("Edit a task");
                     editTaskMenu();
                     break;
                 case 4:
-                    System.out.println("Saving and quitting");
                     saveTaskListToFile(stringPathToDatabase);
                     isRunning = false;
                     exitStatus = 0;
@@ -127,16 +123,16 @@ public class SortedTaskListUI extends SortedTaskList {
 
     protected void viewArrayListOfTask(ArrayList<Task> listOfTasks) {
         AtomicInteger i = new AtomicInteger();
-        listOfTasks.stream().forEach(task -> System.out.println((i.getAndIncrement()+1) + " -> " + task));
+        listOfTasks.stream().forEach(task -> System.out.println((i.getAndIncrement() + 1) + " -> " + task));
     }
-    
-    protected Task getTaskFromProjectSortedMap(int index){
+
+    protected Task getTaskFromProjectSortedMap(int index) {
         int i = 1;
         Task result = null;
         outerloop:
-        for(Map.Entry<String, ArrayList<Task>> project : projectSortedMap.entrySet()){
-            for(Task task : project.getValue()){
-                if(i == index){
+        for (Map.Entry<String, ArrayList<Task>> project : projectSortedMap.entrySet()) {
+            for (Task task : project.getValue()) {
+                if (i == index) {
                     result = task;
                     break outerloop;
                 }
@@ -149,66 +145,68 @@ public class SortedTaskListUI extends SortedTaskList {
     private void editTaskMenu() {
         boolean isEditingTask = true;
         // check tasklist is not zero before doing this
+        editaskloop:
         while (isEditingTask) {
-            Task chosenTask;
+            Task chosenTask = null;
             int searchOption = doWhileConditionIsFalse("Choose one of the following to begin editing[1-2]:\n" +
                     "1 -> Show all tasks by project\n" +
                     "2 -> Show all tasks by due date\n" +
-                    "3 -> Search using task name\n", 1, 3);
-                    //Add option to escape from edit here
+                    "3 -> Search using task name\n" +
+                    "4 -> Quit editing", 1, 4);
+            //Add option to escape from edit here
             switch (searchOption) {
                 case 1:
                     viewTaskByProject(true, true);
                     int chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit[1-"
-                            +getNumberOfTasks()+ "]", 1, getNumberOfTasks()); // or quit?
+                            + getNumberOfTasks() + "]", 1, getNumberOfTasks()); // or quit?
                     chosenTask = getTaskFromProjectSortedMap(chosenTaskIndex);
                     break;
                 case 2:
                     viewTaskByDueDate(true, true);
                     chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit[1-"
                             + getNumberOfTasks() + "]", 1, getNumberOfTasks()); // or quit?
-                    chosenTask = dueDateSortedList.get(chosenTaskIndex-1);
+                    chosenTask = dueDateSortedList.get(chosenTaskIndex - 1);
                     break;
                 case 3:
                     ArrayList<Task> listOfTasks = getPossibleListOfTasks();
-                    if (listOfTasks == null || listOfTasks.isEmpty() ){
+                    if (listOfTasks == null || listOfTasks.isEmpty()) {
                         continue;
                     }
                     viewArrayListOfTask(listOfTasks);
                     chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit[1-"
                             + (listOfTasks.size()) + "]", 1, listOfTasks.size()); // or quit?
-                    chosenTask = listOfTasks.get(chosenTaskIndex-1);
+                    chosenTask = listOfTasks.get(chosenTaskIndex - 1);
                     break;
-                default:
-                    chosenTask = null;
+                case 4:
+                    isEditingTask = false;
+                    break editaskloop;
             }
-            boolean isEditingChosenTask;
-            do{
-                // Display task
+            boolean isEditingChosenTask = true;
+            while (isEditingTask && isEditingChosenTask) {
+                System.out.println("Task chosen for editing is:\n" + chosenTask.toString());
                 int fieldToEdit = doWhileConditionIsFalse("Enter the task's field that you want to edit[1-4]" +
                         "\n1 -> Name\n2 -> Due date\n3 -> Status\n4 -> Project", 1, 4);
                 int newStatus;
                 String newValue = null;
                 LocalDateTime newTime;
-                if(fieldToEdit == 3){
+                if (fieldToEdit == 3) {
                     newStatus = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
                     newTime = chosenTask.getDueDate();
                 } else if (fieldToEdit == 2) {
                     newTime = getValidDate();
-                    newStatus = chosenTask.getStatus().ordinal()+1;
+                    newStatus = chosenTask.getStatus().ordinal() + 1;
                 } else {
-                    newStatus = chosenTask.getStatus().ordinal()+1;
+                    newStatus = chosenTask.getStatus().ordinal() + 1;
                     newTime = chosenTask.getDueDate();
                     newValue = promptOpenAnswer("Enter new value: ");
                 }
                 String newName = fieldToEdit == 1 ? newValue : chosenTask.getName();
-                //LocalDateTime newTime = fieldToEdit == 2 ? validateDate(newValue) : chosenTask.getDueDate();
                 String newProject = fieldToEdit == 4 ? newValue : chosenTask.getProject();
                 System.out.println(newStatus);
                 //Confirm changes?
                 setTaskInTaskList(newName, newTime, newStatus, newProject, chosenTask);
                 isEditingChosenTask = promptBooleanAnswer("Continue editing other fields of this task?(y/n)");
-            }while(isEditingChosenTask);
+            }
             isEditingTask = promptBooleanAnswer("Continue editing tasks?(y/n)");
         }
     }
@@ -218,7 +216,7 @@ public class SortedTaskListUI extends SortedTaskList {
         boolean isSearchingWithTaskName;
         ArrayList<Task> possibleTasks;
         do {
-            String searchTerm = promptOpenAnswer("Enter a word you remember from the task's name");
+            String searchTerm = promptOpenAnswer("Enter a word/letter you remember from the task's name");
             possibleTasks = this.findTaskByName(searchTerm);
             if (possibleTasks == null) {
                 isSearchingWithTaskName = promptBooleanAnswer("Looks like no task contains the word you gave!" +
