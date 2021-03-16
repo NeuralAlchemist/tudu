@@ -402,4 +402,28 @@ public class SortedTaskListTests {
                 () -> assertEquals(localDueDates[secondDate], result.get(2).getDueDate()),
                 () -> assertEquals(localDueDates[firstDate], result.get(3).getDueDate()));
     }
+
+    @Test
+    @DisplayName("display by project in descending order returns the correct navigable set")
+    void displayByProjectInDescendingOrderReturnsTheCorrectNavigableSet() {
+        sortedTaskList.addTask("Workout", localDueDates[secondDate], UNSTARTED_STATUS_INPUT, "Exercise");
+        sortedTaskList.addTask("Read LOTR", localDueDates[firstDate], UNSTARTED_STATUS_INPUT, "Personal");
+        sortedTaskList.addTask("Collect package", localDueDates[thirdDate], UNSTARTED_STATUS_INPUT, "Personal");
+        sortedTaskList.addTask("Write a good test", localDueDates[secondDate], UNSTARTED_STATUS_INPUT, "Work");
+        NavigableSet<String> result = sortedTaskList.displayByProject(false);
+        Assertions.assertAll( () -> assertEquals("Work", result.first()),
+                () -> assertEquals("Exercise", result.last()));
+    }
+
+    @Test
+    @DisplayName("display by project in ascending order returns the correct navigable set")
+    void displayByProjectInAscendingOrderReturnsTheCorrectNavigableSet() {
+        sortedTaskList.addTask("Workout", localDueDates[secondDate], UNSTARTED_STATUS_INPUT, "Exercise");
+        sortedTaskList.addTask("Read LOTR", localDueDates[firstDate], UNSTARTED_STATUS_INPUT, "Personal");
+        sortedTaskList.addTask("Collect package", localDueDates[thirdDate], UNSTARTED_STATUS_INPUT, "Personal");
+        sortedTaskList.addTask("Write a good test", localDueDates[secondDate], UNSTARTED_STATUS_INPUT, "Work");
+        NavigableSet<String> result = sortedTaskList.displayByProject(true);
+        Assertions.assertAll( () -> assertEquals("Work", result.last()),
+                () -> assertEquals("Exercise", result.first()));
+    }
 }
