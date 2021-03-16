@@ -39,10 +39,10 @@ public class SortedTaskListUI extends SortedTaskList {
         bufferedReader = new BufferedReader(new InputStreamReader(in));
         System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1, 1));
         System.out.println("Get organizing with TuDu! \n");
-        boolean cont = true;
+        boolean isRunning = true;
         //Display welcome/loading message
         loadTaskList(stringPathToDatabase);
-        while (cont) {
+        while (isRunning) {
             displayMenu();
             int input = doWhileConditionIsFalse("Select an option in range [1-4]:", 1, 4);
             switch (input) {
@@ -61,7 +61,7 @@ public class SortedTaskListUI extends SortedTaskList {
                 case 4:
                     System.out.println("Saving and quitting");
                     saveTaskListToFile(stringPathToDatabase);
-                    cont = false;
+                    isRunning = false;
                     break;
                 default:
                     System.out.println("Invalid input! Please type a number in the range [1-4]");
@@ -71,20 +71,20 @@ public class SortedTaskListUI extends SortedTaskList {
     }
 
     private void addTaskMenu() {
-        boolean addTask = true;
-        while (addTask) {
+        boolean isAddingTask = true;
+        while (isAddingTask) {
             String taskName = questionPrompt("Enter name of task: ");
             LocalDateTime dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")"));
             int status = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
-            addTask = yesOrNoPrompt("Add more tasks?(y/n)");
+            isAddingTask = yesOrNoPrompt("Add more tasks?(y/n)");
         }
     }
 
     private void viewTask() {
-        boolean viewTask = true;
-        while (viewTask) {
+        boolean isViewingTasks = true;
+        while (isViewingTasks) {
             int displayOption = doWhileConditionIsFalse("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
             boolean isAscending = yesOrNoPrompt("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
             if (displayOption == 1) {
@@ -92,7 +92,7 @@ public class SortedTaskListUI extends SortedTaskList {
             } else {
                 viewTaskByDueDate(isAscending, false);
             }
-            viewTask = yesOrNoPrompt("Continue viewing tasks?(y/n)");
+            isViewingTasks = yesOrNoPrompt("Continue viewing tasks?(y/n)");
         }
     }
 
@@ -145,8 +145,8 @@ public class SortedTaskListUI extends SortedTaskList {
     }
 
     private void editTask() {
-        boolean editTask = true;
-        while (editTask) {
+        boolean isEditingTask = true;
+        while (isEditingTask) {
             Task chosenTask;
             int searchOption = doWhileConditionIsFalse("Choose one of the following to begin editing[1-2]:\n" +
                     "1 -> Show all tasks by project\n" +
@@ -210,7 +210,7 @@ public class SortedTaskListUI extends SortedTaskList {
                 }*/
                 isEditingChosenTask = yesOrNoPrompt("Continue editing other fields of this task?(y/n)");
             }while(isEditingChosenTask);
-            editTask = yesOrNoPrompt("Continue editing tasks?(y/n)");
+            isEditingTask = yesOrNoPrompt("Continue editing tasks?(y/n)");
         }
     }
 
@@ -232,7 +232,7 @@ public class SortedTaskListUI extends SortedTaskList {
         return possibleTasks;
     }
 
-
+    // This method needs to have a way of getting the String - failing test!
     private LocalDateTime validateDate(String in) {
         LocalDateTime result;
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
@@ -265,9 +265,9 @@ public class SortedTaskListUI extends SortedTaskList {
     }
 
     private boolean yesOrNoPrompt(String prompt) {
-        boolean result;
+        boolean isTrue;
         String input = null;
-        boolean successful = false;
+        boolean hasTrueOrFalse = false;
         do {
             // add(y/n) here
             System.out.println(prompt);
@@ -278,38 +278,38 @@ public class SortedTaskListUI extends SortedTaskList {
             }
             input = input.isEmpty() ? DEFAULT_STRING_OPTION : input; //DEFAULT
             if (input.substring(0, 1).equalsIgnoreCase("y")) {
-                result = true;
-                successful = true;
+                isTrue = true;
+                hasTrueOrFalse = true;
             } else if (input.substring(0, 1).equalsIgnoreCase("n")) {
-                result = false;
-                successful = true;
+                isTrue = false;
+                hasTrueOrFalse = true;
             } else {
                 System.out.println("Invalid input! Please input yes/no.");
-                result = false;
+                isTrue = false;
             }
-        } while (!successful);
-        return result;
+        } while (!hasTrueOrFalse);
+        return isTrue;
     }
 
     // Maybe improve with varargs, if empty varargs check != null?
     protected int doWhileConditionIsFalse(String prompt, int lowerLimit, int upperLimit) {
-        boolean successful;
+        boolean isWithinLimits;
         int status;
         do {
             try {
                 status = Integer.parseInt(questionPrompt(prompt));
                 if (status < lowerLimit || status > upperLimit) {
                     System.out.println("Invalid option was chosen, please select a valid option");
-                    successful = false;
+                    isWithinLimits = false;
                 } else {
-                    successful = true;
+                    isWithinLimits = true;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid option was chosen, please select a valid option");
-                successful = false;
+                isWithinLimits = false;
                 status = 0;
             }
-        } while (!successful);
+        } while (!isWithinLimits);
         return status;
     }
 
