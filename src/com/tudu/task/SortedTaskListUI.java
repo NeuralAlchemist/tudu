@@ -7,8 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -103,19 +102,56 @@ public class SortedTaskListUI extends SortedTaskList {
         }
     }
 
-    private void viewTask(){
+    private void viewTask() {
         boolean viewTask = true;
-        while(viewTask){
+        while (viewTask) {
             int displayOption = doUntilConditionBreaks("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
             boolean isAscending = yesOrNoPrompt("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
-            if(displayOption == 1){
-                displayByProject(isAscending);
-            }else{
-                displayByDueDate(isAscending);
+            if (displayOption == 1) {
+                NavigableSet<String> navigableSet = isAscending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
+                for (String entry : navigableSet) {
+                    ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
+                    System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size()+"\n");
+                    for (Task task : tasksOfProject) {
+                        System.out.println(task.toString());
+                    }
+                }
+            } else {
+                Iterator<Task> itr = isAscending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
+                while (itr.hasNext()) {
+                    //Alternate invert colors?
+                    System.out.println(itr.next().toString());
+                }
             }
             viewTask = yesOrNoPrompt("Continue viewing tasks?(y/n)");
         }
     }
+
+    /*private void editTask() {
+        boolean editTask = true;
+        while (editTask) {
+            int searchOption = doUntilConditionBreaks("Choose one of the following to begin editing[1-2]:\n" +
+                    "1 -> Show all tasks by project\n" +
+                    "2 -> Show all tasks by due date\n" +
+                    "3 -> Search using task name\n", 1, 3);
+            switch (searchOption) {
+                case 1:
+                    displayByProject(true);
+                    break;
+                case 2:
+                    displayByDueDate(true);
+                    break;
+                case 3:
+                    searchByTaskName();
+                    break;
+            }
+        }
+    }*/
+
+    /*private void searchByTaskName(){
+        String searchTerm = questionPrompt("Enter a word you remember from the task's name");
+        ArrayList<Task> possibleTasks = this.findTaskByName(searchTerm);
+    }*/
 
    /* private void editTask() {
         boolean editTask = true;
