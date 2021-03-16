@@ -130,15 +130,17 @@ public class SortedTaskList extends TaskListObject {
     }
 
     @Override
-    protected void displayByProject(boolean ascending) {
+    protected NavigableSet<String> displayByProject(boolean ascending) {
+
         NavigableSet<String> entries = ascending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
-        for (String entry : entries) {
+        return entries;
+        /*for (String entry : entries) {
             ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
             System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size());
             for (Task task : tasksOfProject) {
                 System.out.println(task.toString());
             }
-        }
+        }*/
     }
 
     protected ArrayList<Task> findTaskByName(String taskName) {
