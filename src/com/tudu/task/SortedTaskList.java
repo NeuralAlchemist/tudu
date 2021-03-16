@@ -33,22 +33,23 @@ public class SortedTaskList extends TaskListObject {
         Task result;
         Task task = new Task(taskName, dueDate, status, project);
         String projectName = task.getProject();
-        boolean addedToProjectSortedMap = false;
-        boolean addedToDueDateSortedList = false;
-        boolean projectExistsAlready = projectSortedMap.containsKey(projectName);
-        ArrayList<Task> tasksOfProject = projectExistsAlready ? projectSortedMap.get(projectName) : new ArrayList<>(100);
-        if (projectExistsAlready && tasksOfProject.contains(task)) {
-            addedToProjectSortedMap = false;
+        boolean isAddedToProjectSortedMap = false;
+        boolean isAddedToDueDateSortedList = false;
+        boolean hasProjectAlready = projectSortedMap.containsKey(projectName);
+        ArrayList<Task> tasksOfProject = hasProjectAlready ? projectSortedMap.get(projectName) : new ArrayList<>(100);
+        if (hasProjectAlready && tasksOfProject.contains(task)) {
+            isAddedToProjectSortedMap = false;
         } else if (!tasksOfProject.contains(task)) {
+
             // Improve adding to sort it out by dueDate
             tasksOfProject.add(task);
             projectSortedMap.put(projectName, tasksOfProject);
-            addedToProjectSortedMap = true;
+            isAddedToProjectSortedMap = true;
         }
 
         if (dueDateSortedList.isEmpty()) {
             dueDateSortedList.add(task);
-            addedToDueDateSortedList = true;
+            isAddedToDueDateSortedList = true;
         } else if (!dueDateSortedList.contains(task)) {
             Iterator<Task> listItr = dueDateSortedList.descendingIterator();
             int currentIndex = dueDateSortedList.size() - 1;
@@ -56,18 +57,18 @@ public class SortedTaskList extends TaskListObject {
                 Task current = listItr.next();
                 if (task.getDueDate().isAfter(current.getDueDate())) {
                     dueDateSortedList.add(currentIndex + 1, task);
-                    addedToDueDateSortedList = true;
+                    isAddedToDueDateSortedList = true;
                     break;
                 } else if (currentIndex == 0) {
                     dueDateSortedList.offerFirst(task);
-                    addedToDueDateSortedList = true;
+                    isAddedToDueDateSortedList = true;
                 }
                 currentIndex--;
             }
         } else {
-            addedToDueDateSortedList = false;
+            isAddedToDueDateSortedList = false;
         }
-        if (addedToDueDateSortedList && addedToProjectSortedMap) {
+        if (isAddedToDueDateSortedList && isAddedToProjectSortedMap) {
             numberOfTasks++;
             // Remove this line -> make UI use the return value to print
             System.out.println("Task has been added");
@@ -150,6 +151,7 @@ public class SortedTaskList extends TaskListObject {
 
     }
 
+    //change name to get?
     protected boolean searchForDatabaseFile(String stringPathToDatabase) {
         System.out.print("Searching for database ..");
         // Jansi code to blink the string "." slowly
@@ -169,18 +171,18 @@ public class SortedTaskList extends TaskListObject {
     }
 
     protected boolean loadTaskList(String stringPathToDatabase) {
-        boolean result;
+        boolean hasLoadedFromDatabase;
         if (searchForDatabaseFile(stringPathToDatabase)) {
-            result = loadTaskListFromFile(stringPathToDatabase);
+            hasLoadedFromDatabase = loadTaskListFromFile(stringPathToDatabase);
         } else {
             // Display database unavailable! Let's start fresh!
-            result = false;
+            hasLoadedFromDatabase = false;
         }
-        return result;
+        return hasLoadedFromDatabase;
     }
 
+    // A simple fancy loading message
     protected void printLoadingMessage() {
-        // Fancy loading message
         String[] loadingPattern = {"-", "\\", "|", "/", "-"};
         System.out.print("Loading tasks ");
         System.out.print("/");
@@ -196,7 +198,6 @@ public class SortedTaskList extends TaskListObject {
         System.out.println("");
     }
 
-
     /**
      * Loads tasklist details from a local text database to this SortedTaskList.
      * @param stringPathToDatabase is the relative path to the local database
@@ -204,7 +205,7 @@ public class SortedTaskList extends TaskListObject {
      *          {@code false} otherwise
      * */
     protected boolean loadTaskListFromFile(String stringPathToDatabase) {
-        boolean result = true;
+        boolean hasLoadedFromDatabase = true;
         File databaseFile = new File(stringPathToDatabase);
         Path pathToDatabase = Paths.get(stringPathToDatabase);
         ArrayList<String> content;
@@ -222,24 +223,12 @@ public class SortedTaskList extends TaskListObject {
                             LocalDateTime.parse(content.get(i + 1), formatter),
                             Integer.parseInt(content.get(i + 2)) + 1,
                             content.get(i + 3));
-                    result = result & (current != null);
+                    hasLoadedFromDatabase = hasLoadedFromDatabase & (current != null);
                 }
             } catch (IOException e) {
-                result = false;
+                hasLoadedFromDatabase = false;
             }
         }
-        return result;
+        return hasLoadedFromDatabase;
     }
-
-    /*public void editByProject(){
-        NavigableSet<String> entries = projectSortedMap.navigableKeySet();
-        int numberOfProject = 1;
-        for(String entry : entries){
-            System.out.println(numberOfProject+" -> "+entry);
-            numberOfProject++;
-        }
-    }*/
-
-
-    // Methods : saveToFile (as CSV/TSV), loadFromFile(from CSV/TSV)
 }
