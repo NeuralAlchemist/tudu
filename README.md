@@ -5,6 +5,7 @@ TuDu is a simple todo list TUI. This java application is being developed as part
 1. [Technologies](#technologies)
 2. [Setup](#setup)
 3. [Current status](#current-status)
+4. [Features](#features)
 
 #### Technologies
 - JDK 15.0.2
@@ -28,7 +29,13 @@ To run this application
 To see other functions available with Gradle, execute ```./gradlew``` on Linux/macOS and ```./gradlew.bat``` in the cloned local repository.
 
 #### Current status
-User can view the startup menu and choose an option. Currently option 2, adding tasks is the only option that has functionality added to it.
+User can view the startup menu and choose an option. Currently options 1, 2 & 3 (viewing, adding, saving tasks) are functional. 
+
+#### Features
+
+- Display all tasks by ascending/ descending order of project/ due date
+- Add a unique task with name, due date, status and project
+- Save the tasks added to a local database
 
 
 
