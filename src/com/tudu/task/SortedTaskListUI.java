@@ -35,6 +35,7 @@ public class SortedTaskListUI extends SortedTaskList {
         System.out.println("4 -> Save and quit");
     }
 
+    // Maybe return 0 if exited sucessfully, -1 if otherwise, helps with 4.1 and 4.2 test
     public void readInput(InputStream in) {
         bufferedReader = new BufferedReader(new InputStreamReader(in));
         System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1, 1));
@@ -73,8 +74,9 @@ public class SortedTaskListUI extends SortedTaskList {
     private void addTaskMenu() {
         boolean isAddingTask = true;
         while (isAddingTask) {
+            //Change what questions to enter
             String taskName = questionPrompt("Enter name of task: ");
-            LocalDateTime dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")"));
+            LocalDateTime dueDate = validateDateImproved();
             int status = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
@@ -146,6 +148,7 @@ public class SortedTaskListUI extends SortedTaskList {
 
     private void editTask() {
         boolean isEditingTask = true;
+        // check tasklist is not zero before doing this
         while (isEditingTask) {
             Task chosenTask;
             int searchOption = doWhileConditionIsFalse("Choose one of the following to begin editing[1-2]:\n" +
@@ -157,13 +160,13 @@ public class SortedTaskListUI extends SortedTaskList {
                 case 1:
                     viewTaskByProject(true, true);
                     int chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit[1-"
-                            + getNumberOfTasks() + "]", 1, getNumberOfTasks());
+                            +getNumberOfTasks()+ "]", 1, getNumberOfTasks()); // or quit?
                     chosenTask = getTaskFromProjectSortedMap(chosenTaskIndex);
                     break;
                 case 2:
                     viewTaskByDueDate(true, true);
                     chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit[1-"
-                            + getNumberOfTasks() + "]", 1, getNumberOfTasks());
+                            + getNumberOfTasks() + "]", 1, getNumberOfTasks()); // or quit?
                     chosenTask = dueDateSortedList.get(chosenTaskIndex-1);
                     break;
                 case 3:
@@ -173,7 +176,7 @@ public class SortedTaskListUI extends SortedTaskList {
                     }
                     viewArrayListOfTask(listOfTasks);
                     chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit[1-"
-                            + (listOfTasks.size()) + "]", 1, listOfTasks.size());
+                            + (listOfTasks.size()) + "]", 1, listOfTasks.size()); // or quit?
                     chosenTask = listOfTasks.get(chosenTaskIndex-1);
                     break;
                 default:
@@ -181,33 +184,29 @@ public class SortedTaskListUI extends SortedTaskList {
             }
             boolean isEditingChosenTask;
             do{
+                // Display task
                 int fieldToEdit = doWhileConditionIsFalse("Enter the task's field that you want to edit[1-4]" +
                         "\n1 -> Name\n2 -> Due date\n3 -> Status\n4 -> Project", 1, 4);
                 int newStatus;
                 String newValue = null;
+                LocalDateTime newTime;
                 if(fieldToEdit == 3){
                     newStatus = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
+                    newTime = chosenTask.getDueDate();
+                } else if (fieldToEdit == 2) {
+                    newTime = validateDateImproved();
+                    newStatus = chosenTask.getStatus().ordinal()+1;
                 } else {
                     newStatus = chosenTask.getStatus().ordinal()+1;
+                    newTime = chosenTask.getDueDate();
                     newValue = questionPrompt("Enter new value: ");
                 }
                 String newName = fieldToEdit == 1 ? newValue : chosenTask.getName();
-                LocalDateTime newTime = fieldToEdit == 2 ? validateDate(newValue) : chosenTask.getDueDate();
+                //LocalDateTime newTime = fieldToEdit == 2 ? validateDate(newValue) : chosenTask.getDueDate();
                 String newProject = fieldToEdit == 4 ? newValue : chosenTask.getProject();
                 System.out.println(newStatus);
+                //Confirm changes?
                 setTaskInTaskList(newName, newTime, newStatus, newProject, chosenTask);
-                /*if (fieldToEdit == 3) {
-                    newStatus = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
-                } else {
-                    String newValue, newProject;
-                    String newName;
-                    LocalDateTime newTime;
-                    newValue = questionPrompt("Enter new value: ");
-                    newName = fieldToEdit == 1 ? newValue : chosenTask.getName();
-                    newTime = fieldToEdit == 2 ? validateDate(newValue) : chosenTask.getDueDate();
-                    newProject = fieldToEdit == 4 ? newValue : chosenTask.getProject();
-                    setTaskInTaskList(newName, newTime, newStatus, newProject, chosenTask);
-                }*/
                 isEditingChosenTask = yesOrNoPrompt("Continue editing other fields of this task?(y/n)");
             }while(isEditingChosenTask);
             isEditingTask = yesOrNoPrompt("Continue editing tasks?(y/n)");
@@ -232,14 +231,15 @@ public class SortedTaskListUI extends SortedTaskList {
         return possibleTasks;
     }
 
-    // This method needs to have a way of getting the String - failing test!
-    private LocalDateTime validateDate(String in) {
+    protected LocalDateTime validateDateImproved() {
         LocalDateTime result;
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         format.setLenient(false);
+        String inputDate;
         do {
+            inputDate = questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")");
             try {
-                Date example = format.parse(in);
+                Date example = format.parse(inputDate);
                 result = example.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
             } catch (ParseException e) {
@@ -269,7 +269,6 @@ public class SortedTaskListUI extends SortedTaskList {
         String input = null;
         boolean hasTrueOrFalse = false;
         do {
-            // add(y/n) here
             System.out.println(prompt);
             try {
                 input = bufferedReader.readLine();
