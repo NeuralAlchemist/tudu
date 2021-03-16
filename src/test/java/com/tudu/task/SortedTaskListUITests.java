@@ -30,6 +30,9 @@ public class SortedTaskListUITests {
     private final String VIEW = "1\n";
     private final String ADD = "2\n";
     private final String EDIT = "3\n";
+    private final String EDIT_SEARCH_TERM = "3\n";
+    private final String EDIT_OUT_SEARCH = "n\n";
+    private final String EDIT_ALL_PROJECTS = "1\n";
     private final String QUIT = "4\n";
     private final String YES = "yah\n";
     private final String NO = "nah\n";
@@ -160,25 +163,19 @@ public class SortedTaskListUITests {
     }
 
     @Test
-    @Disabled
-    @DisplayName("checking for word not in task list does not throw exception if list is null")
+    @DisplayName("checking for word not in task list does not throw exception")
     void checkingForWordNotInTaskListDoesNotThrowExceptionIfListIsNull() {
+        String input = ADD+taskNamesForInput[0]+dueDates[fourthDate]+DEFAULT_STATUS+projectNamesForInput[3]+YES
+                +taskNamesForInput[1]+dueDates[firstDate]+ONGOING_STATUS+projectNamesForInput[0]+YES
+                +taskNamesForInput[2]+dueDates[secondDate]+ONGOING_STATUS+projectNamesForInput[1]+NO
+                +EDIT+EDIT_SEARCH_TERM+"champagne\n"+EDIT_OUT_SEARCH+EDIT_ALL_PROJECTS+"1\n"+"1\n"+taskNamesForInput[3]+NO+NO+QUIT;
         try{
-
+            tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         }catch(Exception e){
             e.printStackTrace();
             fail("This should not have happened");
         }
     }
-
-    @Test
-    @Disabled
-    @DisplayName("invalid input will not quit yes or no prompt")
-    void invalidInputWillNotQuitYesOrNoPrompt() {
-
-    }
-
-    //test what will happen if you pass values after QUIT/QUITING option
 
     @Test
     @DisplayName("returns the correct task with index from project sorted map")
