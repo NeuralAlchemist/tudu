@@ -58,7 +58,6 @@ public class SortedTaskListUITests {
     void taskIsAddedWithCorrectInputsAndShouldBeInTheTasklist() {
         String input = VIEW+ADD+taskNamesForInput[0]+dueDates[3]+DEFAULT_STATUS+projectNamesForInput[0]+NO+QUIT;
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
-        tudu.displayByDueDate(true);
         ArrayList<Task> foundTasks = tudu.findTaskByName(taskNames[0]);
         Assertions.assertAll(() -> Assertions.assertEquals(foundTasks.get(0).getDueDate(), localDueDates[3]),
                 () -> Assertions.assertEquals(foundTasks.get(0).getStatus(), TaskStatus.UNSTARTED),
@@ -123,5 +122,19 @@ public class SortedTaskListUITests {
         Assertions.assertEquals(0,tudu.getNumberOfTasks());
         tudu.readInput(new ByteArrayInputStream(input.getBytes()));
         Assertions.assertEquals(1, tudu.getNumberOfTasks());
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("After displaying descending order of due date the stored linked list should remain unchanged")
+    void afterDisplayingDescendingOrderOfDueDateTheStoredLinkedListShouldRemainUnchanged() {
+        org.junit.jupiter.api.Assertions.fail("Not implemented");
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("After displaying descending order of project the stored tree map should remain unchanged")
+    void afterDisplayingDescendingOrderOfProjectTheStoredTreeMapShouldRemainUnchanged() {
+        org.junit.jupiter.api.Assertions.fail("Not implemented");
     }
 }
