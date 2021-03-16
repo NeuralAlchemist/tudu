@@ -1,7 +1,6 @@
 package com.tudu.task;
 
 import org.fusesource.jansi.Ansi;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.text.ParseException;
@@ -45,18 +44,7 @@ public class SortedTaskListUI extends SortedTaskList {
         loadTaskList(stringPathToDatabase);
         while (cont) {
             displayMenu();
-            int input = 0;
-            boolean successful;
-            do {
-                try {
-                    String temp = bufferedReader.readLine();
-                    input = temp.isEmpty() ? DEFAULT_NUMBER_OPTION : Integer.parseInt(temp); //DEFAULT
-                    successful = true;
-                } catch (IOException | NumberFormatException e) {
-                    System.out.println("Invalid input! Please type a number in the range [1-4]");
-                    successful = false;
-                }
-            } while (!successful);
+            int input = doWhileConditionIsFalse("Select an option in range [1-4]:", 1, 4);
             switch (input) {
                 case 1:
                     System.out.println("Viewing all tasks");
@@ -86,17 +74,8 @@ public class SortedTaskListUI extends SortedTaskList {
         boolean addTask = true;
         while (addTask) {
             String taskName = questionPrompt("Enter name of task: ");
-            boolean successful;
-            int status = 0;
-            LocalDateTime dueDate;
-            do {
-                dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")"));
-                successful = (dueDate != null);
-                if (!successful) {
-                    System.out.println("The chosen date does not exist (OR) please input a valid date in the format" + DATE_FORMAT);
-                }
-            } while (!successful);
-            status = doUntilConditionBreaks(STATUS_QUESTION, 1, 3);
+            LocalDateTime dueDate = validateDate(questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")"));
+            int status = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
             addTask = yesOrNoPrompt("Add more tasks?(y/n)");
@@ -106,7 +85,7 @@ public class SortedTaskListUI extends SortedTaskList {
     private void viewTask() {
         boolean viewTask = true;
         while (viewTask) {
-            int displayOption = doUntilConditionBreaks("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
+            int displayOption = doWhileConditionIsFalse("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
             boolean isAscending = yesOrNoPrompt("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
             if (displayOption == 1) {
                 viewTaskByProject(isAscending, false);
@@ -117,15 +96,15 @@ public class SortedTaskListUI extends SortedTaskList {
         }
     }
 
-    protected void viewTaskByProject(boolean isAscending, boolean ableToShowTaskNumber){
+    protected void viewTaskByProject(boolean isAscending, boolean canShowTaskNumber) {
         NavigableSet<String> navigableSet = isAscending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
         int i = 1;
         for (String entry : navigableSet) {
             ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
             System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size());
             for (Task task : tasksOfProject) {
-                if(ableToShowTaskNumber){
-                    System.out.print((i++)+" -> ");
+                if (canShowTaskNumber) {
+                    System.out.print((i++) + " -> ");
                 }
                 System.out.println(task.toString());
             }
@@ -133,21 +112,26 @@ public class SortedTaskListUI extends SortedTaskList {
         }
     }
 
-    protected void viewTaskByDueDate(boolean isAscending, boolean ableToShowTaskNumber){
+    protected void viewTaskByDueDate(boolean isAscending, boolean canShowTaskNumber) {
         Iterator<Task> itr = isAscending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
         int i = 1;
         while (itr.hasNext()) {
-            if(ableToShowTaskNumber){
-                System.out.print((i++)+" -> ");
+            if (canShowTaskNumber) {
+                System.out.print((i++) + " -> ");
             }
             System.out.println(itr.next().toString());
         }
     }
 
-    private void editTask(){
+    /*protected void viewArrayListOfTask(ArrayList<Task> listOfTasks) {
+        AtomicInteger i = new AtomicInteger();
+        listOfTasks.stream().forEach(task -> System.out.println((i.getAndIncrement()) + " -> " + task));
+    }
+
+    private void editTask() {
         boolean editTask = true;
         while (editTask) {
-            int searchOption = doUntilConditionBreaks("Choose one of the following to begin editing[1-2]:\n" +
+            int searchOption = doWhileConditionIsFalse("Choose one of the following to begin editing[1-2]:\n" +
                     "1 -> Show all tasks by project\n" +
                     "2 -> Show all tasks by due date\n" +
                     "3 -> Search using task name\n", 1, 3);
@@ -159,129 +143,60 @@ public class SortedTaskListUI extends SortedTaskList {
                     viewTaskByDueDate(true, true);
                     break;
                 case 3:
-                    //searchByTaskName();
+                    Task chosenTask = null;
+                    ArrayList<Task> listOfTasks = getPossibleListOfTasks();
+                    viewArrayListOfTask(listOfTasks);
+                    int chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit[0-"
+                            + (listOfTasks.size() - 1) + "]", 1, listOfTasks.size());
+                    int fieldToEdit = doWhileConditionIsFalse("Which one of the following would you " +
+                            "like to edit?\n1 -> Name\n2 -> Due date\n3 -> Status\n4 -> Project", 1, 4);
+                    if (fieldToEdit == 3) {
+                        int newStatus = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
+                    } else {
+                        String newValue = questionPrompt("Enter new value: ");
+                        String newName = fieldToEdit == 1 ? newValue : chosenTask.getName();
+                        LocalDateTime newTime = fieldToEdit == 2 ? validateDate(newValue) : chosenTask.getDueDate();
+                    }
                     break;
             }
         }
     }
 
-    /*private void searchByTaskName(){
-        String searchTerm = questionPrompt("Enter a word you remember from the task's name");
-        ArrayList<Task> possibleTasks = this.findTaskByName(searchTerm);
-    }*/
-
-    /*private void editTask() {
-        boolean editTask = true;
-        while (editTask) {
-            int searchOption = doUntilConditionBreaks("Choose one of the following to begin editing[1-2]:\n" +
-                    "1 -> Show all tasks by project\n" +
-                    "2 -> Show all tasks by due date\n" +
-                    "3 -> Search using task name\n", 1, 3);
-            switch (searchOption) {
-                case 1:
-                    displayByProject(true);
-                    break;
-                case 2:
-                    displayByDueDate(true);
-                    break;
-                case 3:
-                    searchByTaskName();
-                    break;
-            }
-        }
-    }*/
-
-    /*private void searchByTaskName(){
-        String searchTerm = questionPrompt("Enter a word you remember from the task's name");
-        ArrayList<Task> possibleTasks = this.findTaskByName(searchTerm);
-    }*/
-
-   /* private void editTask() {
-        boolean editTask = true;
-        while (editTask) {
-            // Improve question
-            // Search by due date
-            // Search over a range of dates
-            // Search by project
-            // Search by task name
-            // Include searches to contain and/or
+    protected ArrayList<Task> getPossibleListOfTasks() {
+        boolean isSearchingWithTaskName;
+        ArrayList<Task> possibleTasks;
+        do {
             String searchTerm = questionPrompt("Enter a word you remember from the task's name");
-            ArrayList<Task> possibleTasks = this.findTaskByName(searchTerm);
-            // If the the list is empty ask for other methods of searching
-            displayArrayListOfTasks(possibleTasks);
-            boolean successful;
-            do {
-                int taskIndex = Integer.parseInt(questionPrompt("Enter the task's number that you want to edit[0-" + (possibleTasks.size() - 1) + "]"));
-                if (taskIndex < 0 || taskIndex > (possibleTasks.size() - 1)) {
-                    System.out.println("Invalid input! Please choose again!");
-                    successful = false;
-                } else {
-                    editTaskField(possibleTasks.get(taskIndex));
-                    successful = true;
-                }
-            } while (!successful);
-        }
-    }
-
-    protected void editTaskField(Task task){
-        System.out.println("Task chosen for editing:\n" + task);
-        boolean successful;
-        do{
-            int fieldToEdit = Integer.parseInt(questionPrompt("Which one of the following would you " +
-                    "like to edit?\n1 -> Name\n2 -> Due date\n3 -> Status\n4 -> Project"));
-            if (fieldToEdit < 1 || fieldToEdit > 4) {
-                System.out.println("Invalid input! Please choose again!");
-                successful = false;
+            possibleTasks = this.findTaskByName(searchTerm);
+            if (possibleTasks.isEmpty()) {
+                possibleTasks = null;
+                isSearchingWithTaskName = yesOrNoPrompt("Looks like no task contains the word you gave!" +
+                        "\n Do you want to search with another word?(y/n)" +
+                        " \nIf not you will be taken to the edit sub-menu.");
             } else {
-                String newValue = questionPrompt("Enter new value: ");
-                //checks for due date and status
-                createEditedTask(task, fieldToEdit, newValue);
-                successful = true;
+                isSearchingWithTaskName = false;
             }
-        }while(!successful);
+        } while (isSearchingWithTaskName);
+        return possibleTasks;
     }*/
-
-    /*protected void createEditedTask(Task task, int fieldToEdit, String newValue){
-        Task editedTask;
-        switch(fieldToEdit){
-            case 1:
-                setTaskInTaskList(newValue, task.getDueDate(), task.getStatus().ordinal()+1, task.getProject(), task);
-                break;
-            case 2:
-                setTaskInTaskList(task.getName(), validateDate(newValue), task.getStatus().ordinal()+1, task.getProject(), task);
-                break;
-            case 3:
-                setTaskInTaskList(task.getName(), task.getDueDate(), newValue, task.getProject(), task);
-                break;
-            case 4:
-                setTaskInTaskList(task.getName(), task.getDueDate(), task.getStatus().ordinal()+1, newValue, task);
-                break;
-        }
-    }*/
-
-    //protected void editTaskField(){}
-
-    protected void displayArrayListOfTasks(ArrayList<Task> listOfTasks) {
-        if (listOfTasks == null) {
-            System.out.println("Sorry! No task contains that word!");
-        } else {
-            AtomicInteger i = new AtomicInteger();
-            listOfTasks.stream().forEach(task -> System.out.println((i.getAndIncrement()) + " -> " + task));
-        }
-    }
 
 
     private LocalDateTime validateDate(String in) {
         LocalDateTime result;
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         format.setLenient(false);
-        try {
-            Date example = format.parse(in);
-            result = example.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        do {
+            try {
+                Date example = format.parse(in);
+                result = example.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-        } catch (ParseException e) {
-            result = null;
-        }
+            } catch (ParseException e) {
+                result = null;
+            }
+            if (result == null) {
+                System.out.println("The chosen date does not exist (OR) please input a valid date in the format" + DATE_FORMAT);
+            }
+        } while (result == null);
         return result;
     }
 
@@ -325,7 +240,7 @@ public class SortedTaskListUI extends SortedTaskList {
     }
 
     // Maybe improve with varargs, if empty varargs check != null?
-    protected int doUntilConditionBreaks(String prompt, int lowerLimit, int upperLimit) {
+    protected int doWhileConditionIsFalse(String prompt, int lowerLimit, int upperLimit) {
         boolean successful;
         int status;
         do {
