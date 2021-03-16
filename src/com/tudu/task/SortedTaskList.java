@@ -40,8 +40,6 @@ public class SortedTaskList extends TaskListObject {
         if (hasProjectAlready && tasksOfProject.contains(task)) {
             isAddedToProjectSortedMap = false;
         } else if (!tasksOfProject.contains(task)) {
-
-            // Improve adding to sort it out by dueDate
             tasksOfProject.add(task);
             projectSortedMap.put(projectName, tasksOfProject);
             isAddedToProjectSortedMap = true;
@@ -70,23 +68,12 @@ public class SortedTaskList extends TaskListObject {
         }
         if (isAddedToDueDateSortedList && isAddedToProjectSortedMap) {
             numberOfTasks++;
-            // Remove this line -> make UI use the return value to print
-            System.out.println("Task has been added");
             result = task;
         } else {
             result = null;
         }
         return result;
     }
-
-    /*private int getProjectSortedMapIndex(Task task){
-
-        return projectSortedMap.get(task.getProject()).indexOf(task);
-    }
-
-    private int getDueDateSortedListIndex(Task task){
-        return dueDateSortedList.indexOf(task);
-    }*/
 
     // Return the element that was set
     protected void setTaskInTaskList(String taskName, LocalDateTime dueDate, int status, String project, Task oldTask){
@@ -99,6 +86,11 @@ public class SortedTaskList extends TaskListObject {
             removeTaskInTaskList(oldTask);
             addTask(newTask.getName(), newTask.getDueDate(), newTask.getStatus().ordinal()+1, newTask.getProject());
         }
+    }
+
+    protected Task markTaskAsDone(Task task){
+        task.setStatus(TaskStatus.DONE);
+        return task;
     }
 
 
