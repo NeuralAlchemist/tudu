@@ -36,7 +36,8 @@ public class SortedTaskListUI extends SortedTaskList {
     }
 
     // Maybe return 0 if exited sucessfully, -1 if otherwise, helps with 4.1 and 4.2 test
-    public void readInput(InputStream in) {
+    public int readInput(InputStream in) {
+        int exitStatus = -1;
         bufferedReader = new BufferedReader(new InputStreamReader(in));
         System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1, 1));
         System.out.println("Get organizing with TuDu! \n");
@@ -63,12 +64,13 @@ public class SortedTaskListUI extends SortedTaskList {
                     System.out.println("Saving and quitting");
                     saveTaskListToFile(stringPathToDatabase);
                     isRunning = false;
+                    exitStatus = 0;
                     break;
                 default:
                     System.out.println("Invalid input! Please type a number in the range [1-4]");
             }
         }
-
+        return exitStatus;
     }
 
     private void addTaskMenu() {
@@ -231,7 +233,7 @@ public class SortedTaskListUI extends SortedTaskList {
         return possibleTasks;
     }
 
-    protected LocalDateTime getValidDate() {
+    private LocalDateTime getValidDate() {
         LocalDateTime result;
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         format.setLenient(false);
@@ -291,7 +293,7 @@ public class SortedTaskListUI extends SortedTaskList {
     }
 
     // Maybe improve with varargs, if empty varargs check != null?
-    protected int doWhileConditionIsFalse(String prompt, int lowerLimit, int upperLimit) {
+    private int doWhileConditionIsFalse(String prompt, int lowerLimit, int upperLimit) {
         boolean isWithinLimits;
         int status;
         do {
