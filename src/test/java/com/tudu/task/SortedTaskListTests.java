@@ -56,7 +56,7 @@ public class SortedTaskListTests {
          sortedTaskList.addTask("Read LOTR", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Collect package", dates.get(2), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Write a good test", dates.get(3), UNSTARTED_STATUS_INPUT, "Work");
-         LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
+         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
          List<LocalDateTime> actual = Arrays.asList(
                  sortedDueDate.get(0).getDueDate(),
                  sortedDueDate.get(1).getDueDate(),
@@ -73,7 +73,7 @@ public class SortedTaskListTests {
          sortedTaskList.addTask("Read LOTR", dates.get(2), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Collect package", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Write a good test", dates.get(0), UNSTARTED_STATUS_INPUT, "Work");
-         LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
+         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
          List<LocalDateTime> actual = Arrays.asList(
                  sortedDueDate.get(0).getDueDate(),
                  sortedDueDate.get(1).getDueDate(),
@@ -91,7 +91,7 @@ public class SortedTaskListTests {
          sortedTaskList.addTask("Read LOTR", dates.get(0), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Collect package", dates.get(3), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Write a good test", dates.get(1), UNSTARTED_STATUS_INPUT, "Work");
-         LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
+         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
          List<LocalDateTime> actual = Arrays.asList(
                  sortedDueDate.get(0).getDueDate(),
                  sortedDueDate.get(1).getDueDate(),
@@ -108,7 +108,7 @@ public class SortedTaskListTests {
          sortedTaskList.addTask("Read LOTR", dates.get(0), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Collect package", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
          sortedTaskList.addTask("Write a good test", dates.get(1), UNSTARTED_STATUS_INPUT, "Work");
-         LinkedList<Task> sortedDueDate = sortedTaskList.getSortedByDueDate();
+         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
          Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
                  () -> assertEquals(dates.get(1), sortedDueDate.get(2).getDueDate()),
@@ -127,7 +127,7 @@ public class SortedTaskListTests {
      @DisplayName("empty task name results in default name for task")
      void emptyTaskNameResultsInDefaultNameForTask() {
          sortedTaskList.addTask("", dates.get(2), UNSTARTED_STATUS_INPUT, "Empty");
-         LinkedList<Task> tasks = sortedTaskList.getSortedByDueDate();
+         LinkedList<Task> tasks = sortedTaskList.dueDateSortedList;
          Assertions.assertAll(() -> assertEquals(1, sortedTaskList.getNumberOfTasks()),
                  () -> assertEquals("NO NAME", tasks.get(0).getName()));
      }
@@ -136,7 +136,7 @@ public class SortedTaskListTests {
      @DisplayName("empty project name results in default name for project")
      void emptyProjectNameResultsInDefaultNameForProject() {
          sortedTaskList.addTask("Empty", dates.get(2), UNSTARTED_STATUS_INPUT, "");
-         Assertions.assertEquals(true, sortedTaskList.getSortedByProject().containsKey("NO NAME"));
+         Assertions.assertEquals(true, sortedTaskList.projectSortedMap.containsKey("NO NAME"));
          assertEquals(1, sortedTaskList.getNumberOfTasks());
      }
 
