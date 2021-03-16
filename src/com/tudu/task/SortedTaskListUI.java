@@ -27,7 +27,7 @@ public class SortedTaskListUI extends SortedTaskList {
     // Must be an infinite loop until "Save and Quit" option is chosen
     // Private or local fields
     // Methods : readInput, printMenu
-    private void displayMenu() {
+    private void displayMainMenu() {
         System.out.println("You can do the following: ");
         System.out.println("1 -> View all tasks (sort by project/due date)");
         System.out.println("2 -> Add a new task");
@@ -35,22 +35,20 @@ public class SortedTaskListUI extends SortedTaskList {
         System.out.println("4 -> Save and quit");
     }
 
-    // Maybe return 0 if exited sucessfully, -1 if otherwise, helps with 4.1 and 4.2 test
-    public int readInput(InputStream in) {
+    public int startApplication(InputStream in) {
         int exitStatus = -1;
         bufferedReader = new BufferedReader(new InputStreamReader(in));
         System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1, 1));
         System.out.println("Get organizing with TuDu! \n");
         boolean isRunning = true;
-        //Display welcome/loading message
         loadTaskList(stringPathToDatabase);
         while (isRunning) {
-            displayMenu();
+            displayMainMenu();
             int input = doWhileConditionIsFalse("Select an option in range [1-4]:", 1, 4);
             switch (input) {
                 case 1:
                     System.out.println("Viewing all tasks");
-                    viewTask();
+                    viewTaskMenu();
                     break;
                 case 2:
                     System.out.println("Add a new task");
@@ -58,7 +56,7 @@ public class SortedTaskListUI extends SortedTaskList {
                     break;
                 case 3:
                     System.out.println("Edit a task");
-                    editTask();
+                    editTaskMenu();
                     break;
                 case 4:
                     System.out.println("Saving and quitting");
@@ -77,26 +75,26 @@ public class SortedTaskListUI extends SortedTaskList {
         boolean isAddingTask = true;
         while (isAddingTask) {
             //Change what questions to enter
-            String taskName = questionPrompt("Enter name of task: ");
+            String taskName = promptOpenAnswer("Enter name of task: ");
             LocalDateTime dueDate = getValidDate();
             int status = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
-            String project = questionPrompt("What type of project is this task?");
+            String project = promptOpenAnswer("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
-            isAddingTask = yesOrNoPrompt("Add more tasks?(y/n)");
+            isAddingTask = promptBooleanAnswer("Add more tasks?(y/n)");
         }
     }
 
-    private void viewTask() {
+    private void viewTaskMenu() {
         boolean isViewingTasks = true;
         while (isViewingTasks) {
             int displayOption = doWhileConditionIsFalse("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
-            boolean isAscending = yesOrNoPrompt("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
+            boolean isAscending = promptBooleanAnswer("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
             if (displayOption == 1) {
                 viewTaskByProject(isAscending, false);
             } else {
                 viewTaskByDueDate(isAscending, false);
             }
-            isViewingTasks = yesOrNoPrompt("Continue viewing tasks?(y/n)");
+            isViewingTasks = promptBooleanAnswer("Continue viewing tasks?(y/n)");
         }
     }
 
@@ -148,7 +146,7 @@ public class SortedTaskListUI extends SortedTaskList {
         return result;
     }
 
-    private void editTask() {
+    private void editTaskMenu() {
         boolean isEditingTask = true;
         // check tasklist is not zero before doing this
         while (isEditingTask) {
@@ -201,7 +199,7 @@ public class SortedTaskListUI extends SortedTaskList {
                 } else {
                     newStatus = chosenTask.getStatus().ordinal()+1;
                     newTime = chosenTask.getDueDate();
-                    newValue = questionPrompt("Enter new value: ");
+                    newValue = promptOpenAnswer("Enter new value: ");
                 }
                 String newName = fieldToEdit == 1 ? newValue : chosenTask.getName();
                 //LocalDateTime newTime = fieldToEdit == 2 ? validateDate(newValue) : chosenTask.getDueDate();
@@ -209,9 +207,9 @@ public class SortedTaskListUI extends SortedTaskList {
                 System.out.println(newStatus);
                 //Confirm changes?
                 setTaskInTaskList(newName, newTime, newStatus, newProject, chosenTask);
-                isEditingChosenTask = yesOrNoPrompt("Continue editing other fields of this task?(y/n)");
+                isEditingChosenTask = promptBooleanAnswer("Continue editing other fields of this task?(y/n)");
             }while(isEditingChosenTask);
-            isEditingTask = yesOrNoPrompt("Continue editing tasks?(y/n)");
+            isEditingTask = promptBooleanAnswer("Continue editing tasks?(y/n)");
         }
     }
 
@@ -220,10 +218,10 @@ public class SortedTaskListUI extends SortedTaskList {
         boolean isSearchingWithTaskName;
         ArrayList<Task> possibleTasks;
         do {
-            String searchTerm = questionPrompt("Enter a word you remember from the task's name");
+            String searchTerm = promptOpenAnswer("Enter a word you remember from the task's name");
             possibleTasks = this.findTaskByName(searchTerm);
             if (possibleTasks == null) {
-                isSearchingWithTaskName = yesOrNoPrompt("Looks like no task contains the word you gave!" +
+                isSearchingWithTaskName = promptBooleanAnswer("Looks like no task contains the word you gave!" +
                         "\nDo you want to search with another word?(y/n)" +
                         " \nIf not you will be taken to the edit sub-menu.");
             } else {
@@ -239,7 +237,7 @@ public class SortedTaskListUI extends SortedTaskList {
         format.setLenient(false);
         String inputDate;
         do {
-            inputDate = questionPrompt("What is the due date of the task? (enter in " + DATE_FORMAT + ")");
+            inputDate = promptOpenAnswer("What is the due date of the task? (enter in " + DATE_FORMAT + ")");
             try {
                 Date example = format.parse(inputDate);
                 result = example.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -254,7 +252,7 @@ public class SortedTaskListUI extends SortedTaskList {
         return result;
     }
 
-    private String questionPrompt(String prompt) {
+    private String promptOpenAnswer(String prompt) {
         String result;
         System.out.println(prompt);
         try {
@@ -266,7 +264,7 @@ public class SortedTaskListUI extends SortedTaskList {
         return result;
     }
 
-    private boolean yesOrNoPrompt(String prompt) {
+    private boolean promptBooleanAnswer(String prompt) {
         boolean isTrue;
         String input = null;
         boolean hasTrueOrFalse = false;
@@ -292,13 +290,12 @@ public class SortedTaskListUI extends SortedTaskList {
         return isTrue;
     }
 
-    // Maybe improve with varargs, if empty varargs check != null?
     private int doWhileConditionIsFalse(String prompt, int lowerLimit, int upperLimit) {
         boolean isWithinLimits;
         int status;
         do {
             try {
-                status = Integer.parseInt(questionPrompt(prompt));
+                status = Integer.parseInt(promptOpenAnswer(prompt));
                 if (status < lowerLimit || status > upperLimit) {
                     System.out.println("Invalid option was chosen, please select a valid option");
                     isWithinLimits = false;
