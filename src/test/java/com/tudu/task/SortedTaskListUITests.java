@@ -175,5 +175,26 @@ public class SortedTaskListUITests {
         assertEquals(projectNames[2], actual.getProject());
     }
 
+    @Test
+    @DisplayName("do while condition is false does not throw number format exception")
+    void doWhileConditionIsFalseDoesNotThrowNumberFormatException() {
+        String input = "#\n"+"we\n"+QUIT;
+        try{
+            tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        }catch (NumberFormatException e){
+            fail("Exception should have been caught");
+        }
+    }
+
+    @Test
+    @DisplayName("read input will never return negative one")
+    void readInputWillNeverReturnNegativeOne() {
+        String input = ADD + EMPTY + dueDates[1] + DEFAULT_STATUS + EMPTY + NO + "5\n"+"%\n"+QUIT;
+        int result = tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        if(result == -1){
+            fail("The program exited forcefully, this should not have happened");
+        }
+    }
+
 
 }
