@@ -108,22 +108,29 @@ public class SortedTaskListUI extends SortedTaskList {
             int displayOption = doUntilConditionBreaks("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
             boolean isAscending = yesOrNoPrompt("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
             if (displayOption == 1) {
-                NavigableSet<String> navigableSet = isAscending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
-                for (String entry : navigableSet) {
-                    ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
-                    System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size()+"\n");
-                    for (Task task : tasksOfProject) {
-                        System.out.println(task.toString());
-                    }
-                }
+                viewTaskByProject(isAscending);
             } else {
-                Iterator<Task> itr = isAscending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
-                while (itr.hasNext()) {
-                    //Alternate invert colors?
-                    System.out.println(itr.next().toString());
-                }
+                viewTaskByDueDate(isAscending);
             }
             viewTask = yesOrNoPrompt("Continue viewing tasks?(y/n)");
+        }
+    }
+
+    protected void viewTaskByProject(boolean isAscending){
+        NavigableSet<String> navigableSet = isAscending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
+        for (String entry : navigableSet) {
+            ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
+            System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size()+"\n");
+            for (Task task : tasksOfProject) {
+                System.out.println(task.toString());
+            }
+        }
+    }
+
+    protected void viewTaskByDueDate(boolean isAscending){
+        Iterator<Task> itr = isAscending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
+        while (itr.hasNext()) {
+            System.out.println(itr.next().toString());
         }
     }
 
