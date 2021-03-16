@@ -124,7 +124,7 @@ public class SortedTaskListUITests {
         Assertions.assertEquals(1, tudu.getNumberOfTasks());
     }
 
-    @Test
+    /*@Test
     @Disabled
     @DisplayName("After displaying descending order of due date the stored linked list should remain unchanged")
     void afterDisplayingDescendingOrderOfDueDateTheStoredLinkedListShouldRemainUnchanged() {
@@ -136,5 +136,20 @@ public class SortedTaskListUITests {
     @DisplayName("After displaying descending order of project the stored tree map should remain unchanged")
     void afterDisplayingDescendingOrderOfProjectTheStoredTreeMapShouldRemainUnchanged() {
         org.junit.jupiter.api.Assertions.fail("Not implemented");
+    }*/
+
+    @Test
+    @DisplayName("returns the correct task with index from project sorted map")
+    void returnsTheCorrectTaskWithIndexFromProjectSortedMap() {
+        String input = ADD+EMPTY+dueDates[1]+DEFAULT_STATUS+EMPTY
+                +YES+taskNamesForInput[2]+dueDates[2]+DEFAULT_STATUS+projectNamesForInput[2]
+                +YES+taskNamesForInput[1]+dueDates[3]+ONGOING_STATUS+projectNamesForInput[1]
+                +NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        assertEquals(3, tudu.getNumberOfTasks());
+        Task actual = tudu.getTaskFromProjectSortedMap(2);
+        assertEquals(projectNames[2], actual.getProject());
+
+
     }
 }
