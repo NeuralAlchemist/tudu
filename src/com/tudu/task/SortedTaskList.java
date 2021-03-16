@@ -79,14 +79,14 @@ public class SortedTaskList extends TaskListObject {
         return result;
     }
 
-    private int getProjectSortedMapIndex(Task task){
+    /*private int getProjectSortedMapIndex(Task task){
 
         return projectSortedMap.get(task.getProject()).indexOf(task);
     }
 
     private int getDueDateSortedListIndex(Task task){
         return dueDateSortedList.indexOf(task);
-    }
+    }*/
 
     // Return the element that was set
     protected void setTaskInTaskList(String taskName, LocalDateTime dueDate, int status, String project, Task oldTask){
@@ -103,6 +103,7 @@ public class SortedTaskList extends TaskListObject {
 
 
     protected boolean removeTaskInTaskList(Task task){
+        numberOfTasks--;
         return projectSortedMap.get(task.getProject()).remove(task) && dueDateSortedList.remove(task);
     }
 
