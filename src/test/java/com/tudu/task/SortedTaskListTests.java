@@ -388,4 +388,18 @@ public class SortedTaskListTests {
          sortedTaskList.removeTaskInTaskList(sortedTaskList.dueDateSortedList.get(0));
          assertFalse(sortedTaskList.getNumberOfTasks() > numberOfTasksBeforeRemove);
      }
+
+    @Test
+    @DisplayName("display by due date in descending order returns the correct linked list")
+    void displayByDueDateInDescendingOrderReturnsTheCorrectLinkedList() {
+        sortedTaskList.addTask("Workout", localDueDates[secondDate], UNSTARTED_STATUS_INPUT, "Exercise");
+        sortedTaskList.addTask("Read LOTR", localDueDates[firstDate], UNSTARTED_STATUS_INPUT, "Personal");
+        sortedTaskList.addTask("Collect package", localDueDates[thirdDate], UNSTARTED_STATUS_INPUT, "Personal");
+        sortedTaskList.addTask("Write a good test", localDueDates[secondDate], UNSTARTED_STATUS_INPUT, "Work");
+        LinkedList<Task> result = sortedTaskList.displayByDueDate(false);
+        Assertions.assertAll( () -> assertEquals(localDueDates[thirdDate], result.get(0).getDueDate()),
+                () -> assertEquals(localDueDates[secondDate], result.get(1).getDueDate()),
+                () -> assertEquals(localDueDates[secondDate], result.get(2).getDueDate()),
+                () -> assertEquals(localDueDates[firstDate], result.get(3).getDueDate()));
+    }
 }
