@@ -17,6 +17,10 @@ public class SortedTaskListUITests {
             LocalDateTime.of(2000, 1, 1, 1, 1),
             LocalDateTime.of(1987, 12, 12, 20, 0),
             LocalDateTime.of(2050, 10, 23, 10, 0)};
+    private final int firstDate = 2;
+    private final int secondDate = 1;
+    private final int thirdDate = 0;
+    private final int fourthDate = 3;
     private String[] dueDates = {"21-3-11 13:00\n", "00-1-1 1:1\n", "87-12-12 20:00\n", "2050-10-23 10:0\n"};
     private String DEFAULT_STATUS = "3\n";
     private String ONGOING_STATUS = "1\n";
@@ -127,19 +131,33 @@ public class SortedTaskListUITests {
         Assertions.assertEquals(1, tudu.getNumberOfTasks());
     }
 
-    /*@Test
-    @Disabled
+    @Test
     @DisplayName("After displaying descending order of due date the stored linked list should remain unchanged")
     void afterDisplayingDescendingOrderOfDueDateTheStoredLinkedListShouldRemainUnchanged() {
-        org.junit.jupiter.api.Assertions.fail("Not implemented");
+        String input = ADD+taskNamesForInput[0]+dueDates[fourthDate]+DEFAULT_STATUS+projectNamesForInput[3]+YES
+                +taskNamesForInput[1]+dueDates[firstDate]+ONGOING_STATUS+projectNamesForInput[0]+YES
+                +taskNamesForInput[2]+dueDates[secondDate]+ONGOING_STATUS+projectNamesForInput[1]+NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        tudu.viewTaskByDueDate(false, false);
+        Assertions.assertAll(() -> assertEquals(localDueDates[firstDate], tudu.dueDateSortedList.get(0).getDueDate()),
+                () -> assertEquals(localDueDates[secondDate], tudu.dueDateSortedList.get(1).getDueDate()),
+                () -> assertEquals(localDueDates[fourthDate], tudu.dueDateSortedList.get(2).getDueDate()));
+
+
     }
 
     @Test
-    @Disabled
     @DisplayName("After displaying descending order of project the stored tree map should remain unchanged")
     void afterDisplayingDescendingOrderOfProjectTheStoredTreeMapShouldRemainUnchanged() {
-        org.junit.jupiter.api.Assertions.fail("Not implemented");
-    }*/
+        String input = ADD+taskNamesForInput[0]+dueDates[fourthDate]+DEFAULT_STATUS+projectNamesForInput[3]+YES
+                +taskNamesForInput[1]+dueDates[firstDate]+ONGOING_STATUS+projectNamesForInput[0]+YES
+                +taskNamesForInput[2]+dueDates[secondDate]+ONGOING_STATUS+projectNamesForInput[1]+NO+QUIT;
+        tudu.readInput(new ByteArrayInputStream(input.getBytes()));
+        tudu.viewTaskByProject(false, false);
+        assertEquals(3, tudu.getNumberOfTasks());
+        Assertions.assertAll(() -> assertEquals(projectNames[3], tudu.projectSortedMap.firstKey()),
+        () -> assertEquals(projectNames[1], tudu.projectSortedMap.lastKey()));
+    }
 
     @Test
     @Disabled
