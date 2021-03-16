@@ -76,7 +76,7 @@ public class SortedTaskListUI extends SortedTaskList {
         while (isAddingTask) {
             //Change what questions to enter
             String taskName = questionPrompt("Enter name of task: ");
-            LocalDateTime dueDate = validateDateImproved();
+            LocalDateTime dueDate = getValidDate();
             int status = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
             String project = questionPrompt("What type of project is this task?");
             this.addTask(taskName, dueDate, status, project);
@@ -194,7 +194,7 @@ public class SortedTaskListUI extends SortedTaskList {
                     newStatus = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
                     newTime = chosenTask.getDueDate();
                 } else if (fieldToEdit == 2) {
-                    newTime = validateDateImproved();
+                    newTime = getValidDate();
                     newStatus = chosenTask.getStatus().ordinal()+1;
                 } else {
                     newStatus = chosenTask.getStatus().ordinal()+1;
@@ -231,7 +231,7 @@ public class SortedTaskListUI extends SortedTaskList {
         return possibleTasks;
     }
 
-    protected LocalDateTime validateDateImproved() {
+    protected LocalDateTime getValidDate() {
         LocalDateTime result;
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         format.setLenient(false);
