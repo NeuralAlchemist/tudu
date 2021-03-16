@@ -117,11 +117,16 @@ public class SortedTaskList extends TaskListObject {
 
 
     @Override
-    protected void displayByDueDate(boolean ascending) {
-        Iterator<Task> itr = ascending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
+    protected LinkedList<Task> displayByDueDate(boolean ascending) {
+        LinkedList<Task> result = dueDateSortedList;
+        if(!ascending){
+            Collections.reverse(result);
+        }
+        return result;
+        /*Iterator<Task> itr = ascending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
         while (itr.hasNext()) {
             System.out.println(itr.next().toString());
-        }
+        }*/
     }
 
     @Override
