@@ -115,6 +115,14 @@ public class SortedTaskListTests {
                  () -> assertEquals(dates.get(2), sortedDueDate.get(3).getDueDate()));
      }
 
+    @Test
+    @DisplayName("duplicate tasks will not increase the number of tasks")
+    void duplicateTasksWillNotIncreaseTheNumberOfTasks() {
+        sortedTaskList.addTask("", dates.get(2), UNSTARTED_STATUS_INPUT, "Empty");
+        int expectedNumberOfTasks = 1;
+        sortedTaskList.addTask("", dates.get(2), UNSTARTED_STATUS_INPUT, "Empty");
+        assertEquals(1, sortedTaskList.getNumberOfTasks());
+    }
      @Test
      @DisplayName("empty task name results in default name for task")
      void emptyTaskNameResultsInDefaultNameForTask() {
