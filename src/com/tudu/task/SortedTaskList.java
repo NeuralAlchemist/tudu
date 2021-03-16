@@ -105,44 +105,6 @@ public class SortedTaskList extends TaskListObject {
         return projectSortedMap.get(task.getProject()).remove(task) && dueDateSortedList.remove(task);
     }
 
-    // Remove these
-    protected LinkedList<Task> getSortedByDueDate() {
-        return dueDateSortedList;
-    }
-    // Remove these
-    protected TreeMap<String, ArrayList<Task>> getSortedByProject() {
-        return projectSortedMap;
-    }
-
-
-
-    @Override
-    protected LinkedList<Task> displayByDueDate(boolean ascending) {
-        LinkedList<Task> result = dueDateSortedList;
-        if(!ascending){
-            Collections.reverse(result);
-        }
-        return result;
-        /*Iterator<Task> itr = ascending ? dueDateSortedList.iterator() : dueDateSortedList.descendingIterator();
-        while (itr.hasNext()) {
-            System.out.println(itr.next().toString());
-        }*/
-    }
-
-    @Override
-    protected NavigableSet<String> displayByProject(boolean ascending) {
-
-        NavigableSet<String> entries = ascending ? projectSortedMap.navigableKeySet() : projectSortedMap.descendingKeySet();
-        return entries;
-        /*for (String entry : entries) {
-            ArrayList<Task> tasksOfProject = projectSortedMap.get(entry);
-            System.out.println("tasks of project: " + entry + " total: " + tasksOfProject.size());
-            for (Task task : tasksOfProject) {
-                System.out.println(task.toString());
-            }
-        }*/
-    }
-
     protected ArrayList<Task> findTaskByName(String taskName) {
         ArrayList<Task> listOfTasksFound = new ArrayList<>(10);
         Iterator<Task> itr = dueDateSortedList.iterator();
