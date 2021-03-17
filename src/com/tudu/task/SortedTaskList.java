@@ -4,7 +4,6 @@ import org.fusesource.jansi.Ansi;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ public class SortedTaskList extends TaskListObject {
     // Private fields
     protected TreeMap<String, ArrayList<Task>> projectSortedMap;
     protected LinkedList<Task> dueDateSortedList;
-    private int numberOfTasks = 0;
+    private int size = 0;
 
 
     protected SortedTaskList() {
@@ -26,8 +25,6 @@ public class SortedTaskList extends TaskListObject {
         dueDateSortedList = new LinkedList<>();
     }
 
-    // Methods : ~~addTask~~, editTask, markAsDone, removeTask(IF: support removeAll, IF: support removeAllProjectFlag)
-    // update to check for already present tasks and return false if not added
     @Override
     protected Task addTask(String taskName, LocalDateTime dueDate, int status, String project) {
         Task result;
@@ -67,7 +64,7 @@ public class SortedTaskList extends TaskListObject {
             isAddedToDueDateSortedList = false;
         }
         if (isAddedToDueDateSortedList && isAddedToProjectSortedMap) {
-            numberOfTasks++;
+            size++;
             result = task;
         } else {
             result = null;
@@ -75,28 +72,43 @@ public class SortedTaskList extends TaskListObject {
         return result;
     }
 
-    // Return the element that was set
-    protected void setTaskInTaskList(String taskName, LocalDateTime dueDate, int status, String project, Task oldTask){
-        Task newTask = new Task(taskName, dueDate, status, project);
-        if(!newTask.getName().equals(oldTask.getName())){
-            oldTask.setName(newTask.getName());
-        } else if ((newTask.getStatus().compareTo(oldTask.getStatus())) != 0) {
-            oldTask.setStatus(newTask.getStatus());
+    @Override
+    protected void setTask(String taskName, LocalDateTime dueDate, int status, String project, Task oldTask){
+        if(contains(oldTask)){
+            Task newTask = new Task(taskName, dueDate, status, project);
+            if(!newTask.getName().equals(oldTask.getName())){
+                oldTask.setName(newTask.getName());
+            } else if ((newTask.getStatus().compareTo(oldTask.getStatus())) != 0) {
+                oldTask.setStatus(newTask.getStatus());
+            } else {
+                removeTask(oldTask);
+                addTask(newTask.getName(), newTask.getDueDate(), newTask.getStatus().ordinal()+1, newTask.getProject());
+            }
         } else {
-            removeTaskInTaskList(oldTask);
-            addTask(newTask.getName(), newTask.getDueDate(), newTask.getStatus().ordinal()+1, newTask.getProject());
+            System.out.println("Task you are trying to set does not exist!");
+            System.out.println("If this occurs check the method where the arguments are passed for this method");
         }
     }
 
+    @Override
     protected Task markTaskAsDone(Task task){
         task.setStatus(TaskStatus.DONE);
         return task;
     }
 
 
-    protected boolean removeTaskInTaskList(Task task){
-        numberOfTasks--;
-        return projectSortedMap.get(task.getProject()).remove(task) && dueDateSortedList.remove(task);
+    @Override
+    protected boolean removeTask(Task task){
+        boolean isRemoved;
+        if(contains(task)){
+            isRemoved = projectSortedMap.get(task.getProject()).remove(task) && dueDateSortedList.remove(task);
+            System.out.println(isRemoved);
+            size = isRemoved ? size-- : size;
+        }else {
+            System.out.println("Does not find the task!");
+            isRemoved = false;
+        }
+        return isRemoved;
     }
 
     protected ArrayList<Task> findTaskByName(String taskName) {
@@ -112,8 +124,17 @@ public class SortedTaskList extends TaskListObject {
         return listOfTasksFound.isEmpty() ? null : listOfTasksFound;
     }
 
-    protected int getNumberOfTasks() {
-        return numberOfTasks;
+    protected int getSize() {
+        return size;
+    }
+
+    protected boolean contains(Task task){
+        ArrayList<Task> tasksOfProject =  projectSortedMap.get(task.getProject()) ;
+        if(tasksOfProject == null){
+            return false;
+        }else{
+            return (tasksOfProject.contains(task) && dueDateSortedList.contains(task));
+        }
     }
 
     @Override
@@ -144,7 +165,6 @@ public class SortedTaskList extends TaskListObject {
 
     }
 
-    //change name to get?
     protected boolean searchForDatabaseFile(String stringPathToDatabase) {
         System.out.print("Searching for database ..");
         // Jansi code to blink the string "." slowly
@@ -163,10 +183,11 @@ public class SortedTaskList extends TaskListObject {
         return new File(stringPathToDatabase).exists();
     }
 
-    protected boolean loadTaskList(String stringPathToDatabase) {
+    @Override
+    protected boolean loadTaskListFromFile(String stringPathToDatabase) {
         boolean hasLoadedFromDatabase;
         if (searchForDatabaseFile(stringPathToDatabase)) {
-            hasLoadedFromDatabase = loadTaskListFromFile(stringPathToDatabase);
+            hasLoadedFromDatabase = loadTaskList(stringPathToDatabase);
         } else {
             // Display database unavailable! Let's start fresh!
             hasLoadedFromDatabase = false;
@@ -197,7 +218,7 @@ public class SortedTaskList extends TaskListObject {
      * @return Returns {@code true} if all the tasks have been loaded successfully;
      *          {@code false} otherwise
      * */
-    protected boolean loadTaskListFromFile(String stringPathToDatabase) {
+    protected boolean loadTaskList(String stringPathToDatabase) {
         boolean hasLoadedFromDatabase = true;
         File databaseFile = new File(stringPathToDatabase);
         Path pathToDatabase = Paths.get(stringPathToDatabase);
