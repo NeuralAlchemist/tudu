@@ -6,9 +6,9 @@ import java.util.NavigableSet;
 
 abstract class TaskListObject {
     protected abstract Task addTask(String taskName, LocalDateTime dueDate, int status, String project);
-    // Method to edit fields of a Task
-    // Method to mark task as done
-    // Method to remove tasks
+    protected abstract void setTask(String taskName, LocalDateTime dueDate, int status, String project, Task oldTask);
+    protected abstract Task markTaskAsDone(Task task);
+    protected abstract boolean removeTask(Task task);
     protected abstract void saveTaskListToFile(String stringPathToDatabase);
-    // Method to load from a file
+    protected abstract boolean loadTaskListFromFile(String stringPathToDatabase);
 }
