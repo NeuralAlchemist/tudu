@@ -109,7 +109,7 @@ public class SortedTaskListUI extends SortedTaskList {
             }
             System.out.println();
         }
-        if(i == 1){
+        if(projectSortedMap.isEmpty()){
             System.out.println("Your tasklist is empty!");
         }
     }
@@ -123,7 +123,7 @@ public class SortedTaskListUI extends SortedTaskList {
             }
             System.out.println(itr.next().toString());
         }
-        if(i == 1){
+        if(dueDateSortedList.isEmpty()){
             System.out.println("Your tasklist is empty!");
         }
     }
