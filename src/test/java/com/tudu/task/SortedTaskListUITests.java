@@ -2,8 +2,6 @@ package com.tudu.task;
 
 import org.junit.jupiter.api.*;
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +28,8 @@ public class SortedTaskListUITests {
     private final String VIEW = "1\n";
     private final String ADD = "2\n";
     private final String EDIT = "3\n";
+    private final String CHOOSE_EDIT_OR_REMOVE = "1\n";
+    private final String CHOOSE_REMOVE = "2\n";
     private final String EDIT_SEARCH_TERM = "3\n";
     private final String EDIT_OUT_SEARCH = "n\n";
     private final String EDIT_ALL_PROJECTS = "1\n";
@@ -39,8 +39,8 @@ public class SortedTaskListUITests {
     private final String EMPTY = "\n";
     private final String DEFAULT_NAME = "NO NAME";
     private final String stringPathToDatabase = "tudu-database.txt";
-    private final Path pathToDatabase = Paths.get(stringPathToDatabase);
     File databaseFile = new File(stringPathToDatabase);
+
     @BeforeEach
     public void init() {
         tudu = new SortedTaskListUI();
@@ -56,8 +56,8 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("validate date result is not null when input is proper format")
     void validateDateResultIsNotNullWhenInputIsProperFormat() {
-        assertEquals(0, tudu.getNumberOfTasks());
-        String input = ADD+taskNamesForInput[3]+dueDates[3]+DEFAULT_STATUS+projectNamesForInput[3]+NO+QUIT;
+        assertEquals(0, tudu.getSize());
+        String input = ADD + taskNamesForInput[3] + dueDates[3] + DEFAULT_STATUS + projectNamesForInput[3] + NO + QUIT;
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
         assertNotEquals(null, tudu.dueDateSortedList.get(0).getDueDate());
     }
@@ -71,7 +71,7 @@ public class SortedTaskListUITests {
         Assertions.assertAll(() -> Assertions.assertEquals(foundTasks.get(0).getDueDate(), localDueDates[3]),
                 () -> Assertions.assertEquals(foundTasks.get(0).getStatus(), TaskStatus.UNSTARTED),
                 () -> Assertions.assertEquals(foundTasks.get(0).getProject(), projectNames[0]));
-        Assertions.assertEquals(1, tudu.getNumberOfTasks());
+        Assertions.assertEquals(1, tudu.getSize());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class SortedTaskListUITests {
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
         LinkedList<Task> tasks = tudu.dueDateSortedList;
         Assertions.assertAll(() -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
-                () -> Assertions.assertNotEquals(0, tudu.getNumberOfTasks()));
+                () -> Assertions.assertNotEquals(0, tudu.getSize()));
     }
 
 
@@ -92,7 +92,7 @@ public class SortedTaskListUITests {
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
         LinkedList<Task> tasks = tudu.dueDateSortedList;
         Assertions.assertAll(() -> Assertions.assertEquals(tasks.getFirst().getDueDate(), localDueDates[1]),
-                () -> Assertions.assertNotEquals(0, tudu.getNumberOfTasks()));
+                () -> Assertions.assertNotEquals(0, tudu.getSize()));
     }
 
     @Test
@@ -129,49 +129,47 @@ public class SortedTaskListUITests {
     @DisplayName("Input to add task can be empty except for due date")
     void inputToAddTaskCanBeEmptyExceptForDueDate() {
         String input = ADD + EMPTY + dueDates[1] + DEFAULT_STATUS + EMPTY + NO + QUIT;
-        Assertions.assertEquals(0, tudu.getNumberOfTasks());
+        Assertions.assertEquals(0, tudu.getSize());
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
-        Assertions.assertEquals(1, tudu.getNumberOfTasks());
+        Assertions.assertEquals(1, tudu.getSize());
     }
 
     @Test
     @DisplayName("After displaying descending order of due date the stored linked list should remain unchanged")
     void afterDisplayingDescendingOrderOfDueDateTheStoredLinkedListShouldRemainUnchanged() {
-        String input = ADD+taskNamesForInput[0]+dueDates[fourthDate]+DEFAULT_STATUS+projectNamesForInput[3]+YES
-                +taskNamesForInput[1]+dueDates[firstDate]+ONGOING_STATUS+projectNamesForInput[0]+YES
-                +taskNamesForInput[2]+dueDates[secondDate]+ONGOING_STATUS+projectNamesForInput[1]+NO+QUIT;
+        String input = ADD + taskNamesForInput[0] + dueDates[fourthDate] + DEFAULT_STATUS + projectNamesForInput[3] + YES
+                + taskNamesForInput[1] + dueDates[firstDate] + ONGOING_STATUS + projectNamesForInput[0] + YES
+                + taskNamesForInput[2] + dueDates[secondDate] + ONGOING_STATUS + projectNamesForInput[1] + NO + QUIT;
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
         tudu.viewTaskByDueDate(false, false);
         Assertions.assertAll(() -> assertEquals(localDueDates[firstDate], tudu.dueDateSortedList.get(0).getDueDate()),
                 () -> assertEquals(localDueDates[secondDate], tudu.dueDateSortedList.get(1).getDueDate()),
                 () -> assertEquals(localDueDates[fourthDate], tudu.dueDateSortedList.get(2).getDueDate()));
-
-
     }
 
     @Test
     @DisplayName("After displaying descending order of project the stored tree map should remain unchanged")
     void afterDisplayingDescendingOrderOfProjectTheStoredTreeMapShouldRemainUnchanged() {
-        String input = ADD+taskNamesForInput[0]+dueDates[fourthDate]+DEFAULT_STATUS+projectNamesForInput[3]+YES
-                +taskNamesForInput[1]+dueDates[firstDate]+ONGOING_STATUS+projectNamesForInput[0]+YES
-                +taskNamesForInput[2]+dueDates[secondDate]+ONGOING_STATUS+projectNamesForInput[1]+NO+QUIT;
+        String input = ADD + taskNamesForInput[0] + dueDates[fourthDate] + DEFAULT_STATUS + projectNamesForInput[3] + YES
+                + taskNamesForInput[1] + dueDates[firstDate] + ONGOING_STATUS + projectNamesForInput[0] + YES
+                + taskNamesForInput[2] + dueDates[secondDate] + ONGOING_STATUS + projectNamesForInput[1] + NO + QUIT;
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
         tudu.viewTaskByProject(false, false);
-        assertEquals(3, tudu.getNumberOfTasks());
+        assertEquals(3, tudu.getSize());
         Assertions.assertAll(() -> assertEquals(projectNames[3], tudu.projectSortedMap.firstKey()),
-        () -> assertEquals(projectNames[1], tudu.projectSortedMap.lastKey()));
+                () -> assertEquals(projectNames[1], tudu.projectSortedMap.lastKey()));
     }
 
     @Test
     @DisplayName("checking for word not in task list does not throw exception")
     void checkingForWordNotInTaskListDoesNotThrowExceptionIfListIsNull() {
-        String input = ADD+taskNamesForInput[0]+dueDates[fourthDate]+DEFAULT_STATUS+projectNamesForInput[3]+YES
-                +taskNamesForInput[1]+dueDates[firstDate]+ONGOING_STATUS+projectNamesForInput[0]+YES
-                +taskNamesForInput[2]+dueDates[secondDate]+ONGOING_STATUS+projectNamesForInput[1]+NO
-                +EDIT+EDIT_SEARCH_TERM+"champagne\n"+EDIT_OUT_SEARCH+EDIT_ALL_PROJECTS+"1\n"+"1\n"+taskNamesForInput[3]+NO+NO+QUIT;
-        try{
+        String input = ADD + taskNamesForInput[0] + dueDates[fourthDate] + DEFAULT_STATUS + projectNamesForInput[3] + YES
+                + taskNamesForInput[1] + dueDates[firstDate] + ONGOING_STATUS + projectNamesForInput[0] + YES
+                + taskNamesForInput[2] + dueDates[secondDate] + ONGOING_STATUS + projectNamesForInput[1] + NO
+                + EDIT + CHOOSE_EDIT_OR_REMOVE + EDIT_SEARCH_TERM + "champagne\n" + EDIT_OUT_SEARCH + CHOOSE_EDIT_OR_REMOVE + EDIT_ALL_PROJECTS + "1\n" + "1\n" + taskNamesForInput[3] + NO + NO + QUIT;
+        try {
             tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             fail("This should not have happened");
         }
@@ -185,7 +183,7 @@ public class SortedTaskListUITests {
                 + YES + taskNamesForInput[1] + dueDates[3] + ONGOING_STATUS + projectNamesForInput[1]
                 + NO + QUIT;
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
-        assertEquals(3, tudu.getNumberOfTasks());
+        assertEquals(3, tudu.getSize());
         Task actual = tudu.getTaskFromProjectSortedMap(2);
         assertEquals(projectNames[2], actual.getProject());
     }
@@ -193,23 +191,21 @@ public class SortedTaskListUITests {
     @Test
     @DisplayName("do while condition is false does not throw number format exception")
     void doWhileConditionIsFalseDoesNotThrowNumberFormatException() {
-        String input = "#\n"+"we\n"+QUIT;
-        try{
+        String input = "#\n" + "we\n" + QUIT;
+        try {
             tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             fail("Exception should have been caught");
         }
     }
 
     @Test
-    @DisplayName("read input will never return negative one")
-    void readInputWillNeverReturnNegativeOne() {
-        String input = ADD + EMPTY + dueDates[1] + DEFAULT_STATUS + EMPTY + NO + "5\n"+"%\n"+QUIT;
+    @DisplayName("start application will never return negative one")
+    void startApplicationWillNeverReturnNegativeOne() {
+        String input = ADD + EMPTY + dueDates[1] + DEFAULT_STATUS + EMPTY + NO + "5\n" + "%\n" + QUIT;
         int result = tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
-        if(result == -1){
+        if (result == -1) {
             fail("The program exited forcefully, this should not have happened");
         }
     }
-
-
 }
