@@ -22,13 +22,14 @@ public class SortedTaskListUI extends SortedTaskList {
             "\n1 -> I'm currently doing it" +
             "\n2 -> I have finished it" +
             "\n3 -> I have not begun it yet";
-
+    private final String START_MENU_MESSAGE = "You can: ";
+    private final String CHOOSE_MESSAGE = "Select an option in range ";
     // Class to display TaskList and read user input from terminal
     // Must be an infinite loop until "Save and Quit" option is chosen
     // Private or local fields
     // Methods : readInput, printMenu
     private void displayMainMenu() {
-        System.out.println("You can do the following: ");
+        System.out.println(START_MENU_MESSAGE);
         System.out.println("1 -> View all tasks (sort by project/due date)");
         System.out.println("2 -> Add a new task");
         System.out.println("3 -> Modify a task (includes changing task fields, removing a task, marking a task as done)");
@@ -44,7 +45,7 @@ public class SortedTaskListUI extends SortedTaskList {
         loadTaskListFromFile(stringPathToDatabase);
         while (isRunning) {
             displayMainMenu();
-            int input = doWhileConditionIsFalse("Select an option in range [1-4]:", 1, 4);
+            int input = doWhileConditionIsFalse(CHOOSE_MESSAGE+"[1-4]:", 1, 4);
             switch (input) {
                 case 1:
                     viewTaskMenu();
@@ -84,7 +85,8 @@ public class SortedTaskListUI extends SortedTaskList {
     private void viewTaskMenu() {
         boolean isViewingTasks = true;
         while (isViewingTasks) {
-            int displayOption = doWhileConditionIsFalse("Choose one of the following[1-2]:\n1 -> Display all tasks by project\n2 -> Display all tasks by due date", 1, 2);
+            int displayOption = doWhileConditionIsFalse(START_MENU_MESSAGE+"\n1 -> Display all tasks by project\n" +
+                    "2 -> Display all tasks by due date\n"+CHOOSE_MESSAGE+"[1-2]:", 1, 2);
             boolean isAscending = promptBooleanAnswer("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
             if (displayOption == 1) {
                 viewTaskByProject(isAscending, false);
@@ -155,14 +157,15 @@ public class SortedTaskListUI extends SortedTaskList {
         editaskloop:
         while (isEditingTask) {
             Task chosenTask = null;
-            int editOption = doWhileConditionIsFalse("You can:\n" +
+            int editOption = doWhileConditionIsFalse(START_MENU_MESSAGE+"\n" +
                     "1 -> edit a task's fields/ remove a task\n" +
-                    "2 -> mark a task as done", 1, 2);
-            int searchOption = doWhileConditionIsFalse("Choose one of the following to begin editing[1-2]:\n" +
+                    "2 -> mark a task as done\n"+CHOOSE_MESSAGE+"[1-2]:", 1, 2);
+            int searchOption = doWhileConditionIsFalse(START_MENU_MESSAGE+"\n" +
                     "1 -> Show all tasks by project\n" +
                     "2 -> Show all tasks by due date\n" +
                     "3 -> Search using task name\n" +
-                    "4 -> Quit editing", 1, 4);
+                    "4 -> Quit editing\n" +
+                    CHOOSE_MESSAGE+" [1-4]:", 1, 4);
             //Add option to escape from edit here
             switch (searchOption) {
                 case 1:
@@ -194,14 +197,16 @@ public class SortedTaskListUI extends SortedTaskList {
             boolean isEditingChosenTask = true;
             if(editOption == 2){
                 System.out.println("Following task is marked done:\n" +markTaskAsDone(chosenTask).toString());
+                removeDuplicateTasks(chosenTask);
                 isEditingChosenTask = false;
                 isEditingTask = false;
                 break;
             }
             while (isEditingTask && isEditingChosenTask) {
                 System.out.println("Task chosen for editing is:\n" + chosenTask.toString());
-                int fieldToEdit = doWhileConditionIsFalse("Enter the option that you want to edit[1-4]" +
-                        "\n1 -> Name\n2 -> Due date\n3 -> Status\n4 -> Project\n5 -> Remove whole task", 1, 5);
+                int fieldToEdit = doWhileConditionIsFalse(START_MENU_MESSAGE+"\n" +
+                        "\n1 ->Edit name\n2 ->Edit due date\n3 ->Edit status\n4 ->Edit project\n5 -> Remove whole task" +
+                        CHOOSE_MESSAGE+" [1-5]:", 1, 5);
                 if(fieldToEdit == 5){
                     removeTask(chosenTask);
                     System.out.println("Task was removed!");
@@ -227,6 +232,7 @@ public class SortedTaskListUI extends SortedTaskList {
                     System.out.println(newStatus);
                     setTask(newName, newTime, newStatus, newProject, chosenTask);
                     System.out.println("Following task has been edited:\n"+chosenTask.toString());
+                    removeDuplicateTasks(chosenTask);
                     isEditingChosenTask = promptBooleanAnswer("Continue editing other fields of this task?(y/n)");
                 }
             }
