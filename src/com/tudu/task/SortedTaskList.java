@@ -128,6 +128,18 @@ public class SortedTaskList extends TaskListObject {
         return size;
     }
 
+    protected void removeDuplicateTasks(Task task){
+        int lastOccurrence = dueDateSortedList.lastIndexOf(task);
+        int firstOccurence = dueDateSortedList.indexOf(task);
+        System.out.println(firstOccurence);
+        System.out.println(lastOccurrence);
+        if(firstOccurence != lastOccurrence){
+            removeTask(task);
+            System.out.println("The updated task exists twice in the tasklist.\n" +
+                    "Removed one of them.");
+        }
+    }
+
     protected boolean contains(Task task){
         ArrayList<Task> tasksOfProject =  projectSortedMap.get(task.getProject()) ;
         if(tasksOfProject == null){
