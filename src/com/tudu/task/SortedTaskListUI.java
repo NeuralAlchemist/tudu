@@ -41,7 +41,7 @@ public class SortedTaskListUI extends SortedTaskList {
         System.out.println(ansi().eraseScreen(Ansi.Erase.ALL).cursor(1, 1));
         System.out.println("Get organizing with TuDu! \n");
         boolean isRunning = true;
-        loadTaskList(stringPathToDatabase);
+        loadTaskListFromFile(stringPathToDatabase);
         while (isRunning) {
             displayMainMenu();
             int input = doWhileConditionIsFalse("Select an option in range [1-4]:", 1, 4);
@@ -109,6 +109,9 @@ public class SortedTaskListUI extends SortedTaskList {
             }
             System.out.println();
         }
+        if(i == 1){
+            System.out.println("Your tasklist is empty!");
+        }
     }
 
     protected void viewTaskByDueDate(boolean isAscending, boolean canShowTaskNumber) {
@@ -119,6 +122,9 @@ public class SortedTaskListUI extends SortedTaskList {
                 System.out.print((i++) + " -> ");
             }
             System.out.println(itr.next().toString());
+        }
+        if(i == 1){
+            System.out.println("Your tasklist is empty!");
         }
     }
 
@@ -162,13 +168,13 @@ public class SortedTaskListUI extends SortedTaskList {
                 case 1:
                     viewTaskByProject(true, true);
                     int chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit/mark/remove[1-"
-                            + getNumberOfTasks() + "]", 1, getNumberOfTasks()); // or quit?
+                            + getSize() + "]", 1, getSize()); // or quit?
                     chosenTask = getTaskFromProjectSortedMap(chosenTaskIndex);
                     break;
                 case 2:
                     viewTaskByDueDate(true, true);
                     chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit/mark/remove[1-"
-                            + getNumberOfTasks() + "]", 1, getNumberOfTasks()); // or quit?
+                            + getSize() + "]", 1, getSize()); // or quit?
                     chosenTask = dueDateSortedList.get(chosenTaskIndex - 1);
                     break;
                 case 3:
@@ -197,7 +203,7 @@ public class SortedTaskListUI extends SortedTaskList {
                 int fieldToEdit = doWhileConditionIsFalse("Enter the option that you want to edit[1-4]" +
                         "\n1 -> Name\n2 -> Due date\n3 -> Status\n4 -> Project\n5 -> Remove whole task", 1, 5);
                 if(fieldToEdit == 5){
-                    removeTaskInTaskList(chosenTask);
+                    removeTask(chosenTask);
                     System.out.println("Task was removed!");
                     isEditingChosenTask = false;
                     break;
@@ -219,7 +225,8 @@ public class SortedTaskListUI extends SortedTaskList {
                     String newName = fieldToEdit == 1 ? newValue : chosenTask.getName();
                     String newProject = fieldToEdit == 4 ? newValue : chosenTask.getProject();
                     System.out.println(newStatus);
-                    setTaskInTaskList(newName, newTime, newStatus, newProject, chosenTask);
+                    setTask(newName, newTime, newStatus, newProject, chosenTask);
+                    System.out.println("Following task has been edited:\n"+chosenTask.toString());
                     isEditingChosenTask = promptBooleanAnswer("Continue editing other fields of this task?(y/n)");
                 }
             }
