@@ -4,14 +4,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * Represents a task. This class contains fields to store the name, due date,
+ * {@link TaskStatus} and {@link } of a task.
+ * @author yashaswiniseeta
+ * @see TaskStatus
+ * @see TaskProject
+ * @see LocalDateTime
+ */
 public class Task{
-    // Task class contains : name, dueDate, TaskStatus, project, IF:project color
-    // All fields are private
-    private String name;
-    private LocalDateTime dueDate;
-    private TaskStatus status;
-    private TaskProject project;
 
+    public String name;
+    public LocalDateTime dueDate;
+    public TaskStatus status;
+    public TaskProject project;
 
     public Task(String name, LocalDateTime dueDate, int status, String project) {
         TaskStatus[] statusList = TaskStatus.values();
@@ -21,13 +27,12 @@ public class Task{
         this.project = new TaskProject(project);
     }
 
-    // Getters and setters for all fields
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.isEmpty() ? "NO NAME" : name;
     }
 
     public LocalDateTime getDueDate() {
@@ -54,8 +59,6 @@ public class Task{
         this.project = new TaskProject(project);
     }
 
-    // toString Method to display
-
     @Override
     public String toString() {
         LocalDate dueDate = this.dueDate.toLocalDate();
@@ -63,7 +66,7 @@ public class Task{
         return  "Task: "+ name +", due at: " +dueDate+" "+dueTime +", current status: " +status +", project type: " +project.getName() ;
     }
 
-
+    @Override
     public boolean equals(Object o){
         if(o == this){
             return true;
@@ -80,7 +83,5 @@ public class Task{
                 (task.getProject().equals(this.getProject())));
     }
 
-    // IF: add colored display based on project color
-    // IF: add a font style : Italics for finished, Bold for those that need to be done, normal for ongoing
 }
 
