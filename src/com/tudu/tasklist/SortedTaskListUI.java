@@ -1,6 +1,7 @@
 package com.tudu.tasklist;
 
 import com.tudu.task.Task;
+import com.tudu.task.TaskStatus;
 import org.fusesource.jansi.Ansi;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class SortedTaskListUI extends SortedTaskList {
     private final static int DEFAULT_NUMBER_OPTION = 26;
     private final static String DEFAULT_STRING_OPTION = "n";
     private static String stringPathToDatabase = "tudu-database.txt";
+    private static TaskStatus[] taskStatuses = TaskStatus.values();
     private BufferedReader bufferedReader;
     private final static String STATUS_QUESTION = "Choose one of the following options about your task status[1-3]" +
             "\n1 -> I'm currently doing it" +
@@ -77,7 +79,7 @@ public class SortedTaskListUI extends SortedTaskList {
             LocalDateTime dueDate = getValidDate();
             int status = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
             String project = promptOpenAnswer("What type of project is this task?");
-            Task added = this.addTask(taskName, dueDate, status, project);
+            Task added = this.addTask(taskName, dueDate, taskStatuses[status-1], project);
             System.out.println("Following task was added:\n"+added);
             isAddingTask = promptBooleanAnswer("Add more tasks?(y/n)");
         }
@@ -214,17 +216,17 @@ public class SortedTaskListUI extends SortedTaskList {
                     isEditingChosenTask = false;
                     break;
                 }else {
-                    int newStatus;
+                    TaskStatus newStatus;
                     String newValue = null;
                     LocalDateTime newTime;
                     if (fieldToEdit == 3) {
-                        newStatus = doWhileConditionIsFalse(STATUS_QUESTION, 1, 3);
+                        newStatus = taskStatuses[doWhileConditionIsFalse(STATUS_QUESTION, 1, 3)-1];
                         newTime = chosenTask.getDueDate();
                     } else if (fieldToEdit == 2) {
                         newTime = getValidDate();
-                        newStatus = chosenTask.getStatus().ordinal() + 1;
+                        newStatus = chosenTask.getStatus();
                     } else {
-                        newStatus = chosenTask.getStatus().ordinal() + 1;
+                        newStatus = chosenTask.getStatus();
                         newTime = chosenTask.getDueDate();
                         newValue = promptOpenAnswer("Enter new value: ");
                     }
