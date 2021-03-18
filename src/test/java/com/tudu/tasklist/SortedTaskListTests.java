@@ -55,10 +55,10 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("tasks added sequentially with ascending due date are sorted by ascending due date")
     public void tasksAddedSequentiallyWithAscendingDueDateAreSortedByAscendingDueDate() {
-        sortedTaskList.addTask("Workout", dates.get(0), UNSTARTED_STATUS_INPUT, "Exercise");
-        sortedTaskList.addTask("Read LOTR", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Collect package", dates.get(2), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Write a good test", dates.get(3), UNSTARTED_STATUS_INPUT, "Work");
+        sortedTaskList.addTask("Workout", dates.get(0), TaskStatus.UNSTARTED, "Exercise");
+        sortedTaskList.addTask("Read LOTR", dates.get(1), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Collect package", dates.get(2), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Write a good test", dates.get(3), TaskStatus.UNSTARTED, "Work");
         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
         List<LocalDateTime> actual = Arrays.asList(
                 sortedDueDate.get(0).getDueDate(),
@@ -72,10 +72,10 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("tasks added sequentially with descending due date are sorted by ascending due date")
     void tasksAddedSequentiallyWithDescendingDueDateAreSortedByAscendingDueDate() {
-        sortedTaskList.addTask("Workout", dates.get(3), UNSTARTED_STATUS_INPUT, "Exercise");
-        sortedTaskList.addTask("Read LOTR", dates.get(2), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Collect package", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Write a good test", dates.get(0), UNSTARTED_STATUS_INPUT, "Work");
+        sortedTaskList.addTask("Workout", dates.get(3), TaskStatus.UNSTARTED, "Exercise");
+        sortedTaskList.addTask("Read LOTR", dates.get(2), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Collect package", dates.get(1), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Write a good test", dates.get(0), TaskStatus.UNSTARTED, "Work");
         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
         List<LocalDateTime> actual = Arrays.asList(
                 sortedDueDate.get(0).getDueDate(),
@@ -89,10 +89,10 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("tasks added sequentially with random due date are sorted by ascending due date")
     void tasksAddedSequentiallyWithRandomDueDateAreSortedByAscendingDueDate() {
-        sortedTaskList.addTask("Workout", dates.get(2), UNSTARTED_STATUS_INPUT, "Exercise");
-        sortedTaskList.addTask("Read LOTR", dates.get(0), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Collect package", dates.get(3), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Write a good test", dates.get(1), UNSTARTED_STATUS_INPUT, "Work");
+        sortedTaskList.addTask("Workout", dates.get(2), TaskStatus.UNSTARTED, "Exercise");
+        sortedTaskList.addTask("Read LOTR", dates.get(0), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Collect package", dates.get(3), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Write a good test", dates.get(1), TaskStatus.UNSTARTED, "Work");
         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
         List<LocalDateTime> actual = Arrays.asList(
                 sortedDueDate.get(0).getDueDate(),
@@ -106,10 +106,10 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("tasks added sequentially with duplicate due dates in random order are sorted by ascending due date")
     void tasksAddedSequentiallyWithDuplicateDueDatesInRandomOrderAreSortedByAscendingDueDate() {
-        sortedTaskList.addTask("Workout", dates.get(2), UNSTARTED_STATUS_INPUT, "Exercise");
-        sortedTaskList.addTask("Read LOTR", dates.get(0), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Collect package", dates.get(1), UNSTARTED_STATUS_INPUT, "Personal");
-        sortedTaskList.addTask("Write a good test", dates.get(1), UNSTARTED_STATUS_INPUT, "Work");
+        sortedTaskList.addTask("Workout", dates.get(2), TaskStatus.UNSTARTED, "Exercise");
+        sortedTaskList.addTask("Read LOTR", dates.get(0), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Collect package", dates.get(1), TaskStatus.UNSTARTED, "Personal");
+        sortedTaskList.addTask("Write a good test", dates.get(1), TaskStatus.UNSTARTED, "Work");
         LinkedList<Task> sortedDueDate = sortedTaskList.dueDateSortedList;
         Assertions.assertAll(() -> assertEquals(dates.get(0), sortedDueDate.get(0).getDueDate()),
                 () -> assertEquals(dates.get(1), sortedDueDate.get(1).getDueDate()),
@@ -120,27 +120,27 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("duplicate tasks will not increase the number of tasks")
     void duplicateTasksWillNotIncreaseTheNumberOfTasks() {
-        sortedTaskList.addTask("", dates.get(2), UNSTARTED_STATUS_INPUT, "Empty");
+        sortedTaskList.addTask("", dates.get(2), TaskStatus.UNSTARTED, "Empty");
         int expectedNumberOfTasks = 1;
-        sortedTaskList.addTask("", dates.get(2), UNSTARTED_STATUS_INPUT, "Empty");
+        sortedTaskList.addTask("", dates.get(2), TaskStatus.UNSTARTED, "Empty");
         assertEquals(1, sortedTaskList.getSize());
     }
 
     @Test
     @DisplayName("returns null for adding task already present in task list")
     void returnsNullForAddingTaskAlreadyPresentInTaskList() {
-        sortedTaskList.addTask(taskNames[2], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[2]);
-        Task expected = sortedTaskList.addTask(taskNames[2], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[2]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[2], TaskStatus.UNSTARTED, projectNames[2]);
+        Task expected = sortedTaskList.addTask(taskNames[2], localDueDates[2], TaskStatus.UNSTARTED, projectNames[2]);
         assertNull(expected);
     }
 
     @Test
     @DisplayName("setting task that does not exist should not throw exception")
     void settingTaskThatDoesNotExistShouldNotThrowException() {
-        sortedTaskList.addTask(taskNames[2], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[2]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[2], TaskStatus.UNSTARTED, projectNames[2]);
         try {
-            sortedTaskList.setTask(taskNames[3], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[2],
-                    new Task(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]));
+            sortedTaskList.setTask(taskNames[3], localDueDates[2], TaskStatus.UNSTARTED, projectNames[2],
+                    new Task(taskNames[2], localDueDates[1], TaskStatus.UNSTARTED, projectNames[0]));
         } catch (ClassCastException | UnsupportedOperationException e) {
             fail("This should not have happened");
         }
@@ -149,7 +149,7 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("removing task that does not exist should not return true")
     void removingTaskThatDoesNotExistShouldNotReturnTrue() {
-        boolean result = sortedTaskList.removeTask(new Task(taskNames[0], localDueDates[3], ONGOING_STATUS_INPUT, projectNames[3]));
+        boolean result = sortedTaskList.removeTask(new Task(taskNames[0], localDueDates[3], TaskStatus.ONGOING, projectNames[3]));
         if (result) {
             fail("A non exisiting task was removed from the tasklist. This should not occur");
         }
@@ -158,10 +158,10 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("searching by non exisiting task name should not throw exception")
     void searchingByNonExisitingTaskNameShouldNotThrowException() {
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], UNSTARTED_STATUS_INPUT, projectNames[3]);
-        sortedTaskList.addTask(taskNames[3], localDueDates[3], UNSTARTED_STATUS_INPUT, projectNames[2]);
-        sortedTaskList.addTask(taskNames[0], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[1]);
-        sortedTaskList.addTask(taskNames[1], localDueDates[0], UNSTARTED_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.UNSTARTED, projectNames[3]);
+        sortedTaskList.addTask(taskNames[3], localDueDates[3], TaskStatus.UNSTARTED, projectNames[2]);
+        sortedTaskList.addTask(taskNames[0], localDueDates[2], TaskStatus.UNSTARTED, projectNames[1]);
+        sortedTaskList.addTask(taskNames[1], localDueDates[0], TaskStatus.UNSTARTED, projectNames[0]);
         try {
             sortedTaskList.findTaskByName("champagne");
         } catch (NullPointerException | UnsupportedOperationException e) {
@@ -172,9 +172,9 @@ public class SortedTaskListTests {
     @Test
     @DisplayName("saving to a file that does not exist should not throw exception")
     void savingToAFileThatDoesNotExistShouldNotThrowException() {
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], UNSTARTED_STATUS_INPUT, projectNames[3]);
-        sortedTaskList.addTask(taskNames[3], localDueDates[3], UNSTARTED_STATUS_INPUT, projectNames[2]);
-        sortedTaskList.addTask(taskNames[0], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[1]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.UNSTARTED, projectNames[3]);
+        sortedTaskList.addTask(taskNames[3], localDueDates[3], TaskStatus.UNSTARTED, projectNames[2]);
+        sortedTaskList.addTask(taskNames[0], localDueDates[2], TaskStatus.UNSTARTED, projectNames[1]);
         File alternate = new File("alternative-database.txt");
         alternate.delete();
         assertFalse(alternate.exists());
@@ -194,8 +194,8 @@ public class SortedTaskListTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sortedTaskList.addTask("", localDueDates[3], UNSTARTED_STATUS_INPUT, "");
-        sortedTaskList.addTask(taskNames[2], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[2]);
+        sortedTaskList.addTask("", localDueDates[3], TaskStatus.UNSTARTED, "");
+        sortedTaskList.addTask(taskNames[2], localDueDates[2], TaskStatus.UNSTARTED, projectNames[2]);
         int numberOfTasksAdded = 2;
         assertEquals(2, sortedTaskList.getSize());
         ArrayList<String> content;
@@ -217,10 +217,10 @@ public class SortedTaskListTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sortedTaskList.addTask("", localDueDates[3], UNSTARTED_STATUS_INPUT, "");
-        sortedTaskList.addTask(taskNames[2], localDueDates[2], UNSTARTED_STATUS_INPUT, projectNames[2]);
-        List<String> actual = Arrays.asList(taskNames[2], localDueDates[2].toString(), DEFAULT_STATUS, projectNames[2],
-                DEFAULT_NAME, localDueDates[3].toString(), DEFAULT_STATUS, DEFAULT_NAME);
+        sortedTaskList.addTask("", localDueDates[3], TaskStatus.UNSTARTED, "");
+        sortedTaskList.addTask(taskNames[2], localDueDates[2], TaskStatus.UNSTARTED, projectNames[2]);
+        List<String> actual = Arrays.asList(taskNames[2], localDueDates[2].toString(), TaskStatus.UNSTARTED.name(), projectNames[2],
+                DEFAULT_NAME, localDueDates[3].toString(), TaskStatus.UNSTARTED.name(), DEFAULT_NAME);
         ArrayList<String> content;
         sortedTaskList.saveTaskListToFile(stringPathToDatabase);
         try {
@@ -265,7 +265,7 @@ public class SortedTaskListTests {
     @DisplayName("loading a existing file will return true")
     void loadingANonExistingFileWillReturnTrue() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         sortedTaskList.saveTaskListToFile(stringPathToDatabase);
         sortedTaskList = new SortedTaskList();
         assertEquals(true, sortedTaskList.loadTaskListFromFile(stringPathToDatabase));
@@ -306,7 +306,7 @@ public class SortedTaskListTests {
     @DisplayName("non empty task list remains unchanged after reading a non existing database")
     void nonEmptyTaskListRemainsUnchangedAfterReadingANonExistingDatabase() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         int expectedNumberOfTasksBeforeLoading = 1;
         int expectedNumberOfTasksAfterLoading = 1;
         Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getSize());
@@ -325,7 +325,7 @@ public class SortedTaskListTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         int expectedNumberOfTasksBeforeLoading = 1;
         int expectedNumberOfTasksAfterLoading = 1;
         Assertions.assertEquals(expectedNumberOfTasksBeforeLoading, sortedTaskList.getSize());
@@ -343,7 +343,7 @@ public class SortedTaskListTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         sortedTaskList.saveTaskListToFile(stringPathToDatabase);
         Assertions.assertTrue(databaseFile.length() != 0);
         int numberOfTasksToLoadFromDatabase = sortedTaskList.getSize();
@@ -363,12 +363,12 @@ public class SortedTaskListTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         sortedTaskList.saveTaskListToFile(stringPathToDatabase);
         Assertions.assertTrue(databaseFile.length() != 0);
         int numberOfTasksToLoadFromDatabase = sortedTaskList.getSize();
         sortedTaskList = new SortedTaskList();
-        sortedTaskList.addTask(taskNames[0], localDueDates[2], ONGOING_STATUS_INPUT, projectNames[3]);
+        sortedTaskList.addTask(taskNames[0], localDueDates[2], TaskStatus.ONGOING, projectNames[3]);
         int numberOfTasksInSortedTaskList = 1;
         assertEquals(numberOfTasksInSortedTaskList, sortedTaskList.getSize());
         sortedTaskList.loadTaskListFromFile(stringPathToDatabase);
@@ -386,11 +386,11 @@ public class SortedTaskListTests {
     @DisplayName("setting task name does not change the task position in due date sorted list")
     void settingTaskNameDoesNotChangeTheTaskPositionInProjectSortedMap() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[secondDate], ONGOING_STATUS_INPUT, projectNames[0]);
-        sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[secondDate], TaskStatus.ONGOING, projectNames[0]);
+        sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], TaskStatus.ONGOING, projectNames[1]);
         int positionOfTaskUnderTest = 0;
         Task toBeUpdated = sortedTaskList.dueDateSortedList.get(positionOfTaskUnderTest);
-        sortedTaskList.setTask(taskNames[1], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1], toBeUpdated);
+        sortedTaskList.setTask(taskNames[1], localDueDates[firstDate], TaskStatus.ONGOING, projectNames[1], toBeUpdated);
         assertEquals(taskNames[1], sortedTaskList.dueDateSortedList.get(positionOfTaskUnderTest).getName());
     }
 
@@ -398,11 +398,11 @@ public class SortedTaskListTests {
     @DisplayName("setting task status does not change the task position in project sorted map")
     void settingTaskStatusDoesNotChangeTheTaskPositionInProjectSortedMap() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[secondDate], ONGOING_STATUS_INPUT, projectNames[0]);
-        sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], ONGOING_STATUS_INPUT, projectNames[1]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[secondDate], TaskStatus.ONGOING, projectNames[0]);
+        sortedTaskList.addTask(taskNames[3], localDueDates[firstDate], TaskStatus.ONGOING, projectNames[1]);
         // Task is in the first index position of the arraylist mapped to the task's project
         Task toBeUpdated = sortedTaskList.projectSortedMap.get(projectNames[1]).get(0);
-        sortedTaskList.setTask(taskNames[3], localDueDates[firstDate], DONE_STATUS_INPUT, projectNames[1], toBeUpdated);
+        sortedTaskList.setTask(taskNames[3], localDueDates[firstDate], TaskStatus.DONE, projectNames[1], toBeUpdated);
         assertEquals(taskNames[3], sortedTaskList.projectSortedMap.get(projectNames[1]).get(0).getName());
     }
 
@@ -410,7 +410,7 @@ public class SortedTaskListTests {
     @DisplayName("removed task is not present in the project sorted map")
     void removedTaskIsNotPresentInTheProjectSortedMap() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         System.out.println(sortedTaskList.projectSortedMap);
         System.out.println(sortedTaskList.dueDateSortedList);
         System.out.println(sortedTaskList.removeTask(sortedTaskList.dueDateSortedList.get(0)));
@@ -421,7 +421,7 @@ public class SortedTaskListTests {
     @DisplayName("removed task is not present in the due date sorted list")
     void removedTaskIsNotPresentInTheDueDateSortedList() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         sortedTaskList.removeTask(sortedTaskList.dueDateSortedList.get(0));
         Assertions.assertEquals(true, sortedTaskList.dueDateSortedList.isEmpty());
         Assertions.assertNull(sortedTaskList.findTaskByName(taskNames[2]));
@@ -431,7 +431,7 @@ public class SortedTaskListTests {
     @DisplayName("remove task method does not increase the number of tasks")
     void removeTaskMethodDoesNotIncreaseTheNumberOfTasks() {
         databaseFile.delete();
-        sortedTaskList.addTask(taskNames[2], localDueDates[1], ONGOING_STATUS_INPUT, projectNames[0]);
+        sortedTaskList.addTask(taskNames[2], localDueDates[1], TaskStatus.ONGOING, projectNames[0]);
         int numberOfTasksBeforeRemove = sortedTaskList.getSize();
         sortedTaskList.removeTask(sortedTaskList.dueDateSortedList.get(0));
         assertFalse(sortedTaskList.getSize() > numberOfTasksBeforeRemove);
