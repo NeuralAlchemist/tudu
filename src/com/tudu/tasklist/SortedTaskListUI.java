@@ -19,7 +19,7 @@ import static org.fusesource.jansi.Ansi.ansi;
  */
 public class SortedTaskListUI extends SortedTaskList {
     private final static int LOWEST_POSSIBLE_OPTION = 1;
-    private final static String DATE_FORMAT = "yy-MM-dd HH:mm";
+    private final static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
     private final static int DEFAULT_NUMBER_OPTION = 26;
     private final static String DEFAULT_STRING_OPTION = "n";
     private static String stringPathToDatabase = "tudu-database.txt";
@@ -388,7 +388,7 @@ public class SortedTaskListUI extends SortedTaskList {
         String input = null;
         boolean hasTrueOrFalse = false;
         do {
-            System.out.println(prompt);
+            System.out.println(prompt+"\nOBS! If you press enter, the default answer of no is taken");
             try {
                 input = bufferedReader.readLine();
             } catch (IOException e) {
