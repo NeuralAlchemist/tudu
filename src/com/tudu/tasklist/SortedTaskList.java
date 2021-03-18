@@ -22,7 +22,6 @@ public class SortedTaskList extends TaskListObject {
     protected LinkedList<Task> dueDateSortedList;
     private int size = 0;
 
-
     protected SortedTaskList() {
         projectSortedMap = new TreeMap<>();
         dueDateSortedList = new LinkedList<>();
