@@ -2,7 +2,6 @@ package com.tudu.tasklist;
 
 import com.tudu.task.Task;
 import com.tudu.task.TaskStatus;
-import com.tudu.tasklist.SortedTaskListUI;
 import org.junit.jupiter.api.*;
 import java.io.*;
 import java.time.LocalDateTime;
@@ -187,7 +186,7 @@ public class SortedTaskListUITests {
                 + NO + QUIT;
         tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
         assertEquals(3, tudu.getSize());
-        Task actual = tudu.getTaskFromProjectSortedMap(2);
+        Task actual = tudu.getTaskFromDisplayedProjectSortedMap(2);
         assertEquals(projectNames[2], actual.getProject());
     }
 
