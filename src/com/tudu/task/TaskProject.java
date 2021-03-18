@@ -1,16 +1,22 @@
 package com.tudu.task;
 
+/**
+ * Represents the project of a task.
+ * <p>
+ *     Note: This setup is to enable adding fields to customize a project.
+ *     For example, each project can also include a color field which can be
+ *     used to colorize the {@link com.tudu.task.Task#toString()}.
+ * </p>
+ */
 public class TaskProject {
-    private String name, color;
+    private String name;
 
+    /**
+     * Set the name of a project to the specified name.
+     * @param name the name to be set for the project; argument can be empty, in that case a default {@code "NO NAME"} name is given
+     */
     public TaskProject(String name) {
         this.name = name.isEmpty() ? "NO NAME" : name;
-    }
-
-    public TaskProject(String name, boolean pickColor){
-        this.name = name;
-        // IF: keep track of colors used (this should be read and written to a file)
-        // Display available colors and read the chosen color
     }
 
     public String getName() {
@@ -19,13 +25,5 @@ public class TaskProject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 }
