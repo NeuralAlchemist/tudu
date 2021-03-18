@@ -1,5 +1,6 @@
-package com.tudu.task;
+package com.tudu.tasklist;
 
+import com.tudu.task.Task;
 import org.fusesource.jansi.Ansi;
 
 import java.io.*;
