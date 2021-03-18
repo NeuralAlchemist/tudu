@@ -32,7 +32,7 @@ public class Task{
 
     /**
      * Constructs a task by and sets its fields to the specified arguments.
-     * @param name The name to be set for the task; argument can be empty, in that case a default {@code "NO NAME"} name is given
+     * @param name The name to be set for the task; argument can be an empty string, in that case a default {@code "NO NAME"} name is given
      * @param dueDate The date by which this task should be done
      * @param status The current status of the task
      * @param project The project to which this task belongs
@@ -83,7 +83,7 @@ public class Task{
     public void setProject(String project) {
         this.project = new TaskProject(project);
     }
-    
+
     @Override
     public String toString() {
         LocalDate dueDate = this.dueDate.toLocalDate();
