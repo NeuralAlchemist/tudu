@@ -1,5 +1,7 @@
-package com.tudu.task;
+package com.tudu.tasklist;
 
+import com.tudu.task.Task;
+import com.tudu.task.TaskStatus;
 import com.tudu.tasklist.SortedTaskListUI;
 import org.junit.jupiter.api.*;
 import java.io.*;
