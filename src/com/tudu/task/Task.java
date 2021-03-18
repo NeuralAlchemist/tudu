@@ -6,21 +6,38 @@ import java.time.LocalTime;
 
 /**
  * Represents a task. This class contains fields to store the name, due date,
- * {@link TaskStatus} and {@link } of a task.
+ * status and project of a task.
  * @author yashaswiniseeta
  * @see TaskStatus
  * @see TaskProject
  * @see LocalDateTime
  */
 public class Task{
-
+    /**
+     * Represents the name of a task.
+     */
     public String name;
+    /**
+     * Represents the due date of a task.
+     */
     public LocalDateTime dueDate;
+    /**
+     * Represents the status of a task.
+     */
     public TaskStatus status;
+    /**
+     * Represents the project of a task.
+     */
     public TaskProject project;
 
+    /**
+     * Constructs a task by and sets its fields to the specified arguments.
+     * @param name The name to be set for the task; argument can be empty, in that case a default {@code "NO NAME"} name is given
+     * @param dueDate The date by which this task should be done
+     * @param status The current status of the task
+     * @param project The project to which this task belongs
+     */
     public Task(String name, LocalDateTime dueDate, TaskStatus status, String project) {
-        TaskStatus[] statusList = TaskStatus.values();
         this.name = name.isEmpty() ? "NO NAME" : name;
         this.dueDate = dueDate;
         this.status = status;
@@ -31,6 +48,10 @@ public class Task{
         return name;
     }
 
+    /**
+     * Set the name of a task to the specified name.
+     * @param name the name to be set for the task; argument can be empty, in that case a default {@code "NO NAME"} name is given
+     */
     public void setName(String name) {
         this.name = name.isEmpty() ? "NO NAME" : name;
     }
@@ -51,6 +72,10 @@ public class Task{
         this.status = status;
     }
 
+    /**
+     * Returns the name of the project of this task.
+     * @return the name of the project of this task.
+     */
     public String getProject() {
         return project.getName();
     }
@@ -58,7 +83,7 @@ public class Task{
     public void setProject(String project) {
         this.project = new TaskProject(project);
     }
-
+    
     @Override
     public String toString() {
         LocalDate dueDate = this.dueDate.toLocalDate();
