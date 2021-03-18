@@ -13,7 +13,7 @@ public class Task{
     private TaskProject project;
 
 
-    protected Task(String name, LocalDateTime dueDate, int status, String project) {
+    public Task(String name, LocalDateTime dueDate, int status, String project) {
         TaskStatus[] statusList = TaskStatus.values();
         this.name = name.isEmpty() ? "NO NAME" : name;
         this.dueDate = dueDate;
@@ -22,35 +22,35 @@ public class Task{
     }
 
     // Getters and setters for all fields
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
-    protected void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    protected LocalDateTime getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    protected void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    protected TaskStatus getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    protected void setStatus(TaskStatus status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
-    protected String getProject() {
+    public String getProject() {
         return project.getName();
     }
 
-    protected void setProject(String project) {
+    public void setProject(String project) {
         this.project = new TaskProject(project);
     }
 
