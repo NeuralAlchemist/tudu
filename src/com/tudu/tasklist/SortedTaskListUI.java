@@ -31,6 +31,18 @@ public class SortedTaskListUI extends SortedTaskList {
             "\n3 -> I have not begun it yet";
     private final String START_MENU_MESSAGE = "You can: ";
     private final String CHOOSE_MESSAGE = "Select an option in range ";
+    private final int VIEW_TASK = 1;
+    private final int ADD_TASK = 2;
+    private final int EDIT_TASK = 3;
+    private final int SAVE_QUIT = 4;
+    private final int SHOW_ALL_PROJECTS = 1;
+    private final int SHOW_ALL_DUEDATE = 2;
+    private final int SEARCH_BY_WORD = 3;
+    private final int QUIT_EDIT = 4;
+    private final int CHOOSE_REMOVE = 2;
+    private final int EDIT_DUEDATE = 2;
+    private final int EDIT_STATUS = 3;
+    private final int REMOVE_TASK = 5;
 
     // Display Main Menu
     private void displayMainMenu() {
@@ -54,16 +66,16 @@ public class SortedTaskListUI extends SortedTaskList {
             displayMainMenu();
             int input = doWhileConditionIsFalse(CHOOSE_MESSAGE+"[1-4]:", 4);
             switch (input) {
-                case 1:
+                case VIEW_TASK:
                     viewTaskMenu();
                     break;
-                case 2:
+                case ADD_TASK:
                     addTaskMenu();
                     break;
-                case 3:
+                case EDIT_TASK:
                     editTaskMenu();
                     break;
-                case 4:
+                case SAVE_QUIT:
                     saveTaskListToFile(stringPathToDatabase);
                     // Exit is chosen, set boolean to break the while loop
                     isRunning = false;
@@ -101,10 +113,12 @@ public class SortedTaskListUI extends SortedTaskList {
     private void viewTaskMenu() {
         boolean isViewingTasks = true;
         while (isViewingTasks) {
-            int displayOption = doWhileConditionIsFalse(START_MENU_MESSAGE+"\n1 -> Display all tasks by project\n" +
-                    "2 -> Display all tasks by due date\n"+CHOOSE_MESSAGE+"[1-2]:", 2);
+            int displayOption = doWhileConditionIsFalse(START_MENU_MESSAGE+"\n" +
+                    "1 -> Display all tasks by project\n" +
+                    "2 -> Display all tasks by due date\n"+
+                    CHOOSE_MESSAGE+"[1-2]:", 2);
             boolean isAscending = promptBooleanAnswer("Display tasks in ascending order?(y/n)\nOBS! No will imply descending order");
-            if (displayOption == 1) {
+            if (displayOption == SHOW_ALL_PROJECTS) {
                 viewTaskByProject(isAscending, false);
             } else {
                 viewTaskByDueDate(isAscending, false);
@@ -203,19 +217,19 @@ public class SortedTaskListUI extends SortedTaskList {
                task to be edited. Or is quit is chosen, the editaskloop is broken
              */
             switch (searchOption) {
-                case 1:
+                case SHOW_ALL_PROJECTS:
                     viewTaskByProject(true, true);
                     int chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit/mark/remove[1-"
                             + getSize() + "]", getSize()); // or quit?
                     chosenTask = getTaskFromDisplayedProjectSortedMap(chosenTaskIndex);
                     break;
-                case 2:
+                case SHOW_ALL_DUEDATE:
                     viewTaskByDueDate(true, true);
                     chosenTaskIndex = doWhileConditionIsFalse("Enter the task's number that you want to edit/mark/remove[1-"
                             + getSize() + "]", getSize()); // or quit?
                     chosenTask = dueDateSortedList.get(chosenTaskIndex - 1);
                     break;
-                case 3:
+                case SEARCH_BY_WORD:
                     ArrayList<Task> listOfTasks = getPossibleListOfTasks();
                     if (listOfTasks == null || listOfTasks.isEmpty()) {
                         continue;
@@ -225,14 +239,14 @@ public class SortedTaskListUI extends SortedTaskList {
                             + (listOfTasks.size()) + "]", listOfTasks.size()); // or quit?
                     chosenTask = listOfTasks.get(chosenTaskIndex - 1);
                     break;
-                case 4:
+                case QUIT_EDIT:
                     isEditingTask = false;
                     break editaskloop;
             }
             boolean isEditingChosenTask = true;
             /* If the user chose the selected task to be marked done, the operation
                is performed and the edit menu/mode is exited to the main menu */
-            if(editOption == 2){
+            if(editOption == CHOOSE_REMOVE){
                 System.out.println("Following task is marked done:\n" +markTaskAsDone(chosenTask).toString());
                 removeDuplicateTasks(chosenTask);
                 isEditingChosenTask = false;
@@ -242,12 +256,16 @@ public class SortedTaskListUI extends SortedTaskList {
             // If user chose to remove or edit a task the following loop is entered
             while (isEditingTask && isEditingChosenTask) {
                 System.out.println("Task chosen for editing is:\n" + chosenTask.toString());
-                int fieldToEdit = doWhileConditionIsFalse(START_MENU_MESSAGE+"\n" +
-                        "\n1 ->Edit name\n2 ->Edit due date\n3 ->Edit status\n4 ->Edit project\n5 -> Remove whole task" +
+                int fieldToEdit = doWhileConditionIsFalse(START_MENU_MESSAGE +
+                        "\n1 -> Edit name" +
+                        "\n2 -> Edit due date" +
+                        "\n3 -> Edit status" +
+                        "\n4 -> Edit project" +
+                        "\n5 -> Remove whole task\n" +
                         CHOOSE_MESSAGE+" [1-5]:", 5);
                 /* If the user chooses to remove a task, the action is completed
                   and the user is prompted to either to continue or stop editing any more tasks */
-                if(fieldToEdit == 5){
+                if(fieldToEdit == REMOVE_TASK){
                     removeTask(chosenTask);
                     System.out.println("Task was removed!");
                     isEditingChosenTask = false;
@@ -258,11 +276,11 @@ public class SortedTaskListUI extends SortedTaskList {
                     String newValue = null;
                     LocalDateTime newTime;
                     // If status has to be changed it should be within certain limits otherwise it is in invalid
-                    if (fieldToEdit == 3) {
+                    if (fieldToEdit == EDIT_STATUS) {
                         newStatus = taskStatuses[doWhileConditionIsFalse(STATUS_QUESTION, 3)-1];
                         newTime = chosenTask.getDueDate();
                     } // Similarly,if due date has to be changed it should be validated
-                    else if (fieldToEdit == 2) {
+                    else if (fieldToEdit == EDIT_DUEDATE) {
                         newTime = getValidDate();
                         newStatus = chosenTask.getStatus();
                     } else {
