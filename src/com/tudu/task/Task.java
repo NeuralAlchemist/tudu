@@ -19,11 +19,11 @@ public class Task{
     public TaskStatus status;
     public TaskProject project;
 
-    public Task(String name, LocalDateTime dueDate, int status, String project) {
+    public Task(String name, LocalDateTime dueDate, TaskStatus status, String project) {
         TaskStatus[] statusList = TaskStatus.values();
         this.name = name.isEmpty() ? "NO NAME" : name;
         this.dueDate = dueDate;
-        this.status = statusList[status-1];
+        this.status = status;
         this.project = new TaskProject(project);
     }
 
