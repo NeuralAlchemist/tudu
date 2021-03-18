@@ -23,7 +23,7 @@ public class SortedTaskList extends TaskListObject {
     }
 
     @Override
-    protected Task addTask(String taskName, LocalDateTime dueDate, int status, String project) {
+    protected Task addTask(String taskName, LocalDateTime dueDate, TaskStatus status, String project) {
         Task result;
         Task task = new Task(taskName, dueDate, status, project);
         String projectName = task.getProject();
@@ -70,7 +70,7 @@ public class SortedTaskList extends TaskListObject {
     }
 
     @Override
-    protected void setTask(String taskName, LocalDateTime dueDate, int status, String project, Task oldTask){
+    protected void setTask(String taskName, LocalDateTime dueDate, TaskStatus status, String project, Task oldTask){
         if(contains(oldTask)){
             Task newTask = new Task(taskName, dueDate, status, project);
             if(!newTask.getName().equals(oldTask.getName())){
@@ -79,7 +79,7 @@ public class SortedTaskList extends TaskListObject {
                 oldTask.setStatus(newTask.getStatus());
             } else {
                 removeTask(oldTask);
-                addTask(newTask.getName(), newTask.getDueDate(), newTask.getStatus().ordinal()+1, newTask.getProject());
+                addTask(newTask.getName(), newTask.getDueDate(), newTask.getStatus(), newTask.getProject());
             }
         } else {
             System.out.println("Task you are trying to set does not exist!");
@@ -128,8 +128,6 @@ public class SortedTaskList extends TaskListObject {
     protected void removeDuplicateTasks(Task task){
         int lastOccurrence = dueDateSortedList.lastIndexOf(task);
         int firstOccurence = dueDateSortedList.indexOf(task);
-        System.out.println(firstOccurence);
-        System.out.println(lastOccurrence);
         if(firstOccurence != lastOccurrence){
             removeTask(task);
             System.out.println("The updated task exists twice in the tasklist.\n" +
@@ -162,7 +160,7 @@ public class SortedTaskList extends TaskListObject {
                 current = itr.next();
                 writer.println(current.getName());
                 writer.println(current.getDueDate());
-                writer.println(current.getStatus().ordinal());
+                writer.println(current.getStatus());
                 writer.println(current.getProject());
             }
             writer.close();
@@ -244,7 +242,7 @@ public class SortedTaskList extends TaskListObject {
                             // Due date is stored as LocalDateTime's ISO_DATE_TIME format
                             // it needs to be parsed to LocalDateTime object to be added
                             LocalDateTime.parse(content.get(i + 1), formatter),
-                            Integer.parseInt(content.get(i + 2)) + 1,
+                            TaskStatus.valueOf(content.get(i + 2)),
                             content.get(i + 3));
                     hasLoadedFromDatabase = hasLoadedFromDatabase & (current != null);
                 }
