@@ -1,6 +1,6 @@
 package com.tudu;
 
-import com.tudu.task.SortedTaskListUI;
+import com.tudu.tasklist.SortedTaskListUI;
 
 public class Main {
     public static void main(String[] args) {
