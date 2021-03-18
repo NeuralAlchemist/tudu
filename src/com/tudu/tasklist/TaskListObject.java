@@ -1,4 +1,6 @@
-package com.tudu.task;
+package com.tudu.tasklist;
+
+import com.tudu.task.Task;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
