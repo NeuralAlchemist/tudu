@@ -13,7 +13,7 @@ public class TaskProject {
 
     /**
      * Set the name of a project to the specified name.
-     * @param name the name to be set for the project; argument can be empty, in that case a default {@code "NO NAME"} name is given
+     * @param name the name to be set for the project; argument can be an empty string, in that case a default {@code "NO NAME"} name is given
      */
     public TaskProject(String name) {
         this.name = name.isEmpty() ? "NO NAME" : name;
