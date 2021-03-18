@@ -2,9 +2,7 @@ package com.tudu.tasklist;
 
 import com.tudu.task.Task;
 import com.tudu.task.TaskStatus;
-import com.tudu.tasklist.TaskListObject;
 import org.fusesource.jansi.Ansi;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,12 +10,9 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class SortedTaskList extends TaskListObject {
-    // Probably a set Collection of Tasks is TaskList
-    // Private fields
     protected TreeMap<String, ArrayList<Task>> projectSortedMap;
     protected LinkedList<Task> dueDateSortedList;
     private int size = 0;
