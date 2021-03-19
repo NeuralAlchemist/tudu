@@ -46,7 +46,7 @@ To see other functions available with Gradle, execute ```./gradlew``` on Linux/m
 
 #### Getting Started
 
-After going through the [setup](#setup) you are ready to get organising! Here's how to use the application! 
+After going through the [setup](#setup) you are ready to get organising! Here's how to use the application.
 
 Want to see all the tasks? Enter 1 in the main menu and perform actions similar to below
 
