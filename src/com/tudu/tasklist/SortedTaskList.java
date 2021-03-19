@@ -123,6 +123,7 @@ public class SortedTaskList extends TaskListObject {
             if(!newTask.getName().equals(oldTask.getName())){
                 oldTask.setName(newTask.getName());
             } else if ((newTask.getStatus().compareTo(oldTask.getStatus())) != 0) {
+                System.out.println("Here");
                 oldTask.setStatus(newTask.getStatus());
             } else {
                 removeTask(oldTask);
@@ -155,7 +156,6 @@ public class SortedTaskList extends TaskListObject {
         boolean isRemoved;
         if(contains(task)){
             isRemoved = projectSortedMap.get(task.getProject()).remove(task) && dueDateSortedList.remove(task);
-            System.out.println(isRemoved);
             size = isRemoved ? size-- : size;
         }else {
             System.out.println("Does not find the task!");
