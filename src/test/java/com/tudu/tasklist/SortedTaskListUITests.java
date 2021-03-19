@@ -168,7 +168,8 @@ public class SortedTaskListUITests {
         String input = ADD + taskNamesForInput[0] + dueDates[fourthDate] + DEFAULT_STATUS + projectNamesForInput[3] + YES
                 + taskNamesForInput[1] + dueDates[firstDate] + ONGOING_STATUS + projectNamesForInput[0] + YES
                 + taskNamesForInput[2] + dueDates[secondDate] + ONGOING_STATUS + projectNamesForInput[1] + NO
-                + EDIT + CHOOSE_EDIT_OR_REMOVE + EDIT_SEARCH_TERM + "champagne\n" + EDIT_OUT_SEARCH + CHOOSE_EDIT_OR_REMOVE + EDIT_ALL_PROJECTS + "1\n" + "1\n" + taskNamesForInput[3] + NO + NO + QUIT;
+                + EDIT + CHOOSE_EDIT_OR_REMOVE + EDIT_SEARCH_TERM + "champagne\n" + EDIT_OUT_SEARCH + CHOOSE_EDIT_OR_REMOVE +
+                EDIT_ALL_PROJECTS + "1\n" + "1\n" + taskNamesForInput[3] + NO + NO + QUIT;
         try {
             tudu.startApplication(new ByteArrayInputStream(input.getBytes()));
         } catch (Exception e) {
