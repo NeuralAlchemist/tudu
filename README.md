@@ -58,11 +58,11 @@ Type 2 and press enter in the main menu to add tasks as shown below:
 
 Oops! Made a mistake? Edit a task by entering 3 in the main menu and  search for your task using one of the three possible search modes. The following scrrenshot shows searching by viewing all tasks sorted according to ascending due date.
 
-![tudu-edit-field](https://imgur.com/hdTpL8W.png)
+![tudu-edit-field](https://imgur.com/hWk27V0.png)
 
 Finished a task and want to mark it as done? The options for finding the task to mark as done are similar to above. Enter 3 in the main menu and follow steps similar to the following screenshot. It shows searching for a task by querying a word.
 
-![tudu-mark-as-done](https://imgur.com/WHU0xMT.png)
+![tudu-mark-as-done](https://imgur.com/a0EJCtX.png)
 
 To quit the application simply enter 4 in the main menu and your tasks will be saved locally!  TuDu will look for this database and load it automatically the next time you start the application and all your information will be there!
 
