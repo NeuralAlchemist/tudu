@@ -64,3 +64,6 @@ gradle-app.setting
 
 ### MACOS
 .DS_Store
+
+### UML files
+*.uml
