@@ -8,6 +8,7 @@ TuDu is a simple todo list TUI. This java application is being developed as part
 2. [Setup](#setup)
 4. [Features](#features)
 4. [Getting Started](#getting-started)
+5. [API Document](#api-document)
 
 #### Technologies
 - JDK 15.0.2
@@ -66,6 +67,11 @@ Finished a task and want to mark it as done? The options for finding the task to
 
 To quit the application simply enter 4 in the main menu and your tasks will be saved locally!  TuDu will look for this database and load it automatically the next time you start the application and all your information will be there!
 
+#### API Document
+
+To generate HTML pages of API documentation of the source files use [javadocs](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html) from terminal or via your IDE. Recommended to use the argument ` -link https://docs.oracle.com/en/java/javase/15/docs/api`, so the generated documentation will automatically link to official JDK classes wherever possible. Also recommended to use the ` -protected` flag when generating the document.
+
 Hope you enjoy TuDu! 
 
 Developers are welcome to open issues on this repo.
+
