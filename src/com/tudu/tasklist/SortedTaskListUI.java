@@ -292,7 +292,6 @@ public class SortedTaskListUI extends SortedTaskList {
                     }
                     String newName = fieldToEdit == 1 ? newValue : chosenTask.getName();
                     String newProject = fieldToEdit == 4 ? newValue : chosenTask.getProject();
-                    System.out.println(newStatus);
                     setTask(newName, newTime, newStatus, newProject, chosenTask);
                     System.out.println("Following task has been edited:\n"+chosenTask.toString());
                     /* After a task has been edited, it could be duplicate to another task
