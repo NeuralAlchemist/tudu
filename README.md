@@ -50,7 +50,7 @@ After going through the [setup](#setup) you are ready to get organising! Here's 
 
 Want to see all the tasks? Enter 1 in the main menu and perform actions similar to below
 
-![tudu-view-all](https://imgur.com/CooOpKZ.png)
+![tudu-view-all](https://imgur.com/K9qOieb.png) 
 
 Type 2 and press enter in the main menu to add tasks as shown below:
 
